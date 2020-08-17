@@ -6,6 +6,7 @@ categories: Article
 # cover:  "/assets/instacode.png"
 permalink: /History-of-AI/
 # tags: trends
+# comments: true
 ---
 
 AI is possibly one of the biggest talking points in the tech industry right now. We all have our own idea of what AI is, much of which has been shown to us by movies and television. AI is beginning to influence a huge range of industries and has even been used in the development of some of the biggest block buster movies, most recently The Irishman!
@@ -60,5 +61,7 @@ For an AI to play real time games such as Dota2 or Starcraft and not turn-based 
 Another reason why it is important for an AI to play games is as it is a safe environment to develop and test AI techniques. They’re perfect for developing narrow AI.
 
 <br>
+
+{% include page_divider.html %}
 
 ***For more content like this, follow the UCL Artificial Intelligence Society on Facebook and LinkedIn!***

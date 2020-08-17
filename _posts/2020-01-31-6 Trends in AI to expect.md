@@ -6,6 +6,7 @@ categories: Article
 # cover:  "/assets/instacode.png"
 permalink: /trends-in-AI-2020/
 # tags: trends
+# comments: true
 ---
 What is happening in the field of AI? What can one expect to see happen in the coming year? 
 
@@ -46,7 +47,10 @@ We will begin to see companies combining different AI components at different ti
 
 AI is not perfect. One can expect it to make mistakes. Its mistakes could affect companies business operations as well as its reputation. AI can also face discrimination – it already faces some. The spread of deepfakes, overuse of personalisation can offend and creep out the users. 
 
-<br>
-<br>
-
 As AI gets bigger in 2020, the chances of this happening increase as well and hence it is something one can expect to happen. 
+
+<br> 
+
+{% include page_divider.html %}
+
+***For more content like this, follow the UCL Artificial Intelligence Society on Facebook and LinkedIn!***
