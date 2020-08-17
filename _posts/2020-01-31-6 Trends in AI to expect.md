@@ -2,10 +2,10 @@
 layout: post
 title:  "6 Trends in AI to expect"
 author: Vibhu Kulkarni
-categories: Trends
+categories: Article
 # cover:  "/assets/instacode.png"
-# permalink: /firstPost/
-tags: trends
+permalink: /trends-in-AI-2020/
+# tags: trends
 ---
 What is happening in the field of AI? What can one expect to see happen in the coming year? 
 
