@@ -6,7 +6,6 @@ plugins:
   - jekyll-paginate
 
 
-
 include:
   - _pages
 
@@ -15,7 +14,7 @@ exclude:
 
 # Site settings
 title: UCL Artificial Intelligence Society
-subtitle: "A simple website for UCLAIS"
+subtitle: "Log the lessons you've learned"
 email: uclu-artificialintelligencesociety@ucl.ac.uk
 name: UCLAIS
 description: >
@@ -60,9 +59,6 @@ highlightjs_theme: "monokai-sublime"
 # tag_archive:
 #   type: liquid
 #   path: /tags/
-
-
-
 
 
 
