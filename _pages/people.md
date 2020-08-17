@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Who we are
+title: People
 permalink: /people/
 main_nav: true
 ---

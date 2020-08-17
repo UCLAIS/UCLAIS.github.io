@@ -1,7 +1,7 @@
 ---
 layout: page
-title: "Posts"
-permalink: /posts/
+title: "Categories"
+permalink: /categories/
 main_nav: true
 ---
 
