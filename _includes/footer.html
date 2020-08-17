@@ -8,7 +8,11 @@
 
       <p><strong>Site Map</strong></p>
       <ul class="pages">
-				{% include nav_links.html %}
+        {% for page in site.pages %}
+        {% if page.title and page.main_nav != false %}
+          <li class="nav-link"><a href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a>
+        {% endif %}
+        {% endfor %}
       </ul>
     </div>
 
@@ -24,7 +28,7 @@
         </li>
 
         {% for social in site.social %}
-          {% if social.url != "" %}
+          {% if social.url != null %}
           <li>
             <a href="{{ social.url }}" title="{{ social.desc }}">
               <i class="fa fa-{{ social.icon }}"></i>
@@ -37,21 +41,15 @@
       </ul>
     </div>
 
-    <div class="site-signature">
-      <!-- <p class="rss-subscribe text"><strong>Subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></strong></p> -->
-      <p class="text">{{ site.description }}</p>
-    </div>
 
   </div>
 
 </footer>
 
 <!-- Scripts -->
-<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
-<script src="//unpkg.com/popper.js@1"></script>
-<script src="//unpkg.com/tippy.js@5"></script>
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/js/lightbox.min.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -69,15 +67,6 @@ $(document).ready(function() {
       }
     });
   });
-
-	// Enable tooltips via Tippy.js
-	if (Array.isArray(window.tooltips)) {
-		window.tooltips.forEach(function(tooltip) {
-			var selector = tooltip[0];
-			var config = tooltip[1];
-			tippy(selector, config);
-		})
-	}
 });
 
 </script>

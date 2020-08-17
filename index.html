@@ -1,8 +1,7 @@
 ---
 layout: default
-pagination: 
-  enabled: true
 ---
+
 <div class="home">
 
 <div class="site-header-container {% if site.cover %}has-cover{% endif %}" {% if site.cover %}style="background-image: url({{ site.cover | prepend: site.baseurl }});"{% endif %}>
@@ -28,11 +27,7 @@ pagination:
       <div class="post-date">{{ post.date | date: "%B %-d, %Y" }}</div>
       <div class="post-categories">
       {% if post.categories.size > 0 %}in {% for cat in post.categories %}
-        {% if site.jekyll-archives %}
-        <a href="{{ site.baseurl }}/category/{{ cat }}">{{ cat | capitalize }}</a>{% if forloop.last == false %}, {% endif %}
-        {% else %}
         <a href="{{ site.baseurl }}/posts/#{{ cat }}">{{ cat | capitalize }}</a>{% if forloop.last == false %}, {% endif %}
-        {% endif %}
       {% endfor %}{% endif %}
       </div>
     </section>
@@ -47,14 +42,14 @@ pagination:
 	<p>
     {% if paginator.previous_page %}
 			{% if paginator.page == 2 %}
-			<a class="newer-posts" href="{{ site.baseurl }}{{ paginator.previous_page_path }}">
+			<a class="newer-posts" href="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/">
         <span class="fa-stack fa-lg">
           <i class="fa fa-square fa-stack-2x"></i>
           <i class="fa fa-angle-double-left fa-stack-1x fa-inverse"></i>
         </span>
       </a>
 			{% else %}
-			<a class="newer-posts" href="{{ site.baseurl }}{{ paginator.next_page_path }}">
+			<a class="newer-posts" href="{{ site.baseurl }}/page{{paginator.previous_page}}">
 				<span class="fa-stack fa-lg">
 					<i class="fa fa-square fa-stack-2x"></i>
 					<i class="fa fa-angle-double-left fa-stack-1x fa-inverse"></i>
@@ -69,7 +64,7 @@ pagination:
 		{% endif %}
 		<span class="page-number">Page {{ paginator.page }} of {{ paginator.total_pages }}</span>
 		{% if paginator.next_page %}
-		<a class="newer-posts" href="{{ site.baseurl }}{{ paginator.next_page_path }}">
+		<a class="newer-posts" href="{{ site.baseurl }}/page{{paginator.next_page}}">
       <span class="fa-stack fa-lg">
         <i class="fa fa-square fa-stack-2x"></i>
         <i class="fa fa-angle-double-right fa-stack-1x fa-inverse"></i>

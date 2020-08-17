@@ -1,9 +1,14 @@
 # External plugins
 # See http://ixti.net/software/2013/01/28/using-jekyll-plugins-on-github-pages.html for making `jekyll archives` work.
 plugins:
-  - jekyll-archives # Sorry, not GitHub pages friendly!
+  # - jekyll-archives # Sorry, not GitHub pages friendly!
   - jekyll-sitemap
-  - jekyll-paginate-v2
+  - jekyll-paginate
+
+
+
+include:
+  - _pages
 
 exclude:
   - "/vendor/"
@@ -25,26 +30,41 @@ logo: "/assets/logo.jpeg"
 
 # Build settings
 markdown: kramdown
+paginate: 5
+paginate_path: "/page:num/"
 inter_post_navigation: false
 highlightjs_theme: "monokai-sublime"
 
 # Pagination Settings
 # https://github.com/sverrirs/jekyll-paginate-v2/blob/master/README-GENERATOR.md#site-configuration
-pagination:
-  enabled: true
-  per_page: 5
-  permalink: "/page/:num/"
-  sort_reverse: true
+# pagination:
+#   enabled: true
+#   per_page: 5
+#   permalink: "/page/:num/"
+#   sort_reverse: true
 
 # Archive settings (see https://github.com/jekyll/jekyll-archives/)
-jekyll-archives:
-  enabled:
-    - categories
-    - tags
-  layout: 'archive'
-  permalinks:
-    category: '/category/:name/'
-    tag: '/tag/:name/'
+# jekyll-archives:
+#   enabled:
+#     - categories
+#     - tags
+#   layout: 'archive'
+#   permalinks:
+#     category: '/category/:name/'
+#     tag: '/tag/:name/'
+
+# Archive
+# category_archive:
+#   type: liquid
+#   path: /categories/
+# tag_archive:
+#   type: liquid
+#   path: /tags/
+
+
+
+
+
 
 # Disqus comments
 disqus_shortname: https-uclais-github-io
@@ -53,12 +73,12 @@ disqus_shortname: https-uclais-github-io
 # ga_tracking_id: "UA-XXXX-1"
 
 # Category descriptions (for archive pages)
-descriptions:
-  - cat: Trendy topics
-    desc: "Posts introducing recent AI techniques."
+# descriptions:
+#   - cat: Trendy topics
+#     desc: "Posts introducing recent AI techniques."
 
-  - cat: Tutorials
-    desc: "Just some placeholder posts, lorem ipsum and the rest."
+#   - cat: Tutorials
+#     desc: "Just some placeholder posts, lorem ipsum and the rest."
 
 # Social icons and sharing options
 #
