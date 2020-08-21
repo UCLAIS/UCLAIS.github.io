@@ -102,7 +102,7 @@ social:
   - name: Facebook
     icon: facebook
     username: AISoc.ucl
-    url: ""
+    url: "https://www.facebook.com/AISoc.ucl"
     desc: Friend me on Facebook
     share: true
 
