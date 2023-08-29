@@ -1,14 +1,4 @@
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
-vendor
 
-
-2015-04-20-welcome-to-jekyll.md
-2015-04-18-welcome-to-jekyll.md
 
 
 .DS_Store
-README.md
-typography.md
