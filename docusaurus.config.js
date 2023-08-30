@@ -24,6 +24,7 @@ const config = {
   organizationName: 'UCLAIS', // Usually your GitHub org/user name.
   projectName: 'UCLAIS.github.io', // Usually your repo name.
   deploymentBranch: 'production',
+  trailingSlash: true,
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
