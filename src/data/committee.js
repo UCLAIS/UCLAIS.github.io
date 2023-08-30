@@ -123,7 +123,7 @@ const committee = {
       members: [
         {
           name: 'Ferran Junoy',
-          position: '',
+          position: 'Head of Nexus Labs',
           image: 'ferran_junoy.jpg',
           course: 'MSci Neuroscience (3rd year)',
           languages: 'Python, some JavaScript',
