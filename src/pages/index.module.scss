@@ -1,0 +1,134 @@
+@keyframes home-header-pulse {
+  0% {
+    background-position: bottom left;
+  }
+
+  100% {
+    background-position: top right;
+  }
+}
+
+$pink: #DC1C5F;
+
+.header {
+  display: flex;
+  align-items: center;
+
+  min-height: calc(100dvh - 60px);
+  padding: 0.5rem 0.5rem 68px 0.5rem;
+
+  background-color: #0B0B0B;
+  color: #fff;
+}
+
+.hero {
+  flex: 1;
+  margin: auto;
+
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    max-width: 768px;
+  }
+
+  @media (min-width: 1024px) {
+    max-width: 1024px;
+  }
+
+  @media (min-width: 1200px) {
+    max-width: 1200px;
+  }
+}
+
+.heroText {
+  flex: 1;
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 700;
+
+    font-size: 4rem;
+
+    @media (min-width: 768px) {
+      font-size: 6.5rem;
+    }
+
+    &.gradientText {
+      color: $pink;
+
+      @supports (background-clip: text) or (-webkit-background-clip: text) {
+        background-clip: text;
+
+        background: linear-gradient(50deg, #1391F0 12%, $pink 20%, #B805E4 35%, #1391F0 55%, #1391F0 60%, #f72e25 70%, #f79725 80%, $pink 90%);
+        background-size: 1000% 1000%;
+
+        animation: 15s linear 0s infinite alternate home-header-pulse;
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+      }
+    }
+  }
+}
+
+.heroSocials {
+  a {
+    border-radius: 5px;
+    border: 2px solid white;
+    display: inline-block;
+
+    color: white;
+
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 2.5rem;
+    width: 2.5rem;
+    text-align: center;
+
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+
+    transition: all 75ms linear;
+
+    &:hover {
+      background-color: white;
+      color: #0B0B0B;
+    }
+  }
+}
+
+.heroLogo {
+  flex: 0;
+  margin-left: auto;
+
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: block;
+  }
+
+  .logoCenterer {
+    width: 30dvw;
+    max-width: 400px;
+  }
+
+  .logo {
+    width: 100%;
+    padding-top: 100%;
+
+    background: linear-gradient(50deg, #1391F0 12%, $pink 20%, #B805E4 35%, #1391F0 55%, #1391F0 60%, #f72e25 70%, #f79725 80%, $pink 90%);
+    background-size: 1000% 1000%;
+    clip-path: url(#aisoc-logo-clip);
+    animation: 15s linear 0s infinite alternate home-header-pulse;
+
+    margin-bottom: 20px;
+  }
+}
