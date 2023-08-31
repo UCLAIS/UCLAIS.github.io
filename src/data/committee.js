@@ -111,10 +111,10 @@ const committee = {
         {
           name: 'Nadia Najihah',
           position: 'Head of Marketing',
-          image: '',
+          image: 'nadia_najihah.jpg',
           course: 'BSc Computer Science (2nd year)',
-          languages: '',
-          fact: '',
+          languages: 'Python, Java, C, Haskell',
+          fact: 'My Spotify listening time in 2022 was 77,827 minutes.',
         },
       ],
     },
