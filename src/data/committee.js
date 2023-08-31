@@ -77,10 +77,10 @@ const committee = {
         {
           name: 'Ivana He',
           position: 'Head of Events',
-          image: '',
+          image: 'ivana_he.jpg',
           course: 'BASc Arts and Sciences (3rd year)',
-          languages: '',
-          fact: '',
+          languages: 'Python',
+          fact: "I used to be in a communist children's dance group, but now I dance around a pole!",
         },
         {
           name: 'Jess Tsang',
