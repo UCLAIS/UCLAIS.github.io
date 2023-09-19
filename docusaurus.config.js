@@ -111,14 +111,13 @@ const config = {
         },
         items: [
           { to: '/about-us', label: 'About Us', position: 'left' },
-          { to: '/blog', label: 'Blog', position: 'left' },
           {
             type: 'docSidebar',
             sidebarId: 'docsSidebar',
             position: 'left',
-            label: 'Docs',
+            label: 'Our Initiatives',
           },
-
+          { to: '/blog', label: 'Blog', position: 'left' },
           {
             href: 'https://doxaai.com/',
             label: 'DOXA',
@@ -135,11 +134,19 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Our Initiatives',
             items: [
               {
                 label: 'Tutorial Series',
                 to: '/docs/tutorials',
+              },
+              {
+                label: 'Nexus Labs',
+                to: '/docs/nexus-labs',
+              },
+              {
+                label: 'AI Foundry',
+                to: '/docs/ai-foundry',
               },
               {
                 label: 'Journal Club',
