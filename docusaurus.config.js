@@ -48,6 +48,8 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           remarkPlugins: [math],
           rehypePlugins: [katex],
+          path: 'our-initiatives',
+          routeBasePath: 'our-initiatives',
         },
         blog: {
           showReadingTime: true,
@@ -138,19 +140,19 @@ const config = {
             items: [
               {
                 label: 'Tutorial Series',
-                to: '/docs/tutorials',
+                to: '/our-initiatives/tutorials',
               },
               {
                 label: 'Nexus Labs',
-                to: '/docs/nexus-labs',
+                to: '/our-initiatives/nexus-labs',
               },
               {
                 label: 'AI Foundry',
-                to: '/docs/ai-foundry',
+                to: '/our-initiatives/ai-foundry',
               },
               {
                 label: 'Journal Club',
-                to: '/docs/journal-club',
+                to: '/our-initiatives/journal-club',
               },
             ],
           },
