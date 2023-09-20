@@ -48,6 +48,8 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           remarkPlugins: [math],
           rehypePlugins: [katex],
+          path: 'our-initiatives',
+          routeBasePath: 'our-initiatives',
         },
         blog: {
           showReadingTime: true,
@@ -111,14 +113,13 @@ const config = {
         },
         items: [
           { to: '/about-us', label: 'About Us', position: 'left' },
-          { to: '/blog', label: 'Blog', position: 'left' },
           {
             type: 'docSidebar',
             sidebarId: 'docsSidebar',
             position: 'left',
-            label: 'Docs',
+            label: 'Our Initiatives',
           },
-
+          { to: '/blog', label: 'Blog', position: 'left' },
           {
             href: 'https://doxaai.com/',
             label: 'DOXA',
@@ -135,15 +136,23 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Our Initiatives',
             items: [
               {
                 label: 'Tutorial Series',
-                to: '/docs/tutorials',
+                to: '/our-initiatives/tutorials',
+              },
+              {
+                label: 'Nexus Labs',
+                to: '/our-initiatives/nexus-labs',
+              },
+              {
+                label: 'AI Foundry',
+                to: '/our-initiatives/ai-foundry',
               },
               {
                 label: 'Journal Club',
-                to: '/docs/journal-club',
+                to: '/our-initiatives/journal-club',
               },
             ],
           },
