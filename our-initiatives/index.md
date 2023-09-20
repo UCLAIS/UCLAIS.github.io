@@ -22,7 +22,7 @@ In the 2023/24 academic year, the UCL Artificial Intelligence Society [Machine L
 ## 🚀 AI Foundry
 [AI Foundry](/our-initiatives/ai-foundry) is a startup generator/incubator arm of UCL Artificial Intelligence Society. Through a thorough mentoring, series of recurring workshops, and pitching opportunities, we seek to empower students with the potential to become AI startup founders.
 
-## 📝 Journal Club
+## 📚 Journal Club
 The UCL Artificial Intelligence Society runs regular [journal club sessions](/our-initiatives/journal-club) at which leading researchers in both academia and industry share the latest developments in the world of artificial intelligence and machine learning.
 
 ## 🌍 ClimateHack.AI 2023
