@@ -42,6 +42,13 @@ export default function Home() {
                             <br />
                           </>
                         )}
+                        {member.ai_concept && (
+                          <>
+                            <strong>Favourite AI concept</strong>:{' '}
+                            {member.ai_concept}
+                            <br />
+                          </>
+                        )}
                         {member.fact && (
                           <>
                             <strong>Fun Fact</strong>: {member.fact}
