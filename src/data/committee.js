@@ -63,9 +63,9 @@ const committee = {
           position: 'Head of Development',
           image: 'andrzej_szablewski.jpg',
           course: 'MEng Computer Science (4th year)',
-          languages: 'Python, C, Java, Haskell',
-          ai_concept: '',
-          fact: 'I enjoy building things, photography and running! I really like drinking water!',
+          languages: '',
+          ai_concept: 'Transformers for the win!',
+          fact: 'I love taking pictures of planes! 🛩️ 📸',
         },
         {
           name: 'Robbie Morris',
