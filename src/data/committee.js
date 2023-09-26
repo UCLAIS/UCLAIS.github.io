@@ -76,6 +76,15 @@ const committee = {
           ai_concept: '',
           fact: 'I used to be a clarinet soloist in my school orchestra!',
         },
+        {
+          name: 'Szymon Duchniewicz',
+          position: 'Development Officer',
+          image: 'szymon_duchniewicz.jpg',
+          course: 'MEng Computer Science (4th year)',
+          languages: '',
+          ai_concept: 'AI on Embedded Systems & 2/3D Generative AI',
+          fact: 'I\'m a wannabe full-time windsurfer, if I start talking about it, I won\'t stop.💨🏄',
+        },
       ],
     },
     {
