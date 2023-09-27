@@ -24,7 +24,7 @@ const committee = {
           position: 'Treasurer',
           image: 'franek_nowak.jpg',
           course: 'MSc Medical Robotics & AI',
-          ai_concept: 'Cat-GPT (not a typo!).',
+          ai_concept: 'Cat-GPT! (not a typo)',
           fact: 'I became a competitive fencer after I was kicked out from music school.',
         },
         {
