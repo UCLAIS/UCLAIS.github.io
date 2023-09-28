@@ -36,12 +36,6 @@ export default function Home() {
                             <br />
                           </>
                         )}
-                        {member.languages && (
-                          <>
-                            <strong>Languages</strong>: {member.languages}
-                            <br />
-                          </>
-                        )}
                         {member.ai_concept && (
                           <>
                             <strong>Favourite AI concept</strong>:{' '}
