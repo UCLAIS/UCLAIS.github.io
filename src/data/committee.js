@@ -8,7 +8,7 @@ const committee = {
           position: 'President',
           image: 'martynas_pocius.jpg',
           course: 'MEng Biomedical Engineering (4th year)',
-          ai_concept: '',
+          ai_concept: 'Reinforcement learning (especially, PPO).',
           fact: 'I have been playing piano for 13 years.',
         },
         {
@@ -43,7 +43,7 @@ const committee = {
         {
           name: 'Charlie Harrison',
           position: 'Head of Content',
-          image: 'charlie_harrison.PNG',
+          image: 'charlie_harrison.jpg',
           course: 'BSc Philosophy, Politics and Economics (2nd year)',
           ai_concept: '(Aligned) Large Language Models.',
           fact: 'I spent 4 months living at a Buddhist temple.',
@@ -66,7 +66,7 @@ const committee = {
           position: 'Development Officer',
           image: 'robbie_morris.jpg',
           course: 'BSc Computer Science (2nd year)',
-          ai_concept: '',
+          ai_concept: 'AI beamforming in space! 🚀',
           fact: 'I used to be a clarinet soloist in my school orchestra!',
         },
         {
@@ -74,7 +74,7 @@ const committee = {
           position: 'Development Officer',
           image: 'szymon_duchniewicz.jpg',
           course: 'MEng Computer Science (4th year)',
-          ai_concept: 'AI on Embedded Systems & 2/3D Generative AI',
+          ai_concept: 'AI on Embedded Systems & 2/3D Generative AI.',
           fact: "I'm a wannabe full-time windsurfer! If I start talking about it, I won't stop. 💨🏄",
         },
         {
@@ -82,7 +82,7 @@ const committee = {
           position: 'Development Officer',
           image: 'wonjun_lee.jpeg',
           course: 'BSc Computer Science (2nd year)',
-          ai_concept: 'Reinforcement Learning',
+          ai_concept: 'Reinforcement Learning.',
           fact: 'I can cook minute rice in 58 seconds.',
         },
       ],
@@ -95,7 +95,8 @@ const committee = {
           position: 'Head of Events',
           image: 'ivana_he.jpg',
           course: 'BASc Arts and Sciences (3rd year)',
-          ai_concept: '',
+          ai_concept:
+            'Cognitive computing, also interested in the application of speech recognition in eldercare.',
           fact: "I used to be in a communist children's dance group, but now I dance around a pole!",
         },
         {
@@ -114,11 +115,19 @@ const committee = {
       members: [
         {
           name: 'Filip Trhlík',
-          position: 'Journal Club Coordinator',
+          position: 'Head of Journal Club',
           image: 'filip_trhlik.jpg',
           course: 'BSc Computer Science (3rd year)',
-          ai_concept: '',
-          fact: 'I have published an article about generating fake news with GPT-3.',
+          ai_concept: 'Transformers (What would we do without them).',
+          fact: "I read fake news as my guilty pleasure (don't worry also published AI system to combat them).",
+        },
+        {
+          name: 'Shyaam Prasadh',
+          position: 'Journal Club Officer',
+          image: 'shyaam_prasadh.jpg',
+          course: 'MSc Machine Learning',
+          ai_concept: 'Causal Inference and Interpretable Machine Learning.',
+          fact: "I'm an Othello player who uses computer algorithms for game strategies, and in my free time, I teach computing to tribal girl children.",
         },
       ],
     },
@@ -130,8 +139,8 @@ const committee = {
           position: 'Head of Marketing',
           image: 'nadia_najihah.jpg',
           course: 'BSc Computer Science (2nd year)',
-          ai_concept: '',
-          fact: 'My Spotify listening time in 2022 was 77,827 minutes.',
+          ai_concept: 'The entire concept of DALL-E.',
+          fact: 'i cannot study without the mario kart ost playing in the background.',
         },
         {
           name: 'Prasham Jadhwani',
@@ -198,7 +207,7 @@ const committee = {
         },
         {
           name: 'Damien Bose',
-          position: 'ML Officer',
+          position: 'Machine Learning Officer',
           image: 'damien_bose.jpg',
           course: 'MEng Mathematical Computation (4th year)',
           ai_concept: 'Variational autoencoder.',
@@ -206,7 +215,7 @@ const committee = {
         },
         {
           name: 'Suhail Merali',
-          position: 'ML Officer',
+          position: 'Machine Learning Officer',
           image: 'suhail_merali.png',
           course: 'MEng Mathematical Computation (4th year)',
           ai_concept: 'Regression.',
