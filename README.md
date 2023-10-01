@@ -26,6 +26,10 @@ This command generates static content into the `build` directory and can be serv
 
 ### Deployment
 
+This GitHub repository contains CD workflows, that will **automatically run** a test build for every pull request to `main`, and will perform actual deployment on every push to `main`.
+
+However, you can deploy manually as well!
+
 Using SSH:
 
 ```

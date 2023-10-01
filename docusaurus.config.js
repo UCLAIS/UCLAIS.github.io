@@ -23,7 +23,7 @@ const config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'UCLAIS', // Usually your GitHub org/user name.
   projectName: 'UCLAIS.github.io', // Usually your repo name.
-  deploymentBranch: 'production',
+  deploymentBranch: 'gh-pages',
   trailingSlash: true,
 
   onBrokenLinks: 'throw',
