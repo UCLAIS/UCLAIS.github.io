@@ -2,4 +2,6 @@
 sidebar_position: 8
 ---
 
-# Recurrent Neural Networks
+# 7: Recurrent Neural Networks
+
+**Date: 6th November 2023**
