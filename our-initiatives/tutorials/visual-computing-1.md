@@ -1,5 +1,7 @@
 ---
-sidebar_position: 6
+sidebar_position: 7
 ---
 
-# Visual Computing I
+# 5: Visual Computing I
+
+**Date: 22nd November 2023**

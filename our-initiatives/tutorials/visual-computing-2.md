@@ -1,5 +1,7 @@
 ---
-sidebar_position: 7
+sidebar_position: 8
 ---
 
-# Visual Computing II
+# 6: Visual Computing II
+
+**Date: 29th November 2023**

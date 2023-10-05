@@ -1,5 +1,7 @@
 ---
-sidebar_position: 9
+sidebar_position: 10
 ---
 
-# Machine Learning in Practice
+# 8: Machine Learning in Practice
+
+**Date: 13th December 2023**
