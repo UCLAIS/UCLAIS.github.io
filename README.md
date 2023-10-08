@@ -29,7 +29,7 @@ The following instruction gives an example of how to edit a simple document page
 5. In another terminal window, type `yarn start`. This command will run a local development server in your browser - you will be able to make changes to the website and view them automatically updated!
 6. Create/Open a desired file (e.g. `our-initatives/nexus-labs.md`) and introduce necessary changes. We use Markdown for all documents and blog posts - using it is very intuitive!
 7. Commit your changes and push your branch to GitHub.
-8. Create a pull request and ask one the Dev Team members to review it!
+8. Create a pull request and ask one of the Dev Team members to review it (@Willmish, @wonjunlee33, @robbiebmorris, @TheRootOf3). We will make sure that everything works!
 9. Once your change got LGTM, you can merge it and the website will be automatically updated! Cool, huh?
 
 ## Build
