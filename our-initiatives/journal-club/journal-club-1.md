@@ -6,6 +6,8 @@ sidebar_position: 2
 
 **Date: 9th October 2023**
 
+![Yves-Alexandre de Montjoye](../../static/img/journal-1-image.jpeg)
+
 The AI Society Journal Club was honored to host Yves-Alexandre de Montjoye for a captivating discussion revolving around the evolution of data anonymity amidst the modern data deluge, where our actions and movements are logged in real-time. The surge of large-scale behavioral data has not only augmented our understanding of individual and collective behaviors but also sparked grave privacy concerns.
 
 Yves-Alexandre de Montjoye explored the inadequacies of conventional de-identification approaches in preserving privacy in the big data epoch. He navigated through the transformation needed in data anonymization paradigms, advocating for a shift towards the anonymous usage of data. The discourse included a meticulous examination of modern privacy engineering techniques, ranging from Differential Privacy to Query-Based Systems, elucidating their respective advantages and limitations.
