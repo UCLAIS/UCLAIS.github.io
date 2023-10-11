@@ -15,4 +15,4 @@ Yves-Alexandre de Montjoye delved into the shortcomings of traditional de-identi
 
 Concluding the session, de Montjoye painted a picture of how the fusion of these avant-garde techniques can facilitate the significant harnessing of large-scale behavioral data while guaranteeing staunch privacy protections for individuals. This session bestowed deep understanding into marrying data utility with privacy conservation, and how the cohesive deployment of modern privacy engineering techniques can lay the groundwork for secure and influential data usage in the flourishing domain of big data. 🌐💡
 
-You can access the **journal club slides** here: 📘 [The search for anonymous data](https://github.com/UCLAIS/UCLAIS.github.io/blob/main/static/jc/the_search_for_anonymous_data.pdf)
+You can access the **journal club slides** here: 📘 [The search for anonymous data](/jc/the_search_for_anonymous_data.pdf)
