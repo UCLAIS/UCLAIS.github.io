@@ -6,12 +6,13 @@ sidebar_position: 2
 
 **Date: 9th October 2023**
 
-![Yves-Alexandre de Montjoye](../../static/img/journal-1-image.jpeg)
+![Yves-Alexandre de Montjoye](/img/jc/journal-1-image.jpeg)
 
-The AI Society Journal Club was honored to host Yves-Alexandre de Montjoye for a captivating discussion revolving around the evolution of data anonymity amidst the modern data deluge, where our actions and movements are logged in real-time. The surge of large-scale behavioral data has not only augmented our understanding of individual and collective behaviors but also sparked grave privacy concerns.
 
-Yves-Alexandre de Montjoye explored the inadequacies of conventional de-identification approaches in preserving privacy in the big data epoch. He navigated through the transformation needed in data anonymization paradigms, advocating for a shift towards the anonymous usage of data. The discourse included a meticulous examination of modern privacy engineering techniques, ranging from Differential Privacy to Query-Based Systems, elucidating their respective advantages and limitations.
+The AI Society Journal Club was thrilled to welcome Yves-Alexandre de Montjoye for an enthralling dialogue, centered around the metamorphosis of data anonymity in today's torrent of data, where every action and movement is captured in real-time. 🌐 The influx of large-scale behavioral data has not only enriched our comprehension of individual and societal behaviors, but also ignited serious privacy apprehensions. 🚀
 
-Wrapping up the talk, de Montjoye envisioned how the confluence of these cutting-edge techniques can enable the meaningful utilization of large-scale behavioral data while ensuring robust privacy safeguards for individuals. This session offered a profound insight into harmonizing data utility with privacy preservation, and how the integrated application of modern privacy engineering techniques can pave the way for secure and impactful data usage in the burgeoning field of big data.
+Yves-Alexandre de Montjoye delved into the shortcomings of traditional de-identification techniques in maintaining privacy amidst the big data era. 🛑 He traversed the necessary transformation in data anonymization frameworks, championing a move towards the anonymous utilization of data. 🔄 The discussion encompassed a thorough scrutiny of contemporary privacy engineering methodologies, extending from Differential Privacy to Query-Based Systems, shedding light on their respective merits and drawbacks. 🛡️
+
+Concluding the session, de Montjoye painted a picture of how the fusion of these avant-garde techniques can facilitate the significant harnessing of large-scale behavioral data while guaranteeing staunch privacy protections for individuals. This session bestowed deep understanding into marrying data utility with privacy conservation, and how the cohesive deployment of modern privacy engineering techniques can lay the groundwork for secure and influential data usage in the flourishing domain of big data. 🌐💡
 
 You can access the **journal club slides** here: 📘 [The search for anonymous data](https://github.com/UCLAIS/UCLAIS.github.io/blob/main/static/jc/the_search_for_anonymous_data.pdf)
