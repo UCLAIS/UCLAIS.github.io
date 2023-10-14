@@ -93,6 +93,14 @@ const committee = {
           ai_concept: 'Reinforcement Learning.',
           fact: 'I can cook minute rice in 58 seconds.',
         },
+        {
+          name: 'Dash Wong',
+          position: 'Development Officer',
+          image: 'dash_wong.jpg',
+          course: 'MEng Computer Science (2nd year)',
+          ai_concept: 'Generative AI.',
+          fact: 'I like taking photos too!',
+        },
       ],
     },
     {
