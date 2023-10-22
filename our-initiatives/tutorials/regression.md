@@ -11,3 +11,5 @@ sidebar_position: 4
 You can access our **demonstration notebook** here: 📘 [**Tutorial 2 Notebook**](https://github.com/UCLAIS/ml-tutorials-season-4/blob/main/week-2/linear_regression_exercise.ipynb)
 
 The solution is available in the same folder.
+
+You can access our **slides** here: 💻 [**Tutorial 2 Slides**](https://www.canva.com/design/DAFoWFiqTgg/9h0jgvGO1Pd35iYhQfFPMQ/edit?utm_content=DAFoWFiqTgg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
