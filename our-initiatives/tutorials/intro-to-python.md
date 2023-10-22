@@ -18,7 +18,7 @@ The **recording** from this session is available here: 🎤 [**Tutorial 1 Record
 
 Here are two videos covering our exercise **solutions**:
 
-- Exercises 1 to 4: [Solution pt1](https://www.youtube.com/watch?v=qmHgg0IR680&t=116s)
+- Exercises 1 to 4: [Solution pt1](https://www.youtube.com/watch?v=qmHgg0IR680)
 - Exercises 5 and 6: [Solution pt2](https://www.youtube.com/watch?v=3Kmt0qmibrg&t=150s)
 
 We will not go through all of the notebooks in the session, but throughout this series, we will be referring back to them.
