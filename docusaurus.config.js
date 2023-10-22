@@ -121,6 +121,11 @@ const config = {
           },
           { to: '/blog', label: 'Blog', position: 'left' },
           {
+            href: 'https://dashboard.mailerlite.com/forms/364819/102382926138704937/share',
+            label: 'Newsletter 🗞️',
+            position: 'right',
+          },
+          {
             href: 'https://doxaai.com/',
             label: 'DOXA',
             position: 'right',
@@ -180,6 +185,10 @@ const config = {
           {
             title: 'More',
             items: [
+              {
+                label: 'Subscribe to our Newsletter! 🗞️',
+                to: 'https://dashboard.mailerlite.com/forms/364819/102382926138704937/share',
+              },
               {
                 label: 'Blog',
                 to: '/blog',
