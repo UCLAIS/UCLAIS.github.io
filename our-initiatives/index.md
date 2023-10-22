@@ -8,9 +8,11 @@ Welcome to the UCL Artificial Intelligence Society Initiatives site!
 
 Over the course of the year, we'll be posting content and useful information from our [beginner machine learning tutorial series](/our-initiatives/tutorials) and [journal club](/our-initiatives/journal-club), amongst other things, so stay tuned!
 
+**Subscribe to our [weekly Newsletter 🗞️](https://dashboard.mailerlite.com/forms/364819/102382926138704937/share) to be up to date with our events and initiatives!**
+
 ## 💻 The Machine Learning Tutorial Series
 
-In the 2023/24 academic year, the UCL Artificial Intelligence Society [Machine Learning Tutorial Series](/our-initiatives/tutorials) enters its fourth season. If you are a beginner seeking to learn more about machine learning or just looking to consolidate your knowledge, join us as we cover different topics within the landscape of artificial intelligence. No prior machine learning experience is expected.
+In the 2023/24 academic year, the UCL Artificial Intelligence Society [Machine Learning Tutorial Series](/our-initiatives/tuto rials) enters its fourth season. If you are a beginner seeking to learn more about machine learning or just looking to consolidate your knowledge, join us as we cover different topics within the landscape of artificial intelligence. No prior machine learning experience is expected.
 
 ## 🧬 Nexus Labs
 
@@ -34,4 +36,4 @@ The UCL Artificial Intelligence Society runs regular [journal club sessions](/ou
 
 ## 🎙️ Reinforcement Talking Podcast
 
-We have our [very own podcast](https://podcasters.spotify.com/pod/show/ucl-ai-society) (*yes!*), where our members hold engaging conversations with academics, engineers and entrepreneurs!
+We have our [very own podcast](https://podcasters.spotify.com/pod/show/ucl-ai-society) (_yes!_), where our members hold engaging conversations with academics, engineers and entrepreneurs!
