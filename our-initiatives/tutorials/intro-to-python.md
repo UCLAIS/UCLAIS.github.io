@@ -14,6 +14,13 @@ Here are the **exercises** you can go through: 📘 [**Tutorial 1 Exercises**](h
 
 You can access our **slides** here: 💻 [**Tutorial 1 Slides**](https://www.canva.com/design/DAFmvE-ptx0/lyY0SiOcjgSxrb201KcC8w/edit)
 
+The **recording** from this session is available here: 🎤 [**Tutorial 1 Recording**](https://www.youtube.com/watch?v=adnK-hc2DmY)
+
+Here are two videos covering our exercise **solutions**:
+
+- Exercises 1 to 4: [Solution pt1](https://www.youtube.com/watch?v=qmHgg0IR680)
+- Exercises 5 and 6: [Solution pt2](https://www.youtube.com/watch?v=3Kmt0qmibrg)
+
 We will not go through all of the notebooks in the session, but throughout this series, we will be referring back to them.
 
 For more information on various **Python libraries**, we have **extra resources** available here: 📘 [**Python Notebook Collection**](https://github.com/UCLAIS/ml-tutorials-season-4/tree/main/week-1)
