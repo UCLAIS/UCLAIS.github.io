@@ -13,3 +13,5 @@ You can access our **demonstration notebook** here: 📘 [**Tutorial 2 Notebook*
 The solution is available in the same folder.
 
 You can access our **slides** here: 💻 [**Tutorial 2 Slides**](https://www.canva.com/design/DAFoWFiqTgg/9h0jgvGO1Pd35iYhQfFPMQ/edit?utm_content=DAFoWFiqTgg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+
+The **recording** from this session is available here: 🎤 [**Tutorial 2 Recording**](https://www.youtube.com/watch?v=bo-lbJ--F3g)
