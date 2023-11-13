@@ -16,9 +16,9 @@ You can access our **slides** here: 💻 [**Tutorial 3 Slides**](https://www.can
 
 The **recording** from this session is available here: 🎤 [**Tutorial 3 Recording**](https://youtu.be/GUxbM4EJrMo?si=jFVr8klkYPsygzSD)
 
-The **DOXA Challenge notebook** can be found here: 🏆 [**DOXA Challenge 1**](https://github.com/UCLAIS/ml-tutorials-season-4/blob/main/doxa-challenges/challenge-1/getting-started.ipynb)
+The **DOXA Challenge notebook** can be found here: 🏆 [**DOXA Challenge 1**](https://doxaai.com/competition/uclais-2023-1)
 
-We will explain what this is in greater detail in the tutorial - you can start submitting your code mid reading week.
+**This is now open for submissions!** Let's see how well your models can perform🙌🏼
 
 This is the end of the **Classical Machine Learning** section of the series. We will continute next half term on **Deep Learning** 🥳
 
