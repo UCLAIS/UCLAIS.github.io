@@ -2,6 +2,6 @@
 sidebar_position: 17
 ---
 
-# Climate Hack Workshop
+# ClimateHack.AI Workshop
 
 **Date: Coming soon!**
