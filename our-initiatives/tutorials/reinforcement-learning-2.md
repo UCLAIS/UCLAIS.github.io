@@ -1,5 +1,5 @@
 ---
-sidebar_position: 15
+sidebar_position: 14
 ---
 
 # 12: Reinforcement Learning II
