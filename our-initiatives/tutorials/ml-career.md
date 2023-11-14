@@ -1,5 +1,5 @@
 ---
-sidebar_position: 16
+sidebar_position: 15
 ---
 
 # 13: ML Career Perspectives and Ongoing Learning Strategies
