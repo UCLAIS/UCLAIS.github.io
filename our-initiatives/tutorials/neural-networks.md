@@ -12,4 +12,6 @@ You can access our **demonstration notebook** here: 📘 [**Tutorial 4 Notebook*
 
 You can access our **slides** here: 💻 [**Tutorial 4 Slides**](https://www.canva.com/design/DAFqI6YcPmg/vdpTPtvyARZl-op4ENPNqA/edit?utm_content=DAFqI6YcPmg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
+The **recording** from this session is available here: 🎤 [**Tutorial 4 Recording**](https://youtu.be/M16pz-CS2ec?si=4K3K1AmrBbXn-5Fp)
+
 The **DOXA Challenge notebook** can be found here: 🏆 [**DOXA Challenge 2**](https://github.com/UCLAIS/ml-tutorials-season-4/blob/main/doxa-challenges/challenge-2/starter.ipynb)
