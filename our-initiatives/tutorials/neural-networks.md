@@ -14,4 +14,4 @@ You can access our **slides** here: 💻 [**Tutorial 4 Slides**](https://www.can
 
 The **recording** from this session is available here: 🎤 [**Tutorial 4 Recording**](https://youtu.be/M16pz-CS2ec?si=4K3K1AmrBbXn-5Fp)
 
-The **DOXA Challenge notebook** can be found here: 🏆 [**DOXA Challenge 2**](https://github.com/UCLAIS/ml-tutorials-season-4/blob/main/doxa-challenges/challenge-2/starter.ipynb)
+The **DOXA Challenge notebook** can be found here: 🏆 [**DOXA Challenge 2**](https://doxaai.com/competition/uclais-2023-2)
