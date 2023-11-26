@@ -12,4 +12,4 @@ You can access our **demonstration notebook** here: 📘 [**Tutorial 5 Notebook*
 
 You can access our **slides** here: 💻 [**Tutorial 5 Slides**](https://www.canva.com/design/DAFqI-LaZtg/b-1trICOX4C71_QzZGGRxg/edit?utm_content=DAFqI-LaZtg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
-The **recording** from this session is available here: 🎤 [**Tutorial 6 Recording**](https://youtu.be/RDJxWPqux1E)
+The **recording** from this session is available here: 🎤 [**Tutorial 5 Recording**](https://youtu.be/RDJxWPqux1E)
