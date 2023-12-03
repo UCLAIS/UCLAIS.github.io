@@ -6,7 +6,7 @@ sidebar_position: 16
 
 **Date: 8th December 2023 (Friday 5pm)**
 
-💡 **Climate Hack.AI has been launched!** This workshop is all about helping you get started with this hackathon, providing tips and tricks to improve your model to move up the leaderboard🙌🏼.
+💡 **Climate Hack.AI has been launched!** This workshop is all about helping you get started with this hackathon, providing tips and tricks to improve your model to move up the leaderboard 🙌🏼.
 
 **Motivation**: The **National Grid ESO** currently relies on expensive and carbon-intensive **natural gas generators** to compensate for the variability of **solar PV power production**. By incorporating **satellite imagery** into near-term solar **PV forecasting models**, the ESO can improve the accuracy of these forecasts and **reduce its reliance on natural gas generators**.
 
