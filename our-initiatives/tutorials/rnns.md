@@ -4,7 +4,7 @@ sidebar_position: 9
 
 # 7: Recurrent Neural Networks
 
-**Date: 6th November 2023**
+**Date: 6th December 2023**
 
 💡 **Recurrent neural networks** (RNNs) are a type of artificial neural network (ANN) that are well-suited for processing **sequential data**, such as **time series** data or **natural language**. Unlike **feedforward neural networks**, where information flows in one direction, RNNs have **feedback loops** that allow them to retain information about previous inputs. This week we will be covering what RNNs are, how to train such models, the problems faced with RNN **backpropagation**, and introduce **variations of RNNs** such as the **long short-term memory (LSTM)** model. 💡
 
