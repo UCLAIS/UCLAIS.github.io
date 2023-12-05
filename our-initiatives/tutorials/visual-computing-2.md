@@ -11,3 +11,5 @@ sidebar_position: 8
 You can access our **demonstration notebook** here: 📘 [**Tutorial 6 Notebook**](https://github.com/UCLAIS/ml-tutorials-season-4/blob/main/week-6/VAE_andAE.ipynb)
 
 You can access our **slides** here: 💻 [**Tutorial 6 Slides**](https://www.canva.com/design/DAFqI69GK8k/gqvVWbxKazyxAg2Sx3Fbng/edit?utm_content=DAFqI69GK8k&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+
+The **recording** from this session is available here: 🎤 [**Tutorial 6 Recording**](https://youtu.be/sJwf4R3jh8g)
