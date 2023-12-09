@@ -16,4 +16,4 @@ You can access our **demonstration notebook** here: 📘 [**Tutorial Workshop No
 
 You can access our **slides** here: 💻 [**Tutorial Workshop Slides**](https://www.canva.com/design/DAF0bofq91g/IxG-1r8F7sh_ovJeFwi3lA/edit?utm_content=DAF0bofq91g&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
-The **recording** from this session is available here: 🎤 [**Tutorial Workshop Recording**](https://www.youtube.com/watch?v=Gb23M3zy_yE)
+The **recording** from this session is available here: 🎤 [**Tutorial Workshop Recording**](https://youtu.be/Gb23M3zy_yE?si=FGpvPhEY15OfFe7D)
