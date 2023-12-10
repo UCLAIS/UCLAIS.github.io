@@ -11,3 +11,5 @@ sidebar_position: 9
 You can access our **demonstration notebook** here: 📘 [**Tutorial 7 Notebook**](https://github.com/UCLAIS/ml-tutorials-season-4/blob/main/week-7/rnn.ipynb)
 
 You can access our **slides** here: 💻 [**Tutorial 7 Slides**](https://www.canva.com/design/DAF0bkkh7uE/PlWo9_wcOAVhDKP_SdE56g/edit?utm_content=DAF0bkkh7uE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+
+The **recording** from this session is available here: 🎤 [**Tutorial 7 Recording**](https://www.youtube.com/watch?v=j7WFIRzJY44)

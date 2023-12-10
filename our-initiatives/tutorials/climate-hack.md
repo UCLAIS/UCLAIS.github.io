@@ -1,8 +1,8 @@
 ---
-sidebar_position: 16
+sidebar_position: 10
 ---
 
-# ClimateHack.AI Workshop
+# 8: ClimateHack.AI Workshop
 
 **Date: 8th December 2023 (Friday 5pm)**
 
