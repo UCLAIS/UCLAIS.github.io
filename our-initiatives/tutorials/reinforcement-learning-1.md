@@ -2,6 +2,6 @@
 sidebar_position: 13
 ---
 
-# 11: Reinforcement Learning I
+# 11: Reinforcement Learning
 
-**Date: 24th January 2024**
+**Date: 31st January 2024**
