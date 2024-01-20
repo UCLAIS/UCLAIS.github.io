@@ -109,6 +109,14 @@ const committee = {
           ai_concept: 'Robotics 🦾',
           fact: 'I am the only tall person in the whole family tree.',
         },
+        {
+          name: 'Asmita Anand',
+          position: 'Development Officer',
+          image: 'asmita_anand.jpg',
+          course: 'MEng Computer Science (1st year)',
+          ai_concept: 'Cognitive Computing',
+          fact: '',
+        },
       ],
     },
     {
