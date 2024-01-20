@@ -101,6 +101,14 @@ const committee = {
           ai_concept: 'Generative AI.',
           fact: 'I like taking photos too!',
         },
+        {
+          name: 'Emil Medzhidov',
+          position: 'Development officer',
+          image: 'emil.medzhidov.jpg',
+          course: 'BEng Chemical Engineering (1st Year)',
+          ai_concept: 'Robotics',
+          fact: 'I am the only tall person in the whole family tree.',
+        },
       ],
     },
     {
