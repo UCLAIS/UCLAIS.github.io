@@ -104,9 +104,9 @@ const committee = {
         {
           name: 'Emil Medzhidov',
           position: 'Development officer',
-          image: 'emil.medzhidov.jpg',
+          image: 'emil_medzhidov.jpeg',
           course: 'BEng Chemical Engineering (1st Year)',
-          ai_concept: 'Robotics',
+          ai_concept: 'Robotics 🦾',
           fact: 'I am the only tall person in the whole family tree.',
         },
       ],
