@@ -115,7 +115,7 @@ const committee = {
           image: 'asmita_anand.jpg',
           course: 'MEng Computer Science (1st year)',
           ai_concept: 'Cognitive Computing',
-          fact: '',
+          fact: 'I have an unhealthy coffee addiction. ☕️',
         },
       ],
     },
