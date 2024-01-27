@@ -87,7 +87,7 @@ const committee = {
         },
         {
           name: 'Wonjun Lee',
-          position: 'Development Officer',
+          position: 'Head of Development Team Socials',
           image: 'wonjun_lee.jpeg',
           course: 'BSc Computer Science (2nd year)',
           ai_concept: 'Reinforcement Learning.',
