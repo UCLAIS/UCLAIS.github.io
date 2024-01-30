@@ -30,5 +30,3 @@ Uncover diverse career opportunities within Machine Learning and Data Science as
 🎓 **Q&A Session**: Have questions? Our panelists are ready to provide tailored advice during the interactive Q&A. No query is too big or small!
 
 🍕🥤 **Free Food and Networking**: Savor delicious bites and drinks while connecting with like-minded UCL students. Build a network that will support and inspire you throughout your academic and professional journey.
-
-**NOTE: You need either AI, CS, or Data Science membership to attend!**
