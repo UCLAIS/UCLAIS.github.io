@@ -2,14 +2,14 @@
 slug: reintroductions
 title: Welcome (or Welcome Back)
 authors: [anthony]
-tags: [welcome, introductions, events]
+tags: [welcome, introductions, events, miniblog]
 ---
 
 ## Welcome (or welcome back) to UCL Artificial Intelligence Society’s blog!
 
-I’m Anthony, the new Head of Content, and I just can’t wait for everything we’ve got planned for UCL AI Society this year.
+I’m Anthony, the new Head of Content, and I just can’t wait for everything we’ve got planned for UCL AI Society this year. 
 
-The year ahead is looking exciting – there’s a lot going on. We have the return of our incredible initiatives. We’re getting a new season of Reinforcement Talking, the UCL AI Society podcast **(episode coming out VERY soon)**. And of course, our brilliant *blog* is back for another year. 
+The year ahead is looking exciting – there’s a lot going on. We have the return of our incredible initiatives. We’re getting a new season of Reinforcement Talking, the UCL AI Society podcast **(episode coming out VERY soon)**. And of course, our brilliant *blog* is back for another year. In this mini-update, I'm going to walk you through what's happening in the coming days and weeks. 
 
 ## What's on?
 
@@ -21,4 +21,4 @@ For the visionaries and entrepreneurs amongst our membership (yes, get yours now
 
 Finally, **Journal Clubs** invite some of the world’s greatest minds in AI for live and exclusive talks about their research – we’ve hosted individuals from top institutions across the globe talking about everything between machine learning theory and its applications.
 
-That’s not just it though. We’ve got hackathons coming up, some big events, and more… but stay updated through this blog and our members’ newsletter to hear about these as soon as they’re confirmed.
+That’s not just it though. We’ve got hackathons coming up, some big events, career panels, and more… but stay updated through this blog and our members’ newsletter to hear about these as soon as they’re confirmed.
