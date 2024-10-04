@@ -2,11 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://uclaisociety.co.uk/blog</id>
     <title>UCL Artificial Intelligence Society Blog</title>
-    <updated>2024-03-17T00:00:00.000Z</updated>
+    <updated>2024-10-01T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://uclaisociety.co.uk/blog"/>
     <subtitle>UCL Artificial Intelligence Society Blog</subtitle>
     <icon>https://uclaisociety.co.uk/img/logo.png</icon>
+    <entry>
+        <title type="html"><![CDATA[Welcome (or Welcome Back)]]></title>
+        <id>https://uclaisociety.co.uk/blog/reintroductions</id>
+        <link href="https://uclaisociety.co.uk/blog/reintroductions"/>
+        <updated>2024-10-01T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Welcome (or welcome back) to UCL Artificial Intelligence Society’s blog!]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="welcome-or-welcome-back-to-ucl-artificial-intelligence-societys-blog">Welcome (or welcome back) to UCL Artificial Intelligence Society’s blog!<a href="#welcome-or-welcome-back-to-ucl-artificial-intelligence-societys-blog" class="hash-link" aria-label="Direct link to Welcome (or welcome back) to UCL Artificial Intelligence Society’s blog!" title="Direct link to Welcome (or welcome back) to UCL Artificial Intelligence Society’s blog!">​</a></h2><p>I’m Anthony, the new Head of Content, and I just can’t wait for everything we’ve got planned for UCL AI Society this year. </p><p>The year ahead is looking exciting – there’s a lot going on. We have the return of our incredible initiatives. We’re getting a new season of Reinforcement Talking, the UCL AI Society podcast <strong>(episode coming out VERY soon)</strong>. And of course, our brilliant <em>blog</em> is back for another year. In this mini-update, I'm going to walk you through what's happening in the coming days and weeks. </p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="whats-on">What's on?<a href="#whats-on" class="hash-link" aria-label="Direct link to What's on?" title="Direct link to What's on?">​</a></h2><p><strong>Tutorials</strong> are back, where you can learn how to code a vast range of machine learning techniques, completely free for our members. It's every Wednesday, open to all ranges of abilities, so get it onto your calendars.</p><p>Then we have <strong>Nexus Labs</strong>, where you can put these skills to work on a research project, exploring one of neuroscience, robotics, GenAI, practical AI, or responsible AI, culminating in an epic symposium where you can present your findings.</p><p>For the visionaries and entrepreneurs amongst our membership (yes, get yours now if you haven’t), you can apply to <strong>AI Foundry</strong>, which provides you with a series of workshops, mentoring opportunities, and chances to pitch your brainchildren to keen investors, and industry experts. </p><p>Finally, <strong>Journal Clubs</strong> invite some of the world’s greatest minds in AI for live and exclusive talks about their research – we’ve hosted individuals from top institutions across the globe talking about everything between machine learning theory and its applications.</p><p>That’s not just it though. We’ve got hackathons coming up, some big events, career panels, and more… but stay updated through this blog and our members’ newsletter to hear about these as soon as they’re confirmed.</p>]]></content>
+        <author>
+            <name>Anthony Nkyi</name>
+        </author>
+        <category label="welcome" term="welcome"/>
+        <category label="introductions" term="introductions"/>
+        <category label="events" term="events"/>
+        <category label="miniblog" term="miniblog"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Is AI an existential risk?]]></title>
         <id>https://uclaisociety.co.uk/blog/ai-safety-debate</id>
