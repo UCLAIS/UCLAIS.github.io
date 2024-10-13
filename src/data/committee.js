@@ -69,6 +69,14 @@ const committee = {
     {
       title: 'Development',
       members: [
+        {
+            name: 'Levon Davtian',
+            position: 'Head of Development',
+            image: 'levon_davtian.jpg',
+            course: 'BSc Computer Science (2nd year)',
+            ai_concept: '',
+            fact: '',
+          },
         
       ],
     },
