@@ -58,7 +58,7 @@ const committee = {
         },
         {
           name: 'Sofiya Flenova',
-          position: 'Blog Writer',
+          position: 'Content Executive',
           image: 'sofiya_flenova.jpeg',
           course: 'MEng Robotics and AI (1st Year)',
           ai_concept: '',
