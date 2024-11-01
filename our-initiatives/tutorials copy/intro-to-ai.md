@@ -10,6 +10,6 @@ sidebar_position: 2
 
 You can access our **demonstration notebook** here: 📘 [**Tutorial 0 Notebook**](https://github.com/UCLAIS/ml-tutorials-season-5/blob/main/week-0/ai_code_examples.ipynb)
 
-You can access our **slides** here: 💻 [**Tutorial 0 Slides**](https://www.canva.com/design/DAGSEETkOlo/6odBSGgHuNmrCqUAUwCbAA/view?utm_content=DAGSEETkOlo&utm_campaign=designshare&utm_medium=link&utm_source=editor)
+You can access our **slides** here: 💻 [**Tutorial 0 Slides**](https://www.canva.com/design/DAFm9tHNEDM/cEKEXWzmazR5KKN-7f06tw/edit)
 
-The **recording** from this session is available here: 🎤 [**Tutorial 0 Recording**](https://youtu.be/3E5aampSpvc)
+The **recording** from this session is available here: 🎤 [**Tutorial 0 Recording**](https://www.youtube.com/watch?v=OFS90-FX6pg)
