@@ -57,6 +57,14 @@ const committee = {
             fact: '',
         },
         {
+          name: 'Rivan Chanian',
+          position: 'Content Executive',
+          image: 'rivan_chanian.jpg',
+          course: 'MEng Mathematical Computation (2nd Year)',
+          ai_concept: '',
+          fact: '',
+        },
+        {
           name: 'Sofiya Flenova',
           position: 'Content Executive',
           image: 'sofiya_flenova.jpeg',
