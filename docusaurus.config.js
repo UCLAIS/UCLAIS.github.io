@@ -126,6 +126,16 @@ const config = {
             position: 'right',
           },
           {
+            to: '/our-initiatives/holistic-ai-hackathon',
+            label: 'Holistic AI Hackathon',
+            position: 'left',
+          },
+          {
+            href: 'https://dashboard.mailerlite.com/forms/364819/102382926138704937/share',
+            label: 'Newsletter 🗞️',
+            position: 'right',
+          },
+          {
             href: 'https://doxaai.com/',
             label: 'DOXA',
             position: 'right',
@@ -158,6 +168,10 @@ const config = {
               {
                 label: 'Journal Club',
                 to: '/our-initiatives/journal-club',
+              },
+              {
+                label: 'Holistic AI x UCL AI Society Hackathon',
+                to: '/our-initiatives/holistic-ai-hackathon',
               },
             ],
           },
