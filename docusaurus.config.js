@@ -121,11 +121,6 @@ const config = {
           },
           { to: '/blog', label: 'Blog', position: 'left' },
           {
-            href: 'https://dashboard.mailerlite.com/forms/364819/102382926138704937/share',
-            label: 'Newsletter 🗞️',
-            position: 'right',
-          },
-          {
             to: '/our-initiatives/holistic-ai-hackathon',
             label: 'Holistic AI Hackathon',
             position: 'left',
