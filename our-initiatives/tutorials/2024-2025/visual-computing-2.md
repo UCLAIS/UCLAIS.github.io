@@ -2,7 +2,7 @@
 sidebar_position: 9
 ---
 
-# 6: Visual Computing II
+# 7: Generative Visual Computing
 
 **Date: 27th November 2024**
 
