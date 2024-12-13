@@ -1,6 +1,6 @@
 ---
 slug: algorithms-in-government
-title: Welcome (or Welcome Back)
+title: Playing Technocrat's Advocate
 authors: [anthony]
 tags: [big data, government, policy, miniblog]
 ---
