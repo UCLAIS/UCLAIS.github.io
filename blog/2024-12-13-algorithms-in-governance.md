@@ -26,3 +26,12 @@ We could even take it one step further and use it to identify who would benefit 
 However, we must ensure the same biases pervasive in other government algorithms are eroded first. Responsible AI principles must be used in this system’s building – stakeholders should understand how it works without it being exploitable, and training sets should be curated to ensure fair representation across class, background, and representation. These systems should also be able to learn from the human decisions made alongside its use, to further tune its decision-making without falling into bias.
 
 The success of technology in failing institutions is the seed for a future powered by it. It’s the seed for a future without decisions made by humans. However, a future without humans is a future without accountability. Let’s hope this future doesn’t arrive too early.
+
+### References
+1. Ofqual, “Requirements for the calculation of results in summer 2020: GCE (AS/A level), GCSE, Extended Project and Advanced Extension Award Qualifications,” Aug. 2020.   
+2. H. Warrell, “Home Office under fire for using secretive visa algorithm,” Financial Times, Jun. 09, 2019. https://www.ft.com/content/0206dd56-87b0-11e9-a028-86cea8523dc2   
+3. Home Office, “Police Use of Facial Recognition: Factsheet - Home Office in the Media,” homeofficemedia.blog.gov.uk, Oct. 29, 2023. https://homeofficemedia.blog.gov.uk/2023/10/29/police-use-of-facial-recognition-factsheet/   
+4. B. Quinn, “Tech firm Palantir spoke with MoJ about calculating prisoners’ ‘reoffending risks,’” The Guardian, Nov. 16, 2024. https://www.theguardian.com/technology/2024/nov/16/tech-firm-palantir-spoke-with-moj-about-calculating-prisoners-reoffending-risks   
+5. Ministry of Justice, HM Prison and Probation Service, and Lord Timpson OBE, “Process activated to manage prisoner movements,” gov.uk, Aug. 18, 2024. https://www.gov.uk/government/news/process-activated-to-manage-prisoner-movements   
+6. Prison Reform Trust, “Bromley Briefings Prison Factfile,” Feb. 2024.   
+7. D. Clark, “Average prison sentence length in England and Wales 2000-2019,” Statista, Jul. 18, 2024. https://www.statista.com/statistics/1100628/prison-sentence-length-in-england-and-wales-over-time/   
