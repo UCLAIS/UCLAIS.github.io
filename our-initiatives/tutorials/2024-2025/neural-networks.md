@@ -2,7 +2,7 @@
 sidebar_position: 7
 ---
 
-# 4: Neural Networks
+# 5: Neural Networks
 
 **Date: 13th November 2024**
 
