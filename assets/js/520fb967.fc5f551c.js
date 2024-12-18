@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkucl_artificial_intelligence_society=self.webpackChunkucl_artificial_intelligence_society||[]).push([[1141],{8311:l=>{l.exports=JSON.parse('{"label":"policy","permalink":"/blog/tags/policy","allTagsPath":"/blog/tags","count":1}')}}]);

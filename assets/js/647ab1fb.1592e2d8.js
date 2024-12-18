@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkucl_artificial_intelligence_society=self.webpackChunkucl_artificial_intelligence_society||[]).push([[5798],{6820:e=>{e.exports=JSON.parse('{"label":"government","permalink":"/blog/tags/government","allTagsPath":"/blog/tags","count":1}')}}]);
