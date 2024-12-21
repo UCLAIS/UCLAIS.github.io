@@ -2,7 +2,7 @@
 sidebar_position: 8
 ---
 
-# 5: Visual Computing I
+# 6: Visual Computing I
 
 **Date: 20th November 2024**
 
