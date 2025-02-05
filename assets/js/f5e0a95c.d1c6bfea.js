@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkucl_artificial_intelligence_society=self.webpackChunkucl_artificial_intelligence_society||[]).push([[4313],{6783:e=>{e.exports=JSON.parse('{"label":"ww2","permalink":"/blog/tags/ww-2","allTagsPath":"/blog/tags","count":1}')}}]);

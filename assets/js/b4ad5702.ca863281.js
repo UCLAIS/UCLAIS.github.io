@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkucl_artificial_intelligence_society=self.webpackChunkucl_artificial_intelligence_society||[]).push([[170],{967:e=>{e.exports=JSON.parse('{"label":"chatbots","permalink":"/blog/tags/chatbots","allTagsPath":"/blog/tags","count":1}')}}]);
