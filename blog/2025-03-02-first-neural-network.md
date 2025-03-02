@@ -21,7 +21,7 @@ In 1936, Turing was tasked with the *Entscheidungsproblem*, a question posing wh
 
 Using this, he answered the *Entscheidungsproblem* by proving that no algorithm can universally decide whether an arbitrary Turing machine will halt or run forever on a given input. This became known as the Halting Problem, which he detailed in his 1936 paper *“On Computable Numbers, with an Application to the Entscheidungsproblem.”* Turing’s insight—that any computable function could be broken down into simple operations through reading and writing symbols on an infinite tape—was a revolutionary idea that sparked the development of all artificial intelligence fields that followed.
 
-![The Universal Turing machine: complete with Turing Machine descriptions, tape, and transitions. (Image source: MIT)](/img/blog/neural-network-2.png)
+![The Universal Turing machine: complete with Turing Machine descriptions, tape, and transitions. (Image source: MIT)](/img/blog/neural-network-2.gif)
 
 ### The First Neural Network
 Inspired by Turing’s 1936 paper, Warren McCulloch, a neuroscientist, and Walter Pitts, a logician, published their influential 1943 paper *"A Logical Calculus of the Ideas Immanent in Nervous Activity"* in which they explored how the brain might perform computations. Turing’s paper provided a theoretical basis for thinking of computation in strictly formal terms and had shown that any computable function could be realized by a Turing machine. Pitts and McCulloch saw a parallel between Turing’s machine and the way groups of neurons might process and transmit information.
