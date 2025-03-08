@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkucl_artificial_intelligence_society=self.webpackChunkucl_artificial_intelligence_society||[]).push([[9837],{3043:e=>{e.exports=JSON.parse('{"label":"dead internet theory","permalink":"/blog/tags/dead-internet-theory","allTagsPath":"/blog/tags","count":1}')}}]);

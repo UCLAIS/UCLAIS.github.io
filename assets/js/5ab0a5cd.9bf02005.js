@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkucl_artificial_intelligence_society=self.webpackChunkucl_artificial_intelligence_society||[]).push([[8280],{7642:e=>{e.exports=JSON.parse('{"label":"turing","permalink":"/blog/tags/turing","allTagsPath":"/blog/tags","count":1}')}}]);

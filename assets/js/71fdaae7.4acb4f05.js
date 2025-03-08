@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkucl_artificial_intelligence_society=self.webpackChunkucl_artificial_intelligence_society||[]).push([[2777],{2239:e=>{e.exports=JSON.parse('{"label":"social media","permalink":"/blog/tags/social-media","allTagsPath":"/blog/tags","count":1}')}}]);
