@@ -26,6 +26,8 @@ The honest, carefree Internet as we knew it is dead. Yet, we, out of ignorance o
 As the phrase goes, the only thing worse than flogging a dead horse is betting on one. There doesn’t seem to be anyone left to stop us going all-in.
 
 ### Further reading
-R. Mariani, “The Dead Internet to Come,” The New Atlantis, vol. 73, no. 73, pp. 34–42, 2023, doi: https://doi.org/10.2307/27244117.
+R. Mariani, “The Dead Internet to Come,” The New Atlantis, vol. 73, no. 73, pp. 34–42, 2023, available: https://www.thenewatlantis.com/publications/the-dead-internet-to-come.
 
 A. Hern, “TechScape: On the internet, where does the line between person end and bot begin?,” The Guardian, Apr. 30, 2024. Available: https://www.theguardian.com/technology/2024/apr/30/techscape-artificial-intelligence-bots-dead-internet-theory
+
+*This article was amended on 9 March 2025, to correct the reference link to R. Mariana's work.*
