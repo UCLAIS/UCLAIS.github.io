@@ -5,7 +5,7 @@ authors: [anthony]
 tags: [big data, government, policy]
 ---
 
-*Algorithms everywhere are the way forward, whether we like it or not, and it's time to accept it.*
+***Algorithms everywhere are the way forward, whether we like it or not, and it's time to accept it.***
 
 I wouldn’t disagree with anyone who thinks the algorithms that influence what we see, what we learn, and how we interact with technology and the internet are scary.
 

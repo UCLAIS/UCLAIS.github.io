@@ -5,7 +5,7 @@ authors: [anthony]
 tags: [internet, bots, social media, dead internet theory]
 ---
 
-*"They look like people, they act like people, but there are no people left. Well, there's you and maybe a few others, but you can't tell the difference, because the bots wear a million masks."* - Robert Mariani, The Dead Internet to Come.
+***"They look like people, they act like people, but there are no people left. Well, there's you and maybe a few others, but you can't tell the difference, because the bots wear a million masks."* - Robert Mariani, The Dead Internet to Come.**
 
 Bots are everywhere on the Internet. I’m sure you’ve noticed them selling concert tickets in your WhatsApp chats, popping up on customer support websites, replying to your tweets (X posts now?) with ostensibly human-like parlance. They don’t seem to be going anywhere, and that’s a problem.
 
