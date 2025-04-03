@@ -5,7 +5,7 @@ authors: [anthony]
 tags: [internet, bots, social media, dead internet theory]
 ---
 
-*"They look like people, they act like people, but there are no people left. Well, there's you and maybe a few others, but you can't tell the difference, because the bots wear a million masks."* - Robert Mariani, The Dead Internet to Come.
+***"They look like people, they act like people, but there are no people left. Well, there's you and maybe a few others, but you can't tell the difference, because the bots wear a million masks."* - Robert Mariani, The Dead Internet to Come.**
 
 Bots are everywhere on the Internet. I’m sure you’ve noticed them selling concert tickets in your WhatsApp chats, popping up on customer support websites, replying to your tweets (X posts now?) with ostensibly human-like parlance. They don’t seem to be going anywhere, and that’s a problem.
 
@@ -26,6 +26,8 @@ The honest, carefree Internet as we knew it is dead. Yet, we, out of ignorance o
 As the phrase goes, the only thing worse than flogging a dead horse is betting on one. There doesn’t seem to be anyone left to stop us going all-in.
 
 ### Further reading
-R. Mariani, “The Dead Internet to Come,” The New Atlantis, vol. 73, no. 73, pp. 34–42, 2023, doi: https://doi.org/10.2307/27244117.
+R. Mariani, “The Dead Internet to Come,” The New Atlantis, vol. 73, no. 73, pp. 34–42, 2023, available: https://www.thenewatlantis.com/publications/the-dead-internet-to-come.
 
 A. Hern, “TechScape: On the internet, where does the line between person end and bot begin?,” The Guardian, Apr. 30, 2024. Available: https://www.theguardian.com/technology/2024/apr/30/techscape-artificial-intelligence-bots-dead-internet-theory
+
+*This article was amended on 9 March 2025, to correct the reference link to R. Mariana's work.*
