@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkucl_artificial_intelligence_society=self.webpackChunkucl_artificial_intelligence_society||[]).push([[3638],{6150:e=>{e.exports=JSON.parse('{"label":"music","permalink":"/blog/tags/music","allTagsPath":"/blog/tags","count":1}')}}]);

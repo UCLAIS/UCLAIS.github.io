@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkucl_artificial_intelligence_society=self.webpackChunkucl_artificial_intelligence_society||[]).push([[9559],{4824:e=>{e.exports=JSON.parse('{"label":"deep learning","permalink":"/blog/tags/deep-learning","allTagsPath":"/blog/tags","count":2}')}}]);

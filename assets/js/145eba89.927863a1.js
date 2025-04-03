@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkucl_artificial_intelligence_society=self.webpackChunkucl_artificial_intelligence_society||[]).push([[1907],{5519:e=>{e.exports=JSON.parse('{"label":"neural networks","permalink":"/blog/tags/neural-networks","allTagsPath":"/blog/tags","count":1}')}}]);
