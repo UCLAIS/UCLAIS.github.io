@@ -142,9 +142,15 @@ const committee = {
       members: [
         {
           name: 'Edwin Redhead',
-          position: 'Head of Nexus Labs',
-          image: 'edwin_redhead.jpg',
+          position: 'Co-lead Nexus Labs',
+          image: 'edwin.jpg',
           course: 'MEng Robotics and AI (2nd year)',
+        },
+        {
+          name: 'Aiden (Yiliu) Li,',
+          position: 'Co-lead Nexus Labs',
+          image: 'aiden.jpeg',
+          course: 'BSc Comp Sci (3rd year)',
         },
       ],
     },
