@@ -1,0 +1,89 @@
+# 📘 Nexus Labs
+### *The UK’s Largest Student-Run AI Research Labs*
+
+Welcome to the **Nexus Labs**, the research division of the **UCL Artificial Intelligence Society**, where students, researchers, and innovators collaborate to build the next generation of AI systems.
+
+Our mission is simple: **empower students to produce high-quality, impactful AI research** through structure, mentorship, and visibility on a larger stage.
+
+---
+
+## 🌟 What We Are
+
+Nexus Labs is UCL’s central hub for student-powered AI research.  
+We provide:
+
+- 👥 Research communities organised into thematic pillars  
+- 🛠️ Skill-building workshops, seminars, and technical mentorship  
+- 📊 Demo days, poster sessions, and peer evaluation  
+- 🔬 Access to advanced research tools
+- 🎤 Presentation opportunities with academics and industry  
+- 🏆 Support in preparing submissions for top conferences  
+  - NeurIPS, ICML, ICLR  
+  - CVPR, ACL, EMNLP  
+  - SIGGRAPH, ICRA, IROS, CHI, UIST, and more  
+
+---
+
+## 🧭 Our Research Pillars
+
+Explore our four core pillars:
+
+- 🤖 [Embodied Intelligence](embodied-intelligence.md)  
+- 🧑‍🤝‍🧑 [Human-Centered Artificial Intelligence](human-centered-ai.md)  
+- 📐 [Computational Foundations](computational-foundations.md)  
+- 🧬 [AI for Biomedicine](ai-for-biomedicine.md)
+
+---
+
+## 🧪 Research Tracks
+
+### 🎓 Advanced Track
+For experienced student-researchers ready to commit to ambitious, high-impact projects.
+
+- Intensive mentorship  
+- Structured research expectations  
+- Professional guidance  
+- Eligibility for advanced computational resources  
+
+Members struggling to maintain the required pace may be moved to the **Exploratory Track** for a more flexible environment.
+
+### 🌱 Exploratory Track
+For students exploring AI research or developing early-stage ideas.
+
+- Foundational workshops  
+- Light mentorship  
+- Emphasis on creativity and experimentation  
+- Access to all Nexus Labs events  
+
+---
+
+## 🛠️ Research Framework
+
+Our structured research cycle ensures meaningful growth for all students:
+
+1. **Pillar Pools** — Join a community aligned with your interests  
+2. **Team Formation** — We help match complementary skills  
+3. **Workshops & Seminars** — Held bi-monthly across all pillars  
+4. **Peer Evaluation** — Demos and poster sessions to refine work  
+5. **Visibility** — Public presentations and showcase events  
+6. **Conference Preparation** — Support for writing & submitting papers  
+
+---
+
+## 📅 Timeline & Research Culture
+
+Key conferences our teams target:
+
+- **NeurIPS • ICML • ICLR**  
+- **CVPR • SIGGRAPH • IROS**  
+- **ACL • EMNLP**  
+- **CHI • UIST**
+
+Throughout the year, we emphasise:
+
+- ❓ *Be specific. Keep questioning.*  
+- 🔄 *Stay connected. Stay motivated.*  
+- 🔍 *Research thoroughly.*  
+- 🧩 *Build and prove ASAP.*  
+
+---
