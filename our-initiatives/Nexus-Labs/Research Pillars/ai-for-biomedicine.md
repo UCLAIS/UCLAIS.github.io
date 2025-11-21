@@ -20,4 +20,4 @@ This pillar applies machine intelligence to understand biological systems, suppo
 
 From early detection to personalised treatment pathways, biomedically-aligned AI drives meaningful real-world impact, and saves lives.
 
-[← Back to Nexus Labs](index.md)
+[← Back to Nexus Labs](/our-initiatives/Nexus-Labs/)

@@ -19,4 +19,4 @@ This pillar focuses on AI systems that remain interpretable, trustworthy, ethica
 
 AI should augment human abilities, not replace them, while remaining accountable to the people it serves.
 
-[← Back to Nexus Labs](index.md)
+[← Back to Nexus Labs](/our-initiatives/Nexus-Labs/)

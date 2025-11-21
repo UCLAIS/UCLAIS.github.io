@@ -20,4 +20,4 @@
 
 Projects span robotic locomotion, manipulation, reinforcement learning for control, and real-world deployment of embodied agents.
 
-[← Back to Nexus Labs](index.md)
+[← Back to Nexus Labs](/our-initiatives/Nexus-Labs/)
