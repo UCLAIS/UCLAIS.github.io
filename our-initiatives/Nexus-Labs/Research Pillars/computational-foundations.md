@@ -20,4 +20,4 @@ This pillar advances the theoretical and algorithmic structures behind AI system
 
 Robust theory creates scalable, explainable, and reliable AI systems, forming the foundation of all other pillars.
 
-[← Back to Nexus Labs](index.md)
+[← Back to Nexus Labs](/our-initiatives/Nexus-Labs/)
