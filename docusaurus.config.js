@@ -6,15 +6,18 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 
 const math = require('remark-math')
 const katex = require('rehype-katex')
+const defaultSsrTemplate = require('@docusaurus/core/lib/webpack/templates/ssr.html.template').default
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'UCL Artificial Intelligence Society',
   tagline: "The home of UCL's AI community",
-  favicon: 'img/logo.png',
+  favicon: 'img/design/society-light-128.webp',
+  // Preserve the stock 2.x template and defer its external hydration scripts.
+  ssrTemplate: defaultSsrTemplate.replace('<script src=', '<script defer src='),
 
   // Set the production url of your site here
-  url: 'https://uclaisociety.co.uk',
+  url: 'https://uclai.co.uk',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -61,33 +64,9 @@ const config = {
     ],
   ],
 
-  headTags: [
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'preconnect',
-        href: 'https://fonts.googleapis.com',
-      },
-    },
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'preconnect',
-        href: 'https://fonts.gstatic.com',
-      },
-    },
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap',
-      },
-    },
-  ],
-
   stylesheets: [
     {
-      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
+      href: '/vendor/katex/katex.min.css',
       type: 'text/css',
       integrity:
         'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
@@ -101,49 +80,35 @@ const config = {
       // image: 'img/docusaurus-social-card.jpg',
       colorMode: {
         defaultMode: 'light',
-        disableSwitch: true,
+        disableSwitch: false,
         respectPrefersColorScheme: false,
       },
       navbar: {
         title: 'UCL AI Society',
-        style: 'dark',
         logo: {
           alt: 'UCL AI Society Logo',
-          src: 'img/logo_light.svg',
+          src: 'img/design/society-light-128.webp',
+          srcDark: 'img/design/society-dark-128.webp',
+          width: 42,
+          height: 42,
         },
         items: [
           { to: '/about-us', label: 'About Us', position: 'left' },
           {
-            type: 'docSidebar',
-            sidebarId: 'docsSidebar',
+            to: '/our-initiatives',
             position: 'left',
             label: 'Our Initiatives',
           },
           { to: '/blog', label: 'Blog', position: 'left' },
           {
-            to: '/our-initiatives/holistic-ai-hackathon',
-            label: 'Holistic AI Hackathon',
-            position: 'left',
-          },
-          {
             href: 'https://dashboard.mailerlite.com/forms/364819/102382926138704937/share',
-            label: 'Newsletter 🗞️',
-            position: 'right',
-          },
-          {
-            href: 'https://doxaai.com/',
-            label: 'DOXA',
-            position: 'right',
-          },
-          {
-            href: 'https://climatehack.ai/',
-            label: 'ClimateHack.AI',
+            label: 'Newsletter',
             position: 'right',
           },
         ],
       },
       footer: {
-        style: 'dark',
+        style: 'light',
         links: [
           {
             title: 'Our Initiatives',
@@ -154,33 +119,25 @@ const config = {
               },
               {
                 label: 'Nexus Labs',
-                to: '/our-initiatives/nexus-labs',
+                to: '/our-initiatives/Nexus-Labs/',
               },
               {
-                label: 'AI Foundry',
-                to: '/our-initiatives/ai-foundry',
+                label: 'AgentVerse',
+                href: 'https://agentverse.uclai.co.uk/',
+              },
+              {
+                label: 'Opportunities',
+                to: '/our-initiatives/opportunities/',
               },
               {
                 label: 'Journal Club',
                 to: '/our-initiatives/journal-club',
-              },
-              {
-                label: 'Holistic AI x UCL AI Society Hackathon',
-                to: '/our-initiatives/holistic-ai-hackathon',
               },
             ],
           },
           {
             title: 'Community',
             items: [
-              {
-                label: 'Discord',
-                href: 'https://discord.gg/KSUZuQx?ltclid=3f704b3b-9044-415a-a2d7-e41007214187',
-              },
-              {
-                label: 'Facebook',
-                href: 'https://www.facebook.com/AISoc.ucl/',
-              },
               {
                 label: 'Instagram',
                 href: 'https://www.instagram.com/uclaisociety/',
@@ -195,7 +152,7 @@ const config = {
             title: 'More',
             items: [
               {
-                label: 'Subscribe to our Newsletter! 🗞️',
+                label: 'Newsletter',
                 to: 'https://dashboard.mailerlite.com/forms/364819/102382926138704937/share',
               },
               {
@@ -204,7 +161,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/UCLAIS',
               },
               {
                 label: 'DOXA',
