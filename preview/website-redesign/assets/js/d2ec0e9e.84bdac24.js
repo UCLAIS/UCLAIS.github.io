@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkucl_artificial_intelligence_society=self.webpackChunkucl_artificial_intelligence_society||[]).push([[4116],{9956:e=>{e.exports=JSON.parse('{"label":"genAI","permalink":"/preview/website-redesign/blog/tags/gen-ai","allTagsPath":"/preview/website-redesign/blog/tags","count":1}')}}]);
