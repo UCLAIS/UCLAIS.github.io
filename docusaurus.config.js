@@ -120,7 +120,7 @@ const config = {
             title: 'Our Initiatives',
             items: [
               {
-                label: 'Tutorial Series',
+                label: 'Tutorial archive',
                 to: '/our-initiatives/tutorials',
               },
               {
@@ -136,7 +136,7 @@ const config = {
                 to: '/our-initiatives/opportunities/',
               },
               {
-                label: 'Journal Club',
+                label: 'Journal Club archive',
                 to: '/our-initiatives/journal-club',
               },
             ],

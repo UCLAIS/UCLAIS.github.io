@@ -1,11 +1,11 @@
-# 🧑‍🤝‍🧑 Human-Centered Artificial Intelligence  
+# Human-Centered Artificial Intelligence
 ### *AI built for humans, with humans, and around human values.*
 
 This pillar focuses on AI systems that remain interpretable, trustworthy, ethical, and collaborative.
 
 ---
 
-## 🔍 Research Areas
+## Research Areas
 
 - Visual computing and multimodal perception  
 - Explainability, transparency, and safety  
@@ -15,7 +15,7 @@ This pillar focuses on AI systems that remain interpretable, trustworthy, ethica
 
 ---
 
-## 🎯 Our Goal
+## Our Goal
 
 AI should augment human abilities, not replace them, while remaining accountable to the people it serves.
 

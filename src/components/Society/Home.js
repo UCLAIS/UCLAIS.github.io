@@ -21,7 +21,7 @@ export default function Home() {
     </aside>
     <section className="society-section society-home-directory" aria-label="Explore the society">
       <Link to="/about-us/" className="society-home-directory__about"><Emblem /><div><h2>Curiosity, with responsibility.</h2><p>Open to every student, whatever your degree or experience. Get to know our goals and how we think about safe, ethical AI.</p><span className="society-text-link">About Us <Arrow /></span></div></Link>
-      <div className="society-home-directory__links"><Link to={links.initiatives}><h2>Our Initiatives</h2><p>Research, tutorials and AgentVerse.</p><Arrow /></Link><Link to={links.opportunities}><h2>Opportunities</h2><p>Experience and career support from our partners.</p><Arrow /></Link></div>
+      <div className="society-home-directory__links"><Link to={links.initiatives}><h2>Our Initiatives</h2><p>Nexus Labs, AgentVerse and our resource archive.</p><Arrow /></Link><Link to={links.opportunities}><h2>Opportunities</h2><p>Experience and career support from our partners.</p><Arrow /></Link></div>
     </section>
   </Page>
 }

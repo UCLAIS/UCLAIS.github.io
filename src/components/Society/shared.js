@@ -68,8 +68,6 @@ export function ProgrammeGrid() {
       <div><SiteImage className="society-agentverse-wordmark" src="/img/design/agentverse-wordmark.webp" alt="AgentVerse" width="640" height="109" loading="lazy" /><h2 className="society-sr-only">AgentVerse</h2><p>Our student AI hackathon.</p><span className="society-text-link">Explore AgentVerse <Arrow external /></span></div>
       <div className="society-mini-pixels" aria-hidden="true"><span/><span/><span/><span/><span/><span/></div>
     </Link>
-    <Link to={links.tutorials} className="society-resource"><div><h2>Machine learning tutorials</h2><p>Learn the foundations and put them into practice.</p></div><Arrow /></Link>
-    <Link to={links.journal} className="society-resource"><div><h2>Journal Club</h2><p>Read and discuss AI research with other students.</p></div><Arrow /></Link>
     <Link to={links.opportunities} className="society-resource society-resource--wide"><div><h2>Partnerships & opportunities</h2><p>Career support and practical experience through Headstart and Career26.</p></div><Arrow /></Link>
   </div>
 }

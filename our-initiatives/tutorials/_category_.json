@@ -1,8 +1,8 @@
 {
-  "label": "💻 ML Tutorial Series",
+  "label": "Tutorial archive",
   "position": 1,
   "link": {
     "type": "doc",
-    "id": "tutorials/2024-2025/index"
+    "id": "tutorials/index"
   }
 }
