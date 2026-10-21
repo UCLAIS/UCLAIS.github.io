@@ -47,3 +47,12 @@ This GitHub repository contains CD workflows, that will **automatically run** a 
 ## About
 
 This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
+
+## Redesign preview on GitHub Pages
+
+The redesign is published separately at <https://uclai.co.uk/preview/website-redesign/>.
+Build it with `yarn build:preview`. The preview is public and marked `noindex`.
+`scripts/stage-preview.mjs` copies that build into an existing `gh-pages` checkout,
+only replacing `preview/website-redesign/` and verifying all other files stay unchanged.
+Commit and push that directory on `gh-pages` to update the test URL.
+A production deployment from `main` can remove this temporary preview directory.

@@ -6,6 +6,10 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 
 const math = require('remark-math')
 const katex = require('rehype-katex')
+const preview = require('./scripts/preview-config.cjs')
+const isPreview = process.env.SOCIETY_PREVIEW === 'true'
+const siteBaseUrl = isPreview ? preview.baseUrl : '/'
+
 const defaultSsrTemplate = require('@docusaurus/core/lib/webpack/templates/ssr.html.template').default
 
 /** @type {import('@docusaurus/types').Config} */
@@ -20,7 +24,8 @@ const config = {
   url: 'https://uclai.co.uk',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: siteBaseUrl,
+  noIndex: isPreview,
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -47,6 +52,7 @@ const config = {
       'classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
+        ...(isPreview ? { sitemap: false } : {}),
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           remarkPlugins: [math],
@@ -66,7 +72,7 @@ const config = {
 
   stylesheets: [
     {
-      href: '/vendor/katex/katex.min.css',
+      href: `${siteBaseUrl}vendor/katex/katex.min.css`,
       type: 'text/css',
       integrity:
         'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
