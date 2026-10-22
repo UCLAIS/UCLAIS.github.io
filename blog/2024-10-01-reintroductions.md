@@ -21,4 +21,4 @@ For the visionaries and entrepreneurs amongst our membership (yes, get yours now
 
 Finally, **Journal Clubs** invite some of the world’s greatest minds in AI for live and exclusive talks about their research – we’ve hosted individuals from top institutions across the globe talking about everything between machine learning theory and its applications.
 
-That’s not just it though. We’ve got hackathons coming up, some big events, career panels, and more… but stay updated through this blog and our members’ newsletter to hear about these as soon as they’re confirmed.
+That’s not just it though. We’ve got hackathons coming up, some big events, career panels, and more… but stay updated through this blog to hear about these as soon as they’re confirmed.

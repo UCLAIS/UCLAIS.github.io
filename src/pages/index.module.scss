@@ -121,14 +121,10 @@ $pink: #DC1C5F;
   }
 
   .logo {
+    display: block;
     width: 100%;
-    padding-top: 100%;
-
-    background: linear-gradient(50deg, #1391F0 12%, $pink 20%, #B805E4 35%, #1391F0 55%, #1391F0 60%, #f72e25 70%, #f79725 80%, $pink 90%);
-    background-size: 1000% 1000%;
-    clip-path: url(#aisoc-logo-clip);
-    animation: 15s linear 0s infinite alternate home-header-pulse;
-
+    height: auto;
+    mix-blend-mode: screen;
     margin-bottom: 20px;
   }
 }

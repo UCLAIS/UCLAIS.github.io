@@ -6,18 +6,26 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 
 const math = require('remark-math')
 const katex = require('rehype-katex')
+const preview = require('./scripts/preview-config.cjs')
+const isPreview = process.env.SOCIETY_PREVIEW === 'true'
+const siteBaseUrl = isPreview ? preview.baseUrl : '/'
+
+const defaultSsrTemplate = require('@docusaurus/core/lib/webpack/templates/ssr.html.template').default
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'UCL Artificial Intelligence Society',
   tagline: "The home of UCL's AI community",
-  favicon: 'img/logo.png',
+  favicon: 'img/design/society-light-128.webp',
+  // Preserve the stock 2.x template and defer its external hydration scripts.
+  ssrTemplate: defaultSsrTemplate.replace('<script src=', '<script defer src='),
 
   // Set the production url of your site here
-  url: 'https://uclaisociety.co.uk',
+  url: 'https://uclai.co.uk',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: siteBaseUrl,
+  noIndex: isPreview,
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -44,6 +52,7 @@ const config = {
       'classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
+        ...(isPreview ? { sitemap: false } : {}),
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           remarkPlugins: [math],
@@ -61,33 +70,9 @@ const config = {
     ],
   ],
 
-  headTags: [
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'preconnect',
-        href: 'https://fonts.googleapis.com',
-      },
-    },
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'preconnect',
-        href: 'https://fonts.gstatic.com',
-      },
-    },
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap',
-      },
-    },
-  ],
-
   stylesheets: [
     {
-      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
+      href: `${siteBaseUrl}vendor/katex/katex.min.css`,
       type: 'text/css',
       integrity:
         'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
@@ -101,72 +86,56 @@ const config = {
       // image: 'img/docusaurus-social-card.jpg',
       colorMode: {
         defaultMode: 'light',
-        disableSwitch: true,
+        disableSwitch: false,
         respectPrefersColorScheme: false,
       },
       navbar: {
         title: 'UCL AI Society',
-        style: 'dark',
         logo: {
           alt: 'UCL AI Society Logo',
-          src: 'img/logo_light.svg',
+          src: 'img/design/society-light-128.webp',
+          srcDark: 'img/design/society-dark-128.webp',
+          width: 42,
+          height: 42,
         },
         items: [
+          { to: '/', label: 'Home', position: 'left', exact: true },
           { to: '/about-us', label: 'About Us', position: 'left' },
           {
-            type: 'docSidebar',
-            sidebarId: 'docsSidebar',
+            to: '/our-initiatives',
             position: 'left',
             label: 'Our Initiatives',
+            activeBaseRegex: `^${siteBaseUrl}our-initiatives(?:/(?!opportunities(?:/|$))|$)`,
           },
+          { to: '/our-initiatives/opportunities/', label: 'Opportunities', position: 'left' },
           { to: '/blog', label: 'Blog', position: 'left' },
-          {
-            to: '/our-initiatives/holistic-ai-hackathon',
-            label: 'Holistic AI Hackathon',
-            position: 'left',
-          },
-          {
-            href: 'https://dashboard.mailerlite.com/forms/364819/102382926138704937/share',
-            label: 'Newsletter 🗞️',
-            position: 'right',
-          },
-          {
-            href: 'https://doxaai.com/',
-            label: 'DOXA',
-            position: 'right',
-          },
-          {
-            href: 'https://climatehack.ai/',
-            label: 'ClimateHack.AI',
-            position: 'right',
-          },
         ],
       },
       footer: {
-        style: 'dark',
+        style: 'light',
         links: [
           {
             title: 'Our Initiatives',
             items: [
               {
-                label: 'Tutorial Series',
+                label: 'Tutorial archive',
                 to: '/our-initiatives/tutorials',
               },
               {
                 label: 'Nexus Labs',
-                to: '/our-initiatives/nexus-labs',
+                to: '/our-initiatives/Nexus-Labs/',
               },
               {
-                label: 'AI Foundry',
-                to: '/our-initiatives/ai-foundry',
+                label: 'AgentVerse',
+                href: 'https://agentverse.uclai.co.uk/',
               },
               {
-                label: 'Journal Club',
+                label: 'Opportunities',
+                to: '/our-initiatives/opportunities/',
+              },
+              {
+                label: 'Journal Club archive',
                 to: '/our-initiatives/journal-club',
-              },
-              {
-                label: 'Holistic AI x UCL AI Society Hackathon',
-                to: '/our-initiatives/holistic-ai-hackathon',
               },
             ],
           },
@@ -174,12 +143,8 @@ const config = {
             title: 'Community',
             items: [
               {
-                label: 'Discord',
-                href: 'https://discord.gg/KSUZuQx?ltclid=3f704b3b-9044-415a-a2d7-e41007214187',
-              },
-              {
-                label: 'Facebook',
-                href: 'https://www.facebook.com/AISoc.ucl/',
+                label: 'Events calendar',
+                href: 'https://luma.com/UCLAISociety',
               },
               {
                 label: 'Instagram',
@@ -195,24 +160,12 @@ const config = {
             title: 'More',
             items: [
               {
-                label: 'Subscribe to our Newsletter! 🗞️',
-                to: 'https://dashboard.mailerlite.com/forms/364819/102382926138704937/share',
-              },
-              {
                 label: 'Blog',
                 to: '/blog',
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
-              },
-              {
-                label: 'DOXA',
-                href: 'https://doxaai.com/',
-              },
-              {
-                label: 'ClimateHack.AI',
-                href: 'https://climatehack.ai/',
+                href: 'https://github.com/UCLAIS',
               },
             ],
           },

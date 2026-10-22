@@ -1,6 +1,6 @@
 # Website
 
-Welcome to the UCL AI Society website repo! Have a look at what we do: http://uclaisociety.co.uk 🎉
+Welcome to the UCL AI Society website repo! Have a look at what we do: https://uclai.co.uk 🎉
 
 ## Installation
 
@@ -20,7 +20,7 @@ This command starts a local development server and opens up a browser window. Mo
 
 If you would like to modify or add some content, please do so through a Pull Request. [Here](https://github.com/UCLAIS/UCLAIS.github.io/pull/5) is an example of a past pull request, which introduced a simple update to the website - have a look at the "Files changed" section.
 
-The following instruction gives an example of how to edit a simple document page (e.g. one like [this](https://uclaisociety.co.uk/our-initiatives/nexus-labs/)):
+The following instruction gives an example of how to edit a simple document page (e.g. one like [this](https://uclai.co.uk/our-initiatives/Nexus-Labs/)):
 
 1. First, clone this repository (e.g. with `git clone`).
 2. Make sure you have [node.js](https://nodejs.org/en/download/current) and [yarn](https://classic.yarnpkg.com/lang/en/docs/install) installed.
@@ -47,3 +47,12 @@ This GitHub repository contains CD workflows, that will **automatically run** a 
 ## About
 
 This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
+
+## Redesign preview on GitHub Pages
+
+The redesign is published separately at <https://uclai.co.uk/preview/website-redesign/>.
+Build it with `yarn build:preview`. The preview is public and marked `noindex`.
+`scripts/stage-preview.mjs` copies that build into an existing `gh-pages` checkout,
+only replacing `preview/website-redesign/` and verifying all other files stay unchanged.
+Commit and push that directory on `gh-pages` to update the test URL.
+A production deployment from `main` can remove this temporary preview directory.

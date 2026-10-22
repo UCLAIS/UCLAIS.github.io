@@ -1,11 +1,11 @@
-# 📐 Computational Foundations  
+# Computational Foundations
 ### *The mathematical bedrock of modern AI.*
 
 This pillar advances the theoretical and algorithmic structures behind AI systems.
 
 ---
 
-## 🔍 Research Areas
+## Research Areas
 
 - Machine learning theory  
 - Optimisation and numerical computation  
@@ -16,7 +16,7 @@ This pillar advances the theoretical and algorithmic structures behind AI system
 
 ---
 
-## 🎯 Why It Matters
+## Why It Matters
 
 Robust theory creates scalable, explainable, and reliable AI systems, forming the foundation of all other pillars.
 
