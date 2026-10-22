@@ -12,7 +12,7 @@ function EventsCalendar() {
 export default function Opportunities() {
   return <Page title="Events & opportunities" description="Browse UCL AI Society and partner events on our Luma calendar, then explore career support, micro-internships and partner programmes.">
     <Hero title={<>Events &<br/>opportunities</>}>Find society and partner events, practical experience and career support.</Hero>
-    <nav className="society-section society-page-links" aria-label="On this page"><Link to="#events">Events calendar</Link><Link to="#career-opportunities">Career opportunities</Link><Link to="#opportunity-newsletter">Newsletter</Link></nav>
+    <nav className="society-section society-page-links" aria-label="On this page"><Link to="#events">Events calendar</Link><Link to="#career-opportunities">Career opportunities</Link></nav>
     <section className="society-section society-events" id="events" aria-labelledby="events-calendar-title">
       <h2 id="events-calendar-title">Our events calendar</h2>
       <p>Browse all our society and partner events on Luma, from talks and workshops to hackathons and industry meetups.</p>
@@ -22,6 +22,5 @@ export default function Opportunities() {
       <p className="society-events__fallback">Calendar not loading? <Link to={links.calendar}>View all events directly on Luma.</Link></p>
     </section>
     <Partnerships />
-    <section className="society-section society-opportunities-follow" id="opportunity-newsletter"><h2>Hear about the next opportunity.</h2><p>We share society opportunities through our newsletter.</p><Button href={links.newsletter}>Get the newsletter</Button></section>
   </Page>
 }

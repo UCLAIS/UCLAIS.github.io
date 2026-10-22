@@ -6,7 +6,6 @@ export const links = {
   journal: '/our-initiatives/journal-club/',
   agentverse: 'https://agentverse.uclai.co.uk/',
   membership: 'https://studentsunionucl.org/clubs-societies/artificial-intelligence-society',
-  newsletter: 'https://dashboard.mailerlite.com/forms/364819/102382926138704937/share',
   calendar: 'https://luma.com/UCLAISociety',
   calendarEmbed: 'https://luma.com/embed/calendar/cal-3vytj1DeqX8k7mk/events',
   headstart: 'https://www.headstartglobal.io/',

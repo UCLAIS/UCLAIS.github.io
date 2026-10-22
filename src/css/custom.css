@@ -203,8 +203,8 @@ html[data-theme='light'] .society-agentverse-wordmark { filter: brightness(0) sa
 .society-partner .society-text-link { margin-top: 24px; }
 .society-career26-logo { width: 180px; height: auto; margin-top: 10px; }
 html[data-theme='dark'] .society-career26-logo { filter: invert(1); }
-.society-opportunities-follow p, .society-about-opportunities p { margin-top: 20px; }
-.society-opportunities-follow .society-button, .society-about-opportunities .society-text-link { margin-top: 24px; }
+.society-about-opportunities p { margin-top: 20px; }
+.society-about-opportunities .society-text-link { margin-top: 24px; }
 .society-deadline { padding: 22px 28px; background: var(--soc-surface); border-left: 3px solid var(--soc-accent); }
 .society-deadline p { display: flex; flex-wrap: wrap; gap: 8px 28px; max-width: none; font-size: 14px; }
 .society-deadline strong, .society-deadline time { color: var(--soc-text); font-weight: 550; }

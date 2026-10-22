@@ -109,11 +109,6 @@ const config = {
           },
           { to: '/our-initiatives/opportunities/', label: 'Opportunities', position: 'left' },
           { to: '/blog', label: 'Blog', position: 'left' },
-          {
-            href: 'https://dashboard.mailerlite.com/forms/364819/102382926138704937/share',
-            label: 'Newsletter',
-            position: 'right',
-          },
         ],
       },
       footer: {
@@ -164,10 +159,6 @@ const config = {
           {
             title: 'More',
             items: [
-              {
-                label: 'Newsletter',
-                to: 'https://dashboard.mailerlite.com/forms/364819/102382926138704937/share',
-              },
               {
                 label: 'Blog',
                 to: '/blog',
