@@ -18,7 +18,7 @@ To counteract Enigma algorithms, the brilliant minds at Bletchley Park, includin
 
 But how was this code-breaking machine a predecessor to modern AI?
 
-![The Enigma machine](/img/blog/history-of-ai-1.png)
+![The Enigma machine](/img/blog/optimised/history-of-ai-1.webp)
 
 Breaking the Enigma cipher involved identifying patterns in ciphertext to deduce the underlying encryption keys. Modern neural networks, particularly in deep learning, excel at recognising patterns in complex datasets. Image and speech recognition, genomics, and medical imaging are all fields where we use trend detection nowadays. 
 

@@ -5,7 +5,7 @@ import PixelScene from './PixelScene'
 import { links } from './content'
 
 export default function Home() {
-  return <Page title="Home" description="UCL's AI community. Learn, research and build together, with safe and ethical AI at the centre.">
+  return <Page title="Home" description="UCL's AI community. Learn, research and build together, with safe and ethical AI at the centre." preloadEmblem>
     <header className="society-home-hero">
       <PixelScene />
       <Emblem />
@@ -13,6 +13,9 @@ export default function Home() {
       <p>For everyone curious about AI. Learn, research and build with us.</p>
       <div className="society-actions"><Button href={links.opportunities}>See events & opportunities</Button><Link className="society-text-link" to={links.membership}>Join the society <Arrow external /></Link></div>
     </header>
+    <section className="society-quote society-section" aria-label="Jensen Huang on UCL AI Society">
+      <blockquote><p>“UCL AI Society. AI has a society now.”</p><footer>Jensen Huang <span>Founder and CEO, NVIDIA</span></footer></blockquote>
+    </section>
     <nav className="society-section society-home-directory" aria-labelledby="home-directory-title">
       <h2 id="home-directory-title">Explore the society</h2>
       <div className="society-home-directory__pages">
@@ -25,8 +28,5 @@ export default function Home() {
     <aside className="society-section society-home-news" aria-label="Nexus Labs applications">
       <div><h2>Nexus Labs research applications</h2><p>Join our student research programme. Applications close <time dateTime="2026-10-23">Friday 23 October</time>.</p></div><Link className="society-text-link" to={links.nexus}>Explore Nexus Labs <Arrow /></Link>
     </aside>
-    <section className="society-quote society-section" aria-label="Jensen Huang on UCL AI Society">
-      <blockquote><p>“UCL AI Society. AI has a society now.”</p><footer>Jensen Huang <span>Founder and CEO, NVIDIA</span></footer></blockquote>
-    </section>
   </Page>
 }

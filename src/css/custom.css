@@ -115,7 +115,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .society-section--first { padding-top: 12px; }
 .society-section__intro { margin-bottom: 34px; }
 .society-section__intro > p { margin-top: 20px; max-width: 54ch; }
-.society-emblem { display: block; width: 118px; aspect-ratio: 1.08; background: var(--soc-accent); -webkit-mask: url('/img/design/society-mark.webp') center / contain no-repeat; mask: url('/img/design/society-mark.webp') center / contain no-repeat; }
+.society-emblem { display: block; width: 118px; aspect-ratio: 1.08; background: var(--soc-accent); -webkit-mask: url('/img/design/society-mark-256.webp') center / contain no-repeat; mask: url('/img/design/society-mark-256.webp') center / contain no-repeat; }
 .society-home-hero { position: relative; isolation: isolate; display: flex; flex-direction: column; align-items: center; text-align: center; min-height: 480px; padding: 28px var(--soc-gutter) 36px; }
 .society-home-hero .society-emblem { width: 88px; margin-bottom: 18px; }
 .society-home-hero h1 { font-size: clamp(60px, 6vw, 80px); line-height: 1.02; font-weight: 400; }
@@ -308,7 +308,8 @@ html[data-theme='dark'] .society-career26-logo { filter: invert(1); }
   .society-quote { padding-block: 0 16px; }
   .society-quote blockquote { display: block; padding-block: 24px; text-align: center; }
   .society-quote blockquote p { font-size: 27px; max-width: 26ch; margin-inline: auto; }
-  .society-quote footer { margin-top: 18px; }
+  .society-quote footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 12px; margin-top: 14px; }
+  .society-quote footer span { margin-top: 0; }
   .society-home-news { grid-template-columns: 1fr; gap: 20px; padding-block: 30px 36px; }
   .society-home-news h2 { font-size: 35px; }
   .society-home-news p { font-size: 14px; }

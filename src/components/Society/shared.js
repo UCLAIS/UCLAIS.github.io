@@ -9,12 +9,14 @@ import { links, pillars } from './content'
 import PixelScene from './PixelScene'
 import displayFont from '@site/static/fonts/EBGaramond-Latin.woff2'
 import textFont from '@site/static/fonts/Geist.woff2'
+import societyMark from '@site/static/img/design/society-mark-256.webp'
 
-export function Page({ title, description, children, canonical }) {
+export function Page({ title, description, children, canonical, preloadEmblem = false }) {
   return <Layout title={title} description={description} wrapperClassName="society-wrapper">
     <Head>
       <link rel="preload" href={displayFont} as="font" type="font/woff2" crossOrigin="anonymous" />
       <link rel="preload" href={textFont} as="font" type="font/woff2" crossOrigin="anonymous" />
+      {preloadEmblem && <link rel="preload" href={societyMark} as="image" />}
       {canonical && <link rel="canonical" href={`https://uclai.co.uk${canonical}`} />}
     </Head>
     <main className="society-page">{children}</main>
@@ -22,7 +24,7 @@ export function Page({ title, description, children, canonical }) {
 }
 
 export function SiteImage({ src, ...props }) {
-  return <img src={useBaseUrl(src)} {...props} />
+  return <img src={useBaseUrl(src)} decoding="async" {...props} />
 }
 
 export function Arrow({ external = false }) {
