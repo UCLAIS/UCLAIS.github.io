@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkucl_artificial_intelligence_society=self.webpackChunkucl_artificial_intelligence_society||[]).push([[3517],{1063:e=>{e.exports=JSON.parse('{"label":"chemistry","permalink":"/preview/website-redesign/blog/tags/chemistry","allTagsPath":"/preview/website-redesign/blog/tags","count":1}')}}]);

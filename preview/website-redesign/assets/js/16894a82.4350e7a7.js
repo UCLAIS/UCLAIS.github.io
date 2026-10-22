@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkucl_artificial_intelligence_society=self.webpackChunkucl_artificial_intelligence_society||[]).push([[9347],{7846:e=>{e.exports=JSON.parse('{"label":"nobel prize","permalink":"/preview/website-redesign/blog/tags/nobel-prize","allTagsPath":"/preview/website-redesign/blog/tags","count":1}')}}]);
