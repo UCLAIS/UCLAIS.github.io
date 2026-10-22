@@ -6,7 +6,7 @@ sidebar_position: 2
 
 **Date: 9th October 2023**
 
-![Yves-Alexandre de Montjoye](/img/jc/journal-1-image.jpeg)
+![Yves-Alexandre de Montjoye](/img/jc/journal-1-image.webp)
 
 The AI Society Journal Club was thrilled to welcome Yves-Alexandre de Montjoye for an enthralling dialogue, centered around the metamorphosis of data anonymity in today's torrent of data, where every action and movement is captured in real-time. 🌐 The influx of large-scale behavioral data has not only enriched our comprehension of individual and societal behaviors, but also ignited serious privacy apprehensions. 🚀
 

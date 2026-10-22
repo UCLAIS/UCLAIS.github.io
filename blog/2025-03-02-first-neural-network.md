@@ -12,7 +12,7 @@ A neural network is a computational model inspired by the structure of the brain
 
 Modern neural networks are complex multi-layered networks capable of solving intricate tasks like image recognition, natural language processing, and autonomous driving. They have had a profound impact on modern technology, revolutionizing and enriching people's lives through their application in solutions ranging from large language models like GPT-4 to advancements in healthcare, such as disease detection and drug discovery.
 
-![How an artificial neural network works: input layer, hidden layers, output layers. (Image source: Facundo Bre)](/img/blog/neural-network-1.png)
+![How an artificial neural network works: input layer, hidden layers, output layers. (Image source: Facundo Bre)](/img/blog/optimised/neural-network-1.webp)
 
 ### The Turing Machine
 To truly appreciate modern neural networks, it’s important to look at the story of their first theoretical inception. The origins of neural networks are intertwined with the origins of artificial intelligence itself, beginning in Cambridge in 1936, where a mathematician named Alan Turing was quietly laying the foundation for modern AI.
@@ -28,7 +28,7 @@ Inspired by Turing’s 1936 paper, Warren McCulloch, a neuroscientist, and Walte
 
 They proposed that neurons could be modeled as binary on-off units, firing when inputs exceeded a certain threshold (akin to receiving enough excitatory signals). By connecting these idealized neurons in various configurations, they demonstrated that the systems could implement basic logical operators like AND, OR, and NOT. This offered the possibility that these systems might simulate logical operations or even more complex computations. They were the first to describe what later researchers would call a neural network.
 
-![The McCulloch-Pitts Neuron Model. (Image source: available under fair use, Creative Commons)](/img/blog/neural-network-3.png)
+![The McCulloch-Pitts Neuron Model. (Image source: available under fair use, Creative Commons)](/img/blog/optimised/neural-network-3.webp)
 
 Although their model was only theoretical and faced several limitations, their mathematical approach to neural functioning inspired subsequent generations of researchers—paving the way for cybernetics and later the field of artificial intelligence. Their work ultimately shaped the path for modern AI and deep learning, which are now deeply embedded in our everyday lives.
 

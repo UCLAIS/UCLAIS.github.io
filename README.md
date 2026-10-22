@@ -48,6 +48,17 @@ This GitHub repository contains CD workflows, that will **automatically run** a 
 
 This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
 
+## Image assets
+
+Photographs and graphics are served as static files from this repository. Keep the
+originals, then run `python3 scripts/optimise-images.py` with Pillow installed to
+regenerate the small WebP portraits, article images and homepage logo. Commit the
+generated files; visitors and production builds do not need an image service.
+Committee thumbnails are sized for up to three times their displayed resolution.
+The original Jeremy Lo Ying Ping author photograph was copied from
+<https://jezz.me/img/jeremy_lo_ying_ping.jpg>.
+Luma's live calendar and its event images remain hosted by Luma.
+
 ## Redesign preview on GitHub Pages
 
 The redesign is published separately at <https://uclai.co.uk/preview/website-redesign/>.

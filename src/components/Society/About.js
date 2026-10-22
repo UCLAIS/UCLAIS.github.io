@@ -35,7 +35,7 @@ export default function About() {
       <section className="society-section society-committee" aria-labelledby="committee-title">
         <details><summary id="committee-title">Meet the committee</summary><div className="society-committee__groups">
           {committee.categories.map(category => <section key={category.title}><h3>{cleanText(category.title)}</h3><div className="society-member-grid">{category.members.map(member => <article className="society-member" key={member.name}>
-            {member.image && <SiteImage src={`/img/committee/${encodeURIComponent(member.image)}`} alt={member.name} width="88" height="104" loading="lazy" onError={event => { event.currentTarget.style.display = 'none' }} />}
+            {member.image && <SiteImage src={`/img/committee/thumbnails/${encodeURIComponent(member.image.replace(/\.[^.]+$/, '.webp'))}`} alt={member.name} width="72" height="88" loading="lazy" onError={event => { event.currentTarget.style.display = 'none' }} />}
             <div><h4>{member.linkedin ? <Link to={member.linkedin}>{member.name}</Link> : member.name}</h4><p>{cleanText(member.position)}</p>{member.course && <p className="society-member__course">{cleanText(member.course)}{member.year && `, ${cleanText(member.year)}`}</p>}</div>
           </article>)}</div></section>)}
         </div></details>

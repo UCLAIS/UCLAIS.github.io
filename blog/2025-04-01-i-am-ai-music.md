@@ -6,7 +6,7 @@ tags: [music, art, neural networks, deep learning, genAI]
 ---
 
 ***"Even AI gotta practice clonin' Kendrick / The double entendre, the encore remnants."* - Kendrick Lamar, America Has A Problem (Remix).**
-![I AM AI - edit of Playboi Carti's "MUSIC" album cover which reads "I AM MUSIC".](/img/blog/i-am-ai-music.jpeg)
+![I AM AI - edit of Playboi Carti's "MUSIC" album cover which reads "I AM MUSIC".](/img/blog/optimised/i-am-ai-music.webp)
 ### love all my supporters          it’s time
 It’s been just over two weeks since Playboi Carti dropped his latest album. Since his last, we've seen more than four years of pushed-back dates, scrapped rollouts, and straight up lies. *MUSIC* is him thanking the world for the wait. 
 
