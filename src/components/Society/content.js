@@ -7,6 +7,8 @@ export const links = {
   agentverse: 'https://agentverse.uclai.co.uk/',
   membership: 'https://studentsunionucl.org/clubs-societies/artificial-intelligence-society',
   newsletter: 'https://dashboard.mailerlite.com/forms/364819/102382926138704937/share',
+  calendar: 'https://luma.com/UCLAISociety',
+  calendarEmbed: 'https://luma.com/embed/calendar/cal-3vytj1DeqX8k7mk/events',
   headstart: 'https://www.headstartglobal.io/',
   career26: 'https://career26.com/academy',
   researcher: 'https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=_oivH5ipW0yTySEKEdmlwrO1zVMwR0BBruood4Ic9oJUMkJNVFlMT1JNRzNNRTlXNTNIN05YSkVJTy4u',

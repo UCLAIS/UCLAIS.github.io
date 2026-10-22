@@ -47,14 +47,15 @@ export function Upcoming() {
   </section>
 }
 export function Partnerships() {
-  return <section className="society-section society-partners" id="opportunities" aria-label="Our partnerships">
+  return <section className="society-section society-partners" id="opportunities" aria-labelledby="career-opportunities">
+    <h2 id="career-opportunities">Career opportunities</h2>
     <article className="society-partner">
-      <div className="society-partner__name"><h2>Headstart</h2><span>Experience</span></div>
-      <div><h3>Get experience on real projects.</h3><p>Build career skills through mentored startup micro-internships, working on real projects and developing your portfolio.</p><Link className="society-text-link" to={links.headstart}>Visit Headstart <Arrow external /></Link></div>
+      <div className="society-partner__name"><h3>Headstart</h3><span>Experience</span></div>
+      <div><h4>Get experience on real projects.</h4><p>Build career skills through mentored startup micro-internships, working on real projects and developing your portfolio.</p><Link className="society-text-link" to={links.headstart}>Visit Headstart <Arrow external /></Link></div>
     </article>
     <article className="society-partner">
-      <div className="society-partner__name"><h2><SiteImage className="society-career26-logo" src="/img/design/career26.webp" alt="Career26" width="180" height="35" loading="lazy" /></h2><span>Career development</span></div>
-      <div><h3>Eight weeks. Free for our students.</h3><p>Our Career26 partnership offers an exclusive eight-week finance course taught by former industry professionals.</p><p>Strong performers can be considered for referrals.</p><Link className="society-text-link" to={links.career26}>Explore Career26 Academy <Arrow external /></Link></div>
+      <div className="society-partner__name"><h3><SiteImage className="society-career26-logo" src="/img/design/career26.webp" alt="Career26" width="180" height="35" loading="lazy" /></h3><span>Career development</span></div>
+      <div><h4>Eight weeks. Free for our students.</h4><p>Our Career26 partnership offers an exclusive eight-week finance course taught by former industry professionals.</p><p>Strong performers can be considered for referrals.</p><Link className="society-text-link" to={links.career26}>Explore Career26 Academy <Arrow external /></Link></div>
     </article>
   </section>
 }

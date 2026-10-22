@@ -99,12 +99,15 @@ const config = {
           height: 42,
         },
         items: [
+          { to: '/', label: 'Home', position: 'left', exact: true },
           { to: '/about-us', label: 'About Us', position: 'left' },
           {
             to: '/our-initiatives',
             position: 'left',
             label: 'Our Initiatives',
+            activeBaseRegex: `^${siteBaseUrl}our-initiatives(?:/(?!opportunities(?:/|$))|$)`,
           },
+          { to: '/our-initiatives/opportunities/', label: 'Opportunities', position: 'left' },
           { to: '/blog', label: 'Blog', position: 'left' },
           {
             href: 'https://dashboard.mailerlite.com/forms/364819/102382926138704937/share',
@@ -145,6 +148,10 @@ const config = {
             title: 'Community',
             items: [
               {
+                label: 'Events calendar',
+                href: 'https://luma.com/UCLAISociety',
+              },
+              {
                 label: 'Instagram',
                 href: 'https://www.instagram.com/uclaisociety/',
               },
@@ -168,14 +175,6 @@ const config = {
               {
                 label: 'GitHub',
                 href: 'https://github.com/UCLAIS',
-              },
-              {
-                label: 'DOXA',
-                href: 'https://doxaai.com/',
-              },
-              {
-                label: 'ClimateHack.AI',
-                href: 'https://climatehack.ai/',
               },
             ],
           },

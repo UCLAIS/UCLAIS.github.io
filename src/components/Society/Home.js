@@ -11,17 +11,22 @@ export default function Home() {
       <Emblem />
       <h1>UCL Artificial<br/>Intelligence Society</h1>
       <p>For everyone curious about AI. Learn, research and build with us.</p>
-      <div className="society-actions"><Button href={links.membership}>Join the society</Button><Link className="society-text-link" to={links.initiatives}>Explore our initiatives <Arrow /></Link></div>
+      <div className="society-actions"><Button href={links.opportunities}>See events & opportunities</Button><Link className="society-text-link" to={links.membership}>Join the society <Arrow external /></Link></div>
     </header>
+    <nav className="society-section society-home-directory" aria-labelledby="home-directory-title">
+      <h2 id="home-directory-title">Explore the society</h2>
+      <div className="society-home-directory__pages">
+        <Link to={links.opportunities}><div><h3>Events & opportunities</h3><p>Our calendar, partner events and career support.</p></div><Arrow /></Link>
+        <Link to={links.initiatives}><div><h3>Our Initiatives</h3><p>Research with Nexus Labs. Build at AgentVerse.</p></div><Arrow /></Link>
+        <Link to="/about-us/"><div><h3>About Us</h3><p>Our goals, principles and the people behind the society.</p></div><Arrow /></Link>
+        <Link to={`${links.initiatives}#archive`}><div><h3>Tutorials & Journal Club</h3><p>Past recordings, slides and notes from our learning archive.</p></div><Arrow /></Link>
+      </div>
+    </nav>
+    <aside className="society-section society-home-news" aria-label="Nexus Labs applications">
+      <div><h2>Nexus Labs research applications</h2><p>Join our student research programme. Applications close <time dateTime="2026-10-23">Friday 23 October</time>.</p></div><Link className="society-text-link" to={links.nexus}>Explore Nexus Labs <Arrow /></Link>
+    </aside>
     <section className="society-quote society-section" aria-label="Jensen Huang on UCL AI Society">
       <blockquote><p>“UCL AI Society. AI has a society now.”</p><footer>Jensen Huang <span>Founder and CEO, NVIDIA</span></footer></blockquote>
-    </section>
-    <aside className="society-section society-home-news" aria-label="Nexus Labs applications">
-      <div><p>Nexus Labs 2026/27</p><h2>Research starts with a question.</h2><p>Join our student research programme. Applications close <time dateTime="2026-10-23">Friday 23 October</time>.</p></div><Link className="society-text-link" to={links.nexus}>Meet Nexus Labs <Arrow /></Link>
-    </aside>
-    <section className="society-section society-home-directory" aria-label="Explore the society">
-      <Link to="/about-us/" className="society-home-directory__about"><Emblem /><div><h2>Curiosity, with responsibility.</h2><p>Open to every student, whatever your degree or experience. Get to know our goals and how we think about safe, ethical AI.</p><span className="society-text-link">About Us <Arrow /></span></div></Link>
-      <div className="society-home-directory__links"><Link to={links.initiatives}><h2>Our Initiatives</h2><p>Nexus Labs, AgentVerse and our resource archive.</p><Arrow /></Link><Link to={links.opportunities}><h2>Opportunities</h2><p>Experience and career support from our partners.</p><Arrow /></Link></div>
     </section>
   </Page>
 }

@@ -8,7 +8,7 @@ export default function Initiatives() {
     <Hero title="Our Initiatives">Join a research team, build at AgentVerse or explore opportunities through our partners.</Hero>
     <section className="society-section society-section--first" aria-label="Our current initiatives"><ProgrammeGrid /></section>
     <Upcoming />
-    <section className="society-section society-archive-section" aria-labelledby="initiative-archive-title">
+    <section className="society-section society-archive-section" id="archive" aria-labelledby="initiative-archive-title">
       <h2 id="initiative-archive-title">From the archive</h2>
       <p>Learning materials from past years. These are not current programmes or upcoming sessions.</p>
       <div className="society-archive-links">
@@ -16,6 +16,6 @@ export default function Initiatives() {
         <Link to={links.journal}><div><h3>Journal Club</h3><p>Notes and slides from past sessions.</p></div><Arrow /></Link>
       </div>
     </section>
-    <section className="society-section society-more"><h2>More from our community</h2><div><Link to="https://doxaai.com/">DOXA <Arrow external /></Link><Link to="https://climatehack.ai/">ClimateHack.AI <Arrow external /></Link><Link to="https://podcasters.spotify.com/pod/show/ucl-ai-society">Reinforcement Talking podcast <Arrow external /></Link></div></section>
+    <section className="society-section society-more"><h2>From our podcast archive</h2><div><Link to="https://podcasters.spotify.com/pod/show/ucl-ai-society">Reinforcement Talking podcast <Arrow external /></Link></div></section>
   </Page>
 }
