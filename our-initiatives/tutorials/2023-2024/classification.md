@@ -22,4 +22,4 @@ The **DOXA Challenge notebook** can be found here: 🏆 [**DOXA Challenge 1**](h
 
 This is the end of the **Classical Machine Learning** section of the series. We will continute next half term on **Deep Learning** 🥳
 
-Hope you have a great reading week! Please join our **WhatsApp** group chat through this [link](https://chat.whatsapp.com/JWEJn7OWvWE8MBfm2uSBhh).
+Hope you have a great reading week! Please join our **WhatsApp** group chat through this [link](https://chat.whatsapp.com/I2B5ZCng7Id8k5iuaJvHtt).
