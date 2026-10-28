@@ -143,6 +143,10 @@ const config = {
             title: 'Community',
             items: [
               {
+                label: 'WhatsApp',
+                href: 'https://chat.whatsapp.com/I2B5ZCng7Id8k5iuaJvHtt',
+              },
+              {
                 label: 'Events calendar',
                 href: 'https://luma.com/UCLAISociety',
               },

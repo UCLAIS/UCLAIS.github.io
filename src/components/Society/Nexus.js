@@ -5,11 +5,11 @@ import { links, pillars } from './content'
 
 export default function Nexus() {
   return (
-    <Page title="Nexus Labs" description="Student-led AI research at UCL. Explore four research pillars and apply for the 2026/27 programme." canonical={links.nexus}>
-      <Hero title="Nexus Labs" actions={<><Button href={links.researcher}>Apply to Nexus</Button><Button href="#research-pillars" secondary>Explore pillars</Button></>}>
+    <Page title="Nexus Labs" description="Student-led AI research at UCL. Explore four research pillars in our 2026/27 programme. Student applications are now closed." canonical={links.nexus}>
+      <Hero title="Nexus Labs" actions={<Button href="#research-pillars">Explore pillars</Button>}>
         Find a team, develop an idea and do AI research with academic and industry support.
       </Hero>
-      <div className="society-deadline"><p><strong>Nexus Labs 2026/27</strong><span>First-round student applications close <time dateTime="2026-10-23">Friday 23 October</time>.</span></p></div>
+      <div className="society-deadline"><p><strong>Nexus Labs 2026/27</strong><span>Applications now closed.</span></p></div>
       <section className="society-section" aria-labelledby="nexus-process-title">
         <div className="society-section__intro"><h2 id="nexus-process-title">From a question to a project.</h2><p>Nexus Labs is the research division of UCL AI Society. We help students turn shared research interests into work they can present.</p></div>
         <div className="society-process">

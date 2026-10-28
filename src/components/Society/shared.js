@@ -65,7 +65,7 @@ export function ProgrammeGrid() {
   return <div className="society-programmes" id="programmes">
     <Link to={links.nexus} className="society-nexus-feature">
       <div className="society-nexus-feature__copy"><h2>Nexus Labs</h2><p>Our research division. Find a team and develop an AI research project with academic and industry support.</p><span className="society-text-link">Explore Nexus Labs <Arrow /></span></div>
-      <div className="society-nexus-feature__details"><ul>{pillars.map(pillar => <li key={pillar.path}>{pillar.title}</li>)}</ul><p>Applications close<br/><time dateTime="2026-10-23">Friday 23 October</time></p></div>
+      <div className="society-nexus-feature__details"><ul>{pillars.map(pillar => <li key={pillar.path}>{pillar.title}</li>)}</ul><p>Applications now closed.</p></div>
     </Link>
     <Link to={links.agentverse} className="society-agentverse-feature">
       <div><SiteImage className="society-agentverse-wordmark" src="/img/design/agentverse-wordmark.webp" alt="AgentVerse" width="640" height="109" loading="lazy" /><h2 className="society-sr-only">AgentVerse</h2><p>Our student AI hackathon.</p><span className="society-text-link">Explore AgentVerse <Arrow external /></span></div>

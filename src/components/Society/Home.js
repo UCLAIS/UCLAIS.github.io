@@ -26,7 +26,7 @@ export default function Home() {
       </div>
     </nav>
     <aside className="society-section society-home-news" aria-label="Nexus Labs applications">
-      <div><h2>Nexus Labs research applications</h2><p>Join our student research programme. Applications close <time dateTime="2026-10-23">Friday 23 October</time>.</p></div><Link className="society-text-link" to={links.nexus}>Explore Nexus Labs <Arrow /></Link>
+      <div><h2>Nexus Labs research applications</h2><p>Applications now closed.</p></div><Link className="society-text-link" to={links.nexus}>Explore Nexus Labs <Arrow /></Link>
     </aside>
   </Page>
 }
