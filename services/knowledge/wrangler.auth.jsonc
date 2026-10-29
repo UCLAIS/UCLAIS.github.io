@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "uclai-knowledge-auth-staging",
+  "main": "src/auth-worker.ts",
+  "compatibility_date": "2026-10-29",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": true,
+  "vars": {
+    "AUTH_ORIGIN": "https://knowledge-auth.example.invalid",
+    "ADMIN_ORIGIN": "https://knowledge-admin.example.invalid",
+    "GITHUB_CLIENT_ID": "CONFIGURE_GITHUB_OAUTH_APP_CLIENT_ID"
+  },
+  "kv_namespaces": [{ "binding": "OAUTH_KV", "id": "00000000000000000000000000000000" }],
+  "d1_databases": [{ "binding": "PRIVATE_DB", "database_name": "uclai-knowledge-private-staging", "database_id": "00000000-0000-0000-0000-000000000000", "migrations_dir": "migrations" }]
+  // Set GITHUB_CLIENT_SECRET with `wrangler secret put`; never commit it.
+}

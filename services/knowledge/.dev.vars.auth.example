@@ -1,0 +1,5 @@
+# Wrangler local-only auth Worker secrets. Copy to .dev.vars.auth.
+# Configure non-secret origins/client ID in wrangler.auth.jsonc.
+# Local dev: wrangler dev --config wrangler.auth.jsonc --env-file .dev.vars.auth
+# Deployment uses `wrangler secret put`, not this file.
+GITHUB_CLIENT_SECRET=

@@ -1,0 +1,16 @@
+node_modules/
+.wrangler/
+.dev.vars*
+!.dev.vars.example
+!.dev.vars.*.example
+*.log
+*.sqlite*
+*.db
+data/raw/
+data/corpus.json
+data/private*/
+data/releases/
+coverage/
+.generated/
+__pycache__/
+*.pyc

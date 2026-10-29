@@ -22,3 +22,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Test build website
         run: yarn build
+        env:
+          KNOWLEDGE_PUBLIC_MCP_URL: ${{ vars.KNOWLEDGE_PUBLIC_MCP_URL }}
+          KNOWLEDGE_EDITOR_MCP_URL: ${{ vars.KNOWLEDGE_EDITOR_MCP_URL }}
+          KNOWLEDGE_PUBLIC_API_URL: ${{ vars.KNOWLEDGE_PUBLIC_API_URL }}
