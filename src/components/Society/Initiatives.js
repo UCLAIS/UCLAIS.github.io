@@ -9,10 +9,10 @@ export default function Initiatives() {
     <section className="society-section society-section--first" aria-label="Our current initiatives"><ProgrammeGrid /></section>
     <Upcoming />
     <section className="society-section society-archive-section" id="archive" aria-labelledby="initiative-archive-title">
-      <h2 id="initiative-archive-title">From the archive</h2>
-      <p>Learning materials from past years. These are not current programmes or upcoming sessions.</p>
+      <h2 id="initiative-archive-title">Learning resources</h2>
+      <p>Tutorials and Journal Club materials for self-study. Check the events calendar for upcoming sessions.</p>
       <div className="society-archive-links">
-        <Link to={links.tutorials}><div><h3>Machine learning tutorials</h3><p>Past notebooks, slides and recordings. Current-year materials are not published here yet.</p></div><Arrow /></Link>
+        <Link to={links.tutorials}><div><h3>Machine learning tutorials</h3><p>Published tutorials and notebooks, alongside slides and recordings from earlier series.</p></div><Arrow /></Link>
         <Link to={links.journal}><div><h3>Journal Club</h3><p>Notes and slides from past sessions.</p></div><Arrow /></Link>
       </div>
     </section>

@@ -63,6 +63,7 @@ export function parseNotebook(input: string, filename: string): { title: string;
   if (!data || typeof data !== 'object' || !('cells' in data) || !Array.isArray(data.cells) || data.cells.length > 20_000) throw new Error('Invalid notebook cells');
   const sections: Section[] = [];
   const isSolution = /solution/i.test(filename);
+  let contextKind: Section['kind'] = isSolution ? 'solution' : 'explanation';
   let title = filename.replace(/\.ipynb$/i, '').replace(/[_-]/g, ' ');
   for (const [index, cell] of data.cells.entries()) {
     if (!cell || typeof cell !== 'object' || !['markdown', 'code', 'raw'].includes(cell.cell_type)) throw new Error('Invalid notebook cell');
@@ -70,9 +71,10 @@ export function parseNotebook(input: string, filename: string): { title: string;
     const source: string = typeof cell.source === 'string' ? cell.source : cell.source.join('');
     if (!source.trim()) continue;
     const heading = cell.cell_type === 'markdown' ? source.match(/^#{1,6}\s+(.+)$/m)?.[1] : undefined;
+    if (heading) contextKind = /solution|answer/i.test(heading) ? 'solution' : /hint/i.test(heading) ? 'hint' : isSolution ? 'solution' : /exercise|challenge|your turn/i.test(heading) ? 'exercise' : 'explanation';
     if (heading && sections.length === 0) title = heading;
     const text = cell.cell_type === 'code' ? `\`\`\`python\n${source}\n\`\`\`` : plainMarkup(source);
-    sections.push({ id: `cell-${index + 1}`, heading: heading ?? `Cell ${index + 1}`, text, kind: cell.cell_type === 'code' ? 'code' : isSolution || /solution|answer/i.test(heading ?? '') ? 'solution' : /hint/i.test(heading ?? '') ? 'hint' : /exercise|challenge|your turn/i.test(heading ?? '') ? 'exercise' : 'explanation', locator: `notebook cell ${index + 1} (${cell.cell_type})` });
+    sections.push({ id: `cell-${index + 1}`, heading: heading ?? `Cell ${index + 1}`, text, kind: contextKind === 'solution' || contextKind === 'hint' ? contextKind : cell.cell_type === 'code' ? 'code' : contextKind, locator: `notebook cell ${index + 1} (${cell.cell_type})` });
   }
   const text = sections.map(section => `${section.heading}\n${section.text}`).join('\n\n');
   if (new TextEncoder().encode(text).byteLength > MAX_TEXT_BYTES) throw new Error('Extracted notebook text exceeds limit');

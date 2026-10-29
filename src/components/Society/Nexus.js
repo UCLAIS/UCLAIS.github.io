@@ -2,11 +2,12 @@ import React from 'react'
 import Link from '@docusaurus/Link'
 import { Page, Hero, Button, Arrow } from './shared'
 import { links, pillars } from './content'
+import KnowledgeCollection from './KnowledgeCollection'
 
 export default function Nexus() {
   return (
     <Page title="Nexus Labs" description="Student-led AI research at UCL. Explore four research pillars in our 2026/27 programme. Student applications are now closed." canonical={links.nexus}>
-      <Hero title="Nexus Labs" actions={<Button href="#research-pillars">Explore pillars</Button>}>
+      <Hero title="Nexus Labs" actions={<><Button href="#research-pillars">Explore pillars</Button><Button href="#session-notes" secondary>Session notes</Button></>}>
         Find a team, develop an idea and do AI research with academic and industry support.
       </Hero>
       <div className="society-deadline"><p><strong>Nexus Labs 2026/27</strong><span>Applications now closed.</span></p></div>
@@ -31,6 +32,7 @@ export default function Nexus() {
           <article><h3>Exploratory</h3><p>For students discovering research, developing their skills or trying out early ideas.</p><p>A more flexible environment for experimentation and learning. Members may move here from the Advanced track if it becomes a better fit.</p></article>
         </div>
       </section>
+      <section className="society-section" id="session-notes" aria-label="Nexus session notes"><KnowledgeCollection collection="nexus" /></section>
       <section className="society-section" aria-labelledby="nexus-involvement-title">
         <h2 id="nexus-involvement-title">Other ways to get involved.</h2>
         <div className="society-role"><div><h3>Become a Pillar Officer</h3><p>Support teams within one of our four pillars. We are looking for research methodology experience and clear, proactive communication.</p></div><Button href={links.officer} secondary>Apply as officer</Button></div>

@@ -13,13 +13,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 24
           cache: yarn
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+          run_install: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install shared knowledge importer
+        run: pnpm --dir services/knowledge install --frozen-lockfile
+      - name: Install bounded PDF parser
+        run: python -m pip install -r services/knowledge/requirements-pdf.txt
+      - name: Test shared website and MCP publication
+        run: yarn test:knowledge-site
       - name: Build website
         run: yarn build
         env:

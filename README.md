@@ -4,9 +4,15 @@ Welcome to the UCL AI Society website repo! Have a look at what we do: https://u
 
 ## Installation
 
+Use Node 24+, Yarn Classic, pnpm 11 and Python 3.12+ for the shared website/MCP importer.
+
 ```
-$ yarn
+$ yarn install --frozen-lockfile
+$ pnpm --dir services/knowledge install --frozen-lockfile
+$ python3 -m pip install -r services/knowledge/requirements-pdf.txt
 ```
+
+If your PDF parser is installed in a virtual environment, set `KNOWLEDGE_PYTHON` to that environment's Python executable when building.
 
 ## Local Development
 
@@ -17,6 +23,10 @@ $ yarn start
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
 ## Adding/Modifying content
+
+For tutorials and Nexus session notes, use the [shared knowledge folders](knowledge/README.md): upload to `knowledge/tutorials/` or `knowledge/nexus/` and merge a reviewed pull request. Both the website and MCP update automatically; there is no need to edit React pages, the sidebar or a separate search index. These upload instructions are for authorised society committee members. New pages under `our-initiatives/` alone do not update the pinned MCP archive.
+
+With this repository open in your agent, attach a PDF or PowerPoint and say **“Use tutorial.md and push this”** or **“Use nexus.md and push this.”** The guides handle extraction, metadata, sequence records, checks and pushing through the normal publication route. Unknown optional metadata does not block an upload. GitHub's required review still applies. The public MCP remains read-only; uploading needs your own authenticated GitHub tools.
 
 If you would like to modify or add some content, please do so through a Pull Request. [Here](https://github.com/UCLAIS/UCLAIS.github.io/pull/5) is an example of a past pull request, which introduced a simple update to the website - have a look at the "Files changed" section.
 
@@ -39,6 +49,8 @@ $ yarn build
 ```
 
 This command generates static content into the `build` directory and can be served using any static contents hosting service.
+
+Each website build validates and imports the shared knowledge folders before generating tutorial and Nexus pages. `yarn test:knowledge-site` tests uploads of Markdown, notebook cells, PDF pages and Nexus notes in an isolated temporary workspace against both outputs, including draft exclusion and inert rendering. It leaves the real knowledge folder and generated releases untouched.
 
 ## Deployment
 
