@@ -17,6 +17,13 @@ const config = {
   title: 'UCL Artificial Intelligence Society',
   tagline: "The home of UCL's AI community",
   favicon: 'img/design/society-light-128.webp',
+  customFields: {
+    knowledge: {
+      publicMcpUrl: process.env.KNOWLEDGE_PUBLIC_MCP_URL || '',
+      editorMcpUrl: process.env.KNOWLEDGE_EDITOR_MCP_URL || '',
+      publicApiUrl: process.env.KNOWLEDGE_PUBLIC_API_URL || '',
+    },
+  },
   // Preserve the stock 2.x template and defer its external hydration scripts.
   ssrTemplate: defaultSsrTemplate.replace('<script src=', '<script defer src='),
 
@@ -163,6 +170,10 @@ const config = {
           {
             title: 'More',
             items: [
+              {
+                label: 'Connect your AI',
+                to: '/connect/',
+              },
               {
                 label: 'Blog',
                 to: '/blog',

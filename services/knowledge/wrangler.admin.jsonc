@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "uclai-knowledge-admin-staging",
+  "main": "src/admin-worker.ts",
+  "compatibility_date": "2026-10-29",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "vars": {
+    "AUTH_ORIGIN": "https://knowledge-auth.example.invalid",
+    "ADMIN_ORIGIN": "https://knowledge-admin.example.invalid",
+    "ALLOWED_MCP_ORIGINS": "https://chatgpt.com,https://claude.ai"
+  },
+  "d1_databases": [{ "binding": "PRIVATE_DB", "database_name": "uclai-knowledge-private-staging", "database_id": "00000000-0000-0000-0000-000000000000", "migrations_dir": "migrations" }],
+  "r2_buckets": [
+    { "binding": "PRIVATE_BUCKET", "bucket_name": "uclai-knowledge-private-staging" },
+    { "binding": "PUBLISHED_BUCKET", "bucket_name": "uclai-knowledge-published-staging" }
+  ],
+  "services": [{ "binding": "AUTH_SERVER", "service": "uclai-knowledge-auth-staging" }],
+  "triggers": { "crons": ["*/15 * * * *"] }
+}

@@ -1,0 +1,6 @@
+# Wrangler local-only public Worker secrets. Copy to .dev.vars.public.
+# Use Object Read credentials scoped to the published bucket only.
+# Local dev: wrangler dev --config wrangler.public.jsonc --env-file .dev.vars.public
+# Deployment uses `wrangler secret put`, not this file.
+PUBLISHED_READ_ACCESS_KEY_ID=
+PUBLISHED_READ_SECRET_ACCESS_KEY=

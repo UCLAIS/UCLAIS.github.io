@@ -1,0 +1,60 @@
+name: Knowledge service checks
+
+on:
+  pull_request:
+    paths:
+      - 'services/knowledge/**'
+      - 'src/pages/connect*'
+      - 'docusaurus.config.js'
+      - '.github/workflows/knowledge.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'services/knowledge/**'
+      - 'src/pages/connect*'
+      - 'docusaurus.config.js'
+      - '.github/workflows/knowledge.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: knowledge-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  security-and-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: services/knowledge
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: services/knowledge/pnpm-lock.yaml
+      - name: Install locked service dependencies
+        run: pnpm install --frozen-lockfile
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: services/knowledge/requirements-pdf.txt
+      - name: Install bounded PDF parser
+        run: python -m pip install -r requirements-pdf.txt
+      - name: Test PDF decompression and process boundaries
+        run: python -m unittest discover -s tests -p 'test_pdf_*.py' -v
+      - name: Check types
+        run: pnpm typecheck
+      - name: Run security and integration tests
+        run: pnpm test
+      - name: Bundle separate Workers without deploying
+        run: pnpm build

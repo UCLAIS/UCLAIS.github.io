@@ -1,0 +1,39 @@
+{
+  "name": "@uclais/knowledge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "ingest": "node --env-file-if-exists=.env --import tsx scripts/ingest.ts",
+    "doctor": "node --env-file-if-exists=.env --import tsx scripts/doctor.ts",
+    "upload": "node --env-file-if-exists=.env --import tsx scripts/upload.ts",
+    "permissions:probe": "node --env-file-if-exists=.env --import tsx scripts/storage-permissions.ts",
+    "dev": "node --env-file-if-exists=.env --import tsx scripts/dev.ts",
+    "build": "wrangler deploy --dry-run --config wrangler.public.jsonc && wrangler deploy --dry-run --config wrangler.admin.jsonc && wrangler deploy --dry-run --config wrangler.auth.jsonc"
+  },
+  "dependencies": {
+    "@babel/parser": "8.0.8",
+    "@cfworker/json-schema": "4.1.1",
+    "@cloudflare/workers-oauth-provider": "1.2.4",
+    "@modelcontextprotocol/client": "2.4.0",
+    "@modelcontextprotocol/server": "2.4.0",
+    "aws4fetch": "1.0.20",
+    "minisearch": "7.2.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "5.20261028.1",
+    "@types/node": "26.6.5",
+    "esbuild": "0.28.2",
+    "miniflare": "5.20261023.2-beta",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vitest": "5.0.5",
+    "wrangler": "4.155.0"
+  }
+}

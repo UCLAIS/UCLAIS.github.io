@@ -1,0 +1,2 @@
+# Deliberate pin: the helper requires these codec expansion-limit APIs.
+pypdf==6.10.0
