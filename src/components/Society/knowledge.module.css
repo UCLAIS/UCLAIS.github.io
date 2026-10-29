@@ -1,0 +1,26 @@
+.collection > p { margin-top: 18px; }
+.list { list-style: none !important; padding: 0 !important; margin: 28px 0 !important; }
+.list > li { padding: 0 !important; margin: 0 !important; border-top: 1px solid var(--soc-line); }
+.list > li:last-child { border-bottom: 1px solid var(--soc-line); }
+.materialLink { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 0; text-decoration: none !important; }
+.materialLink strong { font-size: 19px; color: var(--soc-accent); }
+.materialLink svg { width: 14px; flex-shrink: 0; }
+.metadata { display: block; font-size: 13px; color: var(--soc-muted); margin-top: 10px; }
+.empty { color: var(--soc-muted); }
+.resource { padding-top: 26px; max-width: 900px; }
+.resource h2 { font-size: 30px; margin-bottom: 20px; }
+.resource h3 { font-size: 23px; margin-block: 28px 16px; }
+.resource p, .resource li { font-size: 16px; line-height: 1.8; overflow-wrap: anywhere; }
+.resource p { margin-bottom: 20px; }
+.resource a { color: var(--soc-accent); }
+.resource pre { white-space: pre; }
+.provenance { padding: 24px 0; margin-block: 18px 30px; border-block: 1px solid var(--soc-line); }
+.provenance p { font-size: 14px; margin-bottom: 12px; }
+.provenance p:last-child { margin-bottom: 0; }
+.provenance svg { width: 12px; }
+.section { margin-block: 36px; scroll-margin-top: 100px; }
+.locator { color: var(--soc-muted); font-size: 13px !important; }
+.answer { border-block: 1px solid var(--soc-line); margin-block: 24px; padding-block: 18px; }
+.answer summary { color: var(--soc-accent); font-size: 20px; cursor: pointer; }
+.answer > div { padding-top: 20px; }
+.pdfText { white-space: pre-wrap; }

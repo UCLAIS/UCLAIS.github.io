@@ -2,7 +2,7 @@ export type Role = 'editor' | 'publisher' | 'admin';
 export interface Actor { githubId: string; role: Role }
 export interface Section { id: string; heading: string; text: string; kind?: 'explanation' | 'code' | 'exercise' | 'hint' | 'solution'; locator?: string }
 export interface KnowledgeDocument {
-  id: string; title: string; text: string; type: string; topics: string[]; year?: string; archived: boolean;
+  id: string; title: string; text: string; type: string; topics: string[]; year?: string; series?: string; order?: number; archived: boolean;
   origin?: 'imported' | 'curated'; importedContentHash?: string;
   source: { url: string; revision?: string; attribution?: string; license?: string; status: 'approved' | 'review-required' };
   sections?: Section[]; reviewedAt?: string; expiresAt?: string;

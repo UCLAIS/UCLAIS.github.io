@@ -8,7 +8,7 @@ export const publicGuidance = {
   },
   contributions: {
     audience: 'UCL AI Society committee members with authorised GitHub repository access only.',
-    workflow: 'Committee members prepare and review knowledge changes through authenticated GitHub access. Passing checks and merging to main publishes an update. The public MCP is read-only and does not grant editing or publishing permissions. Other readers should email corrections or suggestions to info@uclai.co.uk.',
+    workflow: 'Committee members upload tutorials to knowledge/tutorials/ and Nexus notes to knowledge/nexus/ through authenticated GitHub access. Review, passing checks and a merge to main publish both website pages and MCP knowledge from those files. The public MCP is read-only and does not grant editing or publishing permissions. Other readers should email corrections or suggestions to info@uclai.co.uk.',
     url: 'https://github.com/UCLAIS/UCLAIS.github.io/tree/main/knowledge',
   },
   values: {

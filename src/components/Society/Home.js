@@ -22,7 +22,7 @@ export default function Home() {
         <Link to={links.opportunities}><div><h3>Events & opportunities</h3><p>Our calendar, partner events and career support.</p></div><Arrow /></Link>
         <Link to={links.initiatives}><div><h3>Our Initiatives</h3><p>Research with Nexus Labs. Build at AgentVerse.</p></div><Arrow /></Link>
         <Link to="/about-us/"><div><h3>About Us</h3><p>Our goals, principles and the people behind the society.</p></div><Arrow /></Link>
-        <Link to={`${links.initiatives}#archive`}><div><h3>Tutorials & Journal Club</h3><p>Past recordings, slides and notes from our learning archive.</p></div><Arrow /></Link>
+        <Link to={`${links.initiatives}#archive`}><div><h3>Tutorials & Journal Club</h3><p>Tutorials, notebooks and Journal Club notes for self-study.</p></div><Arrow /></Link>
       </div>
     </nav>
     <aside className="society-section society-home-news" aria-label="Nexus Labs applications">

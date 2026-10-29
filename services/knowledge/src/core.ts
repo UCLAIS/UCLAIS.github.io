@@ -11,6 +11,7 @@ const httpsUrl = z.string().url().max(2048).refine(value => new URL(value).proto
 export const DocumentSchema = z.object({
   id: identifier, title: z.string().min(1).max(500), text: z.string().max(2_000_000), type: z.string().min(1).max(80),
   topics: z.array(z.string().max(100)).max(100), year: z.string().max(30).optional(), archived: z.boolean(),
+  series: z.string().min(1).max(200).optional(), order: z.number().int().min(1).max(10000).optional(),
   origin: z.enum(['imported', 'curated']).optional(), importedContentHash: z.string().regex(/^[a-f0-9]{64}$/).optional(),
   source: z.object({ url: httpsUrl, revision: z.string().max(200).optional(), attribution: z.string().max(2000).optional(), license: z.string().max(200).optional(), status: z.enum(['approved', 'review-required']) }),
   sections: z.array(z.object({ id: identifier, heading: z.string().max(500), text: z.string().max(1_000_000), kind: z.enum(['explanation', 'code', 'exercise', 'hint', 'solution']).optional(), locator: z.string().max(200).optional() })).max(2000).optional(),
@@ -28,6 +29,7 @@ export function validateCorpus(corpus: Corpus): ValidationResult {
   if (!parsed.success) return { valid: false, errors: parsed.error.issues.map(x => `${x.path.join('.')}: ${x.message}`), warnings: [] };
   const errors: string[] = []; const warnings: string[] = []; const ids = new Set<string>();
   for (const [position, document] of corpus.documents.entries()) {
+    if (document.order !== undefined && !document.series) errors.push(`Lesson/session order needs a series: ${document.id}`);
     if (containsSensitiveText(JSON.stringify(document))) errors.push(`Credential-like content must be removed from document at position ${position}.`);
     if (ids.has(document.id)) errors.push(`Duplicate document: ${document.id}`); ids.add(document.id);
     if (document.source.status !== 'approved') warnings.push(`Excluded pending review: ${document.id}`);
@@ -49,7 +51,7 @@ export function makeIndex(corpus: Corpus) {
   const index = new MiniSearch({ fields: ['title', 'text', 'topics'], storeFields: ['documentId', 'sectionId', 'heading'], searchOptions: { boost: { title: 3 }, prefix: true, fuzzy: 0.15 } });
   index.addAll(corpus.documents.flatMap(doc => {
     const sections = doc.sections?.length ? doc.sections : [{ id: 'body', heading: doc.title, text: doc.text }];
-    return sections.map((section, i) => ({ id: `${doc.id}#${i}`, documentId: doc.id, sectionId: section.id, heading: section.heading, title: `${doc.title} ${section.heading}`, text: section.text, topics: doc.topics.join(' ') }));
+    return sections.map((section, i) => ({ id: `${doc.id}#${i}`, documentId: doc.id, sectionId: section.id, heading: section.heading, title: `${doc.series ?? ''} ${doc.title} ${section.heading}`, text: section.text, topics: doc.topics.join(' ') }));
   }));
   return index;
 }
@@ -85,7 +87,7 @@ export class KnowledgeReader {
     for (const match of index.search(query)) {
       const doc = docs.get(match.documentId as string); if (!doc || (doc.expiresAt && Date.parse(doc.expiresAt) <= Date.now()) || (filters.type && doc.type !== filters.type) || (filters.year && doc.year !== filters.year) || (filters.topic && !doc.topics.includes(filters.topic)) || (filters.archived !== undefined && doc.archived !== filters.archived) || await this.store.isWithdrawn(doc.id)) continue;
       const section = doc.sections?.find(x => x.id === match.sectionId);
-      results.push({ documentId: doc.id, sectionId: match.sectionId, title: doc.title, heading: match.heading, excerpt: (section?.text ?? doc.text).slice(0, 1600), source: doc.source, year: doc.year, archived: doc.archived, reviewedAt: doc.reviewedAt, expiresAt: doc.expiresAt, score: match.score, releaseId: release.id });
+      results.push({ documentId: doc.id, sectionId: match.sectionId, title: doc.title, heading: match.heading, excerpt: (section?.text ?? doc.text).slice(0, 1600), source: doc.source, year: doc.year, series: doc.series, order: doc.order, archived: doc.archived, reviewedAt: doc.reviewedAt, expiresAt: doc.expiresAt, score: match.score, releaseId: release.id });
       if (results.length >= limit) break;
     }
     const terms = query.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(term => term.length >= 3);

@@ -44,7 +44,7 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
-  plugins: ['docusaurus-plugin-sass'],
+  plugins: ['docusaurus-plugin-sass', require.resolve('./plugins/society-knowledge/index.cjs')],
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -126,7 +126,7 @@ const config = {
             title: 'Our Initiatives',
             items: [
               {
-                label: 'Tutorial archive',
+                label: 'Tutorials',
                 to: '/our-initiatives/tutorials',
               },
               {
