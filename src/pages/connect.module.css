@@ -29,9 +29,6 @@
 .values { margin-top: 34px; padding-top: 28px; border-top: 1px solid var(--soc-line); }
 .values p { margin-top: 14px; }
 .values a { margin-top: 16px; }
-.maintainers { border-bottom: 1px solid var(--soc-line); }
-.maintainers > div:first-child p { margin-block: 22px 30px; }
-.maintainers > p { font-size: 13px; }
 .privacy p { margin-top: 22px !important; }
 @media (max-width: 900px) {
   .clients { grid-template-columns: 1fr; gap: 34px; }

@@ -110,7 +110,6 @@ export default function Connect() {
   const { siteConfig } = useDocusaurusContext()
   const config = siteConfig.customFields?.knowledge || {}
   const publicMcpUrl = configuredUrl(config.publicMcpUrl)
-  const editorMcpUrl = configuredUrl(config.editorMcpUrl)
   const apiUrl = configuredUrl(config.publicApiUrl) || (publicMcpUrl ? new URL(publicMcpUrl).origin : '')
   const connectionPrompt = publicMcpUrl ? `Connect to the public UCL AI Society MCP at ${publicMcpUrl} for society FAQs, tutorials and upcoming Luma events, and cite its sources.` : ''
   const geminiCommand = publicMcpUrl ? `gemini mcp add --transport http ucl-ai-society ${publicMcpUrl}` : ''
@@ -136,13 +135,6 @@ export default function Connect() {
       <h2 id="try-title">Start with a question.</h2><ul><li>“Using UCL AI Society, how can I get involved? Cite the current sources.”</li><li>“Find a beginner neural networks tutorial. Fetch a notebook section and help me understand it.”</li><li>“Which tutorials are archived, and what events are currently listed? Check the dates.”</li></ul>
       <p>The library can have gaps. Ask your assistant to identify missing material and cite the source and release version for its answer.</p>
       <div className={styles.values}><h3>What we stand for</h3><p>We bring students together to make AI accessible, support student research and build a community around safe and ethical AI.</p><Link className="society-text-link" to="/about-us/">Our purpose and principles <Arrow /></Link></div>
-    </section>
-    <section className={`society-section ${styles.maintainers}`} aria-labelledby="maintain-title">
-      <div><h2 id="maintain-title">For society committee members only.</h2><p>Only UCL AI Society committee members with authorised repository access may add or update the library. Committee members can add tutorials, Nexus sessions and FAQs through GitHub. Reviewed changes publish after passing checks and merging to main.</p></div>
-      <a className="society-text-link" href="https://github.com/UCLAIS/UCLAIS.github.io/tree/main/knowledge" target="_blank" rel="noopener noreferrer">Committee: add or update material <Arrow external /></a>
-      <p>Committee members can prepare files through their own GitHub connection. Public MCP access does not grant editing or publishing permissions. Files in this public repository are public, including draft files.</p>
-      <p>For corrections or suggestions, email <a href="mailto:info@uclai.co.uk">info@uclai.co.uk</a>.</p>
-      {editorMcpUrl && <Endpoint label="Committee editor MCP" url={editorMcpUrl} description="Optional separate editor deployment for explicitly approved society committee members. Choose OAuth when adding this connection." />}
     </section>
     <section className={`society-section ${styles.privacy}`} aria-labelledby="privacy-title"><h2 id="privacy-title">What reaches the service?</h2><p>Your assistant sends search terms and resource requests to our service. Avoid including private information or student code in a query. The service is designed to avoid retaining raw member queries; your AI provider has its own data policies.</p><p>Compatible browser agents can also use public, read-only WebMCP tools while this page is open. Browser support is experimental; the remote connection works independently.</p></section>
   </Page>
