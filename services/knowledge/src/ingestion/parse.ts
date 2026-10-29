@@ -31,13 +31,44 @@ export function discoverLinks(text: string): string[] {
   return [...results];
 }
 
+type Fence = { marker: string; length: number };
+function openingFence(line: string): Fence | undefined {
+  const match = line.match(/^ {0,3}(`{3,}|~{3,})([^\r\n]*)\r?$/);
+  if (!match || (match[1][0] === '`' && match[2].includes('`'))) return undefined;
+  return { marker: match[1][0], length: match[1].length };
+}
+function closesFence(line: string, fence: Fence): boolean {
+  const match = line.match(/^ {0,3}(`+|~+)[ \t\r]*$/);
+  return !!match && match[1][0] === fence.marker && match[1].length >= fence.length;
+}
+/** Clean prose as data while preserving fenced teaching code byte-for-byte. */
+function markdownData(text: string): string {
+  const parts: string[] = []; let lines: string[] = []; let fence: Fence | undefined;
+  const prose = () => {
+    const clean = plainMarkup(lines.join('\n').replace(/^import\s+[^\n]+\n/gm, '').replace(/^export\s+[^\n]+\n/gm, ''));
+    if (clean) parts.push(clean);
+    lines = [];
+  };
+  for (const line of text.split('\n')) {
+    if (fence) {
+      lines.push(line);
+      if (closesFence(line, fence)) { parts.push(lines.join('\n')); lines = []; fence = undefined; }
+    } else {
+      const start = openingFence(line);
+      if (start) { prose(); fence = start; }
+      lines.push(line);
+    }
+  }
+  if (fence) parts.push(lines.join('\n')); else prose();
+  return parts.join('\n\n').trim();
+}
+
 export function parseMarkdown(text: string, fallbackTitle: string): { title: string; text: string; sections: Section[] } {
   bounded(text);
   const frontmatter = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
   const metadataTitle = frontmatter?.[1].match(/^title:\s*(.+)$/m)?.[1]?.replace(/^['"]|['"]$/g, '');
-  const body = text.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '')
-    .replace(/^import\s+[^\n]+\n/gm, '').replace(/^export\s+[^\n]+\n/gm, '');
-  const clean = plainMarkup(body);
+  const body = text.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '');
+  const clean = markdownData(body);
   const title = metadataTitle && !['>-', '|', '>'].includes(metadataTitle) ? metadataTitle : clean.match(/^#\s+(.+)$/m)?.[1] ?? fallbackTitle;
   const sections: Section[] = [];
   let heading = title; let lines: string[] = [];
@@ -46,10 +77,12 @@ export function parseMarkdown(text: string, fallbackTitle: string): { title: str
     if (value) sections.push({ id: `section-${sections.length + 1}`, heading, text: value, kind: /solution/i.test(heading) ? 'solution' : /hint/i.test(heading) ? 'hint' : /exercise|challenge/i.test(heading) ? 'exercise' : 'explanation' });
     lines = [];
   };
-  let inFence = false;
+  let fence: Fence | undefined;
   for (const line of clean.split('\n')) {
-    if (/^\s*```|^\s*~~~/.test(line)) inFence = !inFence;
-    const match = !inFence && line.match(/^#{1,6}\s+(.+)$/);
+    if (fence) { lines.push(line); if (closesFence(line, fence)) fence = undefined; continue; }
+    const start = openingFence(line);
+    if (start) { fence = start; lines.push(line); continue; }
+    const match = line.match(/^#{1,6}[ \t]+([^\r\n]+)\r?$/);
     if (match) { flush(); heading = match[1]; }
     else lines.push(line);
   }
