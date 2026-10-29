@@ -13,7 +13,7 @@ Authorised committee members can add tutorials, Nexus session notes, FAQs and gu
 
 Tutorials appear in the website tutorial library; Nexus notes appear under session notes on the Nexus Labs page. Markdown, notebooks and PDFs all use the same importer for both services. Drafts and files awaiting review are excluded from both. Removing or withdrawing a document removes it from both outputs after their deployments succeed. FAQs and guides feed the MCP without creating tutorial or Nexus pages.
 
-Use the repository's `tutorial.md` or `nexus.md` instructions with your agent and an attached PDF or PowerPoint. The agent prepares faithful notes and a reviewable pull request; it needs file-reading tools and your authenticated GitHub connection. A raw PowerPoint is not imported directly.
+With the repository open in your agent, attach a PDF or PowerPoint and say “Use tutorial.md and push this” or “Use nexus.md and push this.” The agent prepares faithful notes, records the sequence and pushes through the normal publication route, opening a PR where required. It needs file-reading tools and your authenticated GitHub connection. A raw PowerPoint is not imported directly.
 
 Each lesson or session can carry a record in Markdown front matter, or a matching `.meta.json` file for a PDF/notebook. The academic year, series and explicit lesson/session number determine website order. Duplicate positions within the same year and series fail validation. MCP search ranks relevant passages and returns this sequence metadata alongside them. Notebooks retain cell order without execution outputs; PDF text retains page references. Linked videos and slide decks remain links unless an authorised body or transcript has been imported.
 

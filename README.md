@@ -26,7 +26,7 @@ This command starts a local development server and opens up a browser window. Mo
 
 For tutorials and Nexus session notes, use the [shared knowledge folders](knowledge/README.md): upload to `knowledge/tutorials/` or `knowledge/nexus/` and merge a reviewed pull request. Both the website and MCP update automatically; there is no need to edit React pages, the sidebar or a separate search index. These upload instructions are for authorised society committee members. New pages under `our-initiatives/` alone do not update the pinned MCP archive.
 
-To use an agent with an attached PDF or PowerPoint instead, follow [`tutorial.md`](tutorial.md) or [`nexus.md`](nexus.md). They include one prompt and require the agent to record series/lesson position, prepare faithful notes and open a PR for review. The public MCP remains read-only; uploading needs your own authenticated GitHub tools.
+With this repository open in your agent, attach a PDF or PowerPoint and say **“Use tutorial.md and push this”** or **“Use nexus.md and push this.”** The guides handle extraction, metadata, sequence records, checks and pushing through the normal publication route. Unknown optional metadata does not block an upload. GitHub's required review still applies. The public MCP remains read-only; uploading needs your own authenticated GitHub tools.
 
 If you would like to modify or add some content, please do so through a Pull Request. [Here](https://github.com/UCLAIS/UCLAIS.github.io/pull/5) is an example of a past pull request, which introduced a simple update to the website - have a look at the "Files changed" section.
 
