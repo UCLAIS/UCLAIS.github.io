@@ -99,6 +99,29 @@ describe('passive teaching parsers', () => {
     expect(parsed.text).toContain('Read the lesson');
     expect((globalThis as Record<string, unknown>)[sentinel]).toBeUndefined();
   });
+  it.each(['```', '~~~~'])('preserves teaching code, imports and indentation within %s fences', fence => {
+    const code = 'import numpy as np\nimport matplotlib.pyplot as plt\n\ndef predict(x):\n    if x < 3:\n        return "<script>display_only()</script> &amp;"\n    return  x';
+    const parsed = parseMarkdown(`# Lesson\n<script>outside_script()</script>\nimport unsafe from 'node:fs'\n\n${fence}python\n${code}\n${fence}\n\n## Next\nContinue.`, 'fallback');
+    expect(parsed.text).toContain(`${fence}python\n${code}\n${fence}`);
+    expect(parsed.sections[0].text).toBe(`${fence}python\n${code}\n${fence}`);
+    expect(parsed.text).not.toContain('outside_script');
+    expect(parsed.text).not.toContain("import unsafe from 'node:fs'");
+    expect(parsed.sections.map(section => section.heading)).toEqual(['Lesson', 'Next']);
+  });
+  it('requires a matching fence marker and length before reading prose headings again', () => {
+    const input = '# Lesson\n````python\nimport numpy as np\n```\n~~~\n## Still code\n````\n## Next\nContinue.';
+    const parsed = parseMarkdown(input, 'fallback');
+    expect(parsed.sections.map(section => section.heading)).toEqual(['Lesson', 'Next']);
+    expect(parsed.sections[0].text).toContain('```\n~~~\n## Still code');
+    const unfinished = parseMarkdown('# Lesson\n```python\nimport numpy as np\n## Still code', 'fallback');
+    expect(unfinished.sections).toHaveLength(1);
+    expect(unfinished.text).toContain('import numpy as np');
+  });
+  it('preserves CRLF code fences without absorbing later sections', () => {
+    const parsed = parseMarkdown('# Lesson\r\n```python\r\nimport numpy as np\r\n    indented()\r\n```\r\n## Next\r\nContinue.', 'fallback');
+    expect(parsed.text).toContain('import numpy as np\r\n    indented()\r\n');
+    expect(parsed.sections).toHaveLength(2);
+  });
   it('extracts JSX copy and data literals without invoking source imports or calls', () => {
     const source = `import fs from 'node:fs'; globalThis.__UCLAIS_IMPORT_SIDE_EFFECT__ = true; export default () => <Page title="Society"><h1>Welcome</h1><a href="mailto:info@uclai.co.uk">Contact</a>{dangerous()}</Page>;`;
     const parsed = parseReactCopy(source, 'Society');
