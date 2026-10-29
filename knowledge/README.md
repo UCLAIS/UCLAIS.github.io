@@ -4,6 +4,8 @@ This folder is the editable source for the public knowledge MCP. The build combi
 
 ## Add material
 
+This workflow is for **UCL AI Society committee members with authorised GitHub repository access only**. The public MCP provides read-only access and cannot edit or publish material. Other readers should email corrections or suggestions to info@uclai.co.uk.
+
 Add a Markdown file anywhere below this folder, for example:
 
 ```text

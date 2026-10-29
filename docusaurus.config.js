@@ -115,6 +115,7 @@ const config = {
             activeBaseRegex: `^${siteBaseUrl}our-initiatives(?:/(?!opportunities(?:/|$))|$)`,
           },
           { to: '/our-initiatives/opportunities/', label: 'Opportunities', position: 'left' },
+          { to: '/connect/', label: 'Connect your AI', position: 'left' },
           { to: '/blog', label: 'Blog', position: 'left' },
         ],
       },

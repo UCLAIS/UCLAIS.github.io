@@ -112,16 +112,16 @@ export default function Connect() {
   const publicMcpUrl = configuredUrl(config.publicMcpUrl)
   const editorMcpUrl = configuredUrl(config.editorMcpUrl)
   const apiUrl = configuredUrl(config.publicApiUrl) || (publicMcpUrl ? new URL(publicMcpUrl).origin : '')
-  const connectionPrompt = publicMcpUrl ? `Connect to the public UCL AI Society MCP at ${publicMcpUrl} and answer my society questions using its cited sources.` : ''
+  const connectionPrompt = publicMcpUrl ? `Connect to the public UCL AI Society MCP at ${publicMcpUrl} for society FAQs, tutorials and upcoming Luma events, and cite its sources.` : ''
   const geminiCommand = publicMcpUrl ? `gemini mcp add --transport http ucl-ai-society ${publicMcpUrl}` : ''
   usePublicWebMcp(apiUrl)
 
-  return <Page title="Connect your AI" description="Use UCL AI Society FAQs, tutorials and learning paths in your own AI assistant." canonical="/connect/">
-    <Hero title="The society, in your AI.">Connect your assistant to approved society information, tutorial material and learning paths. Ask a question and follow its sources.</Hero>
+  return <Page title="Connect your AI" description="Connect your AI assistant to the public UCL AI Society MCP for FAQs, tutorials and upcoming Luma events." canonical="/connect/">
+    <Hero title="The society, in your AI.">Connect ChatGPT, Claude or another compatible assistant to the public UCL AI Society MCP. Ask about the society, explore tutorials and check upcoming events.</Hero>
     <aside className={`society-section society-section--first ${styles.accuracy}`} aria-label="AI accuracy and support"><p><strong>AI answers may be incorrect.</strong> Check the linked sources and dates. If the library cannot answer your question, or it falls outside our materials, contact <a href="mailto:info@uclai.co.uk">info@uclai.co.uk</a>.</p></aside>
     <section className={`society-section society-section--first ${styles.setup}`} aria-labelledby="public-title">
-      <div className="society-section__intro"><h2 id="public-title">One connection. Your own assistant.</h2><p>The public connection reads published material. No society account is required. Your assistant may ask you to approve its tool calls.</p></div>
-      <Endpoint label="Public MCP" url={publicMcpUrl} description="For members and anyone exploring the society." />
+      <div className="society-section__intro"><h2 id="public-title">Connect to the public MCP.</h2><p>MCP (Model Context Protocol) lets your assistant search our FAQs, read tutorial notebook cells and follow learning paths. Upcoming events come from our Luma calendar. This connection is read-only and open to everyone; no society account is required.</p></div>
+      <Endpoint label="Public MCP connection URL (beta)" url={publicMcpUrl} description="Copy this URL into your assistant’s MCP settings. Your assistant may ask you to approve the connection or its tool calls." />
       {connectionPrompt && <Endpoint label="Start with one prompt" url={connectionPrompt} description="Paste this into your assistant. It may ask you to add or approve the connection first." copyLabel="Copy prompt" />}
       <RetrievalCheck apiUrl={apiUrl} />
       <div className={styles.clients}>
@@ -129,7 +129,7 @@ export default function Connect() {
         <article><h3>Claude</h3><p>Customize → Connectors → Add custom connector → paste the public URL and enable it for your chat.</p><a className="society-text-link" href="https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp" target="_blank" rel="noopener noreferrer">Setup guide <Arrow external /></a></article>
         <article><h3>Gemini</h3><p>Settings → Connected Apps → Custom apps → paste the public URL, where available.</p><a className="society-text-link" href="https://support.google.com/gemini/answer/17209137?hl=en" target="_blank" rel="noopener noreferrer">Setup guide <Arrow external /></a></article>
       </div>
-      <p className={styles.note}>Gemini web custom apps currently require a US personal account, age 18+, with Keep Activity on. Account and workspace permissions also apply in other clients. Live connections will be tested after deployment.</p>
+      <p className={styles.note}>Gemini web custom apps currently require a US personal account, age 18+, with Keep Activity on. Account and workspace permissions also apply in other clients. The service is in beta; the retrieval check does not verify your assistant’s connection.</p>
       {geminiCommand && <details className={styles.cli}><summary>Using Gemini CLI instead?</summary><p>Run this once, then ask your question in Gemini CLI.</p><div className={styles.address}><code>{geminiCommand}</code></div><a href="https://geminicli.com/docs/tools/mcp-server/" target="_blank" rel="noopener noreferrer">Gemini CLI setup guide <Arrow external /></a></details>}
     </section>
     <section className={`society-section ${styles.examples}`} aria-labelledby="try-title">
@@ -138,10 +138,11 @@ export default function Connect() {
       <div className={styles.values}><h3>What we stand for</h3><p>We bring students together to make AI accessible, support student research and build a community around safe and ethical AI.</p><Link className="society-text-link" to="/about-us/">Our purpose and principles <Arrow /></Link></div>
     </section>
     <section className={`society-section ${styles.maintainers}`} aria-labelledby="maintain-title">
-      <div><h2 id="maintain-title">Keep the library useful.</h2><p>Add a tutorial, Nexus session or FAQ to the knowledge folder on GitHub. Maintainers review the change, then merge it to publish the next library update once automatic deployment is enabled.</p></div>
-      <a className="society-text-link" href="https://github.com/UCLAIS/UCLAIS.github.io/tree/main/knowledge" target="_blank" rel="noopener noreferrer">Add or update material <Arrow external /></a>
-      <p>Your assistant can prepare the files using your own GitHub connection. Only authorised repository maintainers can merge changes. Files in this public repository are public, including draft files.</p>
-      {editorMcpUrl && <Endpoint label="Editor MCP" url={editorMcpUrl} description="Optional separate editor deployment for explicitly approved maintainers. Choose OAuth when adding this connection." />}
+      <div><h2 id="maintain-title">For society committee members only.</h2><p>Only UCL AI Society committee members with authorised repository access may add or update the library. Committee members can add tutorials, Nexus sessions and FAQs through GitHub. Reviewed changes publish after passing checks and merging to main.</p></div>
+      <a className="society-text-link" href="https://github.com/UCLAIS/UCLAIS.github.io/tree/main/knowledge" target="_blank" rel="noopener noreferrer">Committee: add or update material <Arrow external /></a>
+      <p>Committee members can prepare files through their own GitHub connection. Public MCP access does not grant editing or publishing permissions. Files in this public repository are public, including draft files.</p>
+      <p>For corrections or suggestions, email <a href="mailto:info@uclai.co.uk">info@uclai.co.uk</a>.</p>
+      {editorMcpUrl && <Endpoint label="Committee editor MCP" url={editorMcpUrl} description="Optional separate editor deployment for explicitly approved society committee members. Choose OAuth when adding this connection." />}
     </section>
     <section className={`society-section ${styles.privacy}`} aria-labelledby="privacy-title"><h2 id="privacy-title">What reaches the service?</h2><p>Your assistant sends search terms and resource requests to our service. Avoid including private information or student code in a query. The service is designed to avoid retaining raw member queries; your AI provider has its own data policies.</p><p>Compatible browser agents can also use public, read-only WebMCP tools while this page is open. Browser support is experimental; the remote connection works independently.</p></section>
   </Page>
