@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkucl_artificial_intelligence_society=self.webpackChunkucl_artificial_intelligence_society||[]).push([[2805],{5218:e=>{e.exports=JSON.parse('{"name":"society-knowledge-pages","id":"default"}')}}]);
