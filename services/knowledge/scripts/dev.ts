@@ -2,7 +2,7 @@ import { startPublicDev } from './local-public';
 
 const args = process.argv.slice(2);
 if (args.includes('--help')) {
-  console.log('Loopback-only public HTTP/MCP development server.\n  pnpm dev [--port 8787] [--corpus data/bootstrap-corpus.json]\nImports only approved content. No editor, authentication bypass or remote publication.');
+  console.log('Loopback-only public HTTP/MCP development server.\n  pnpm dev [--port 8787] [--corpus data/bootstrap-corpus.json]\nDefault: approved bootstrap plus the GitHub knowledge folder. Custom --corpus: approved corpus only. No editor or remote publication.');
 } else {
   const value = (flag: string) => { const index = args.indexOf(flag); return index < 0 ? undefined : args[index + 1]; };
   const rawPort = value('--port');
@@ -13,7 +13,7 @@ if (args.includes('--help')) {
     const stop = () => server.close(() => process.exit(0));
     process.once('SIGINT', stop); process.once('SIGTERM', stop);
   }).catch(() => {
-    console.error('Local server could not start. Run pnpm ingest, check the approved corpus and port, then retry. No imported content or credentials were logged.');
+    console.error('Local server could not start. Check the knowledge folder, approved corpus and port, then retry. No imported content or credentials were logged.');
     process.exitCode = 1;
   });
 }

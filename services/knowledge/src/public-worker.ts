@@ -2,7 +2,7 @@ import { McpServer } from '@modelcontextprotocol/server';
 import { z } from 'zod';
 import { KnowledgeReader } from './core';
 import { handleMcp } from './mcp';
-import { KnowledgeError } from './types';
+import { KnowledgeError, type Release } from './types';
 import { S3PublishedReader, type PublishedReader } from './storage';
 import { publicGuidance } from './guidance';
 import { LumaCalendar } from './luma';
@@ -25,8 +25,8 @@ export function publicServer(reader: KnowledgeReader) {
   return server;
 }
 const json = (body: unknown, status = 200) => Response.json({ ...(body as object), guidance: publicGuidance }, { status, headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' } });
-export function createPublicHandler(store: PublishedReader, calendar?: Pick<LumaCalendar, 'listEvents'>) {
-  const reader = new KnowledgeReader(store, calendar);
+export function createPublicHandler(store: PublishedReader, calendar?: Pick<LumaCalendar, 'listEvents'>, initialRelease?: Release) {
+  const reader = new KnowledgeReader(store, calendar, initialRelease);
   return async function handler(request: Request, env: { PUBLIC_ORIGIN?: string; ALLOWED_ORIGINS?: string } = {}): Promise<Response> {
     const url = new URL(request.url);
     const allowed = new Set([env.PUBLIC_ORIGIN ?? url.origin, 'https://uclai.co.uk', 'https://chatgpt.com', 'https://claude.ai', ...(env.ALLOWED_ORIGINS ?? '').split(',').filter(Boolean)]);

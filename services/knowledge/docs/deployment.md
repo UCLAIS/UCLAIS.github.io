@@ -1,8 +1,18 @@
 # Staging provisioning and deployment
 
+## Current GitHub route
+
+Use the [knowledge folder setup guide](../../../knowledge/README.md#one-time-deployment-setup). It deploys only `wrangler.bundled.jsonc`, with no R2/D1/KV, editor service or GitHub OAuth registration. Run `pnpm knowledge:build`, type checks, security/runtime tests and `pnpm build` before enabling the GitHub publication job. Configure the society account and exact staging endpoint, protect `main`, then verify actual free-tier runtime behaviour and real ChatGPT/Claude connections. Publication is currently disabled until those settings exist.
+
+The generated release and index ship as Worker code. Revert a reviewed content change through GitHub to roll back, preserving `knowledge/withdrawn.json`; retired releases are not available through public retrieval. Do not enable version preview URLs. Restrict access to historical Worker deployments in the Cloudflare account, and never redeploy a withdrawn snapshot.
+
+## Retained legacy editor architecture, not the free launch
+
+**Deployment hold: strict £0 budget.** The user requires zero hosting spend. The R2-based commands below are retained as the original architecture's runbook, but are not currently authorised to execute: R2 can charge for overages. Do not provision buckets, activate R2 billing, enable paid plans or attach a payment method for this deployment. First revise storage for a provider-enforced free limit and rerun the relevant security and integration tests. See [the budget and storage constraint](hosting.md).
+
 This runbook requires a society-controlled Cloudflare account and GitHub OAuth application. The committed configurations contain deliberate placeholders. No public connection is ready until these steps and the real-client acceptance checks pass.
 
-The target is free hosting where feasible. Keep the account on Workers Free during evaluation; do not enable a paid plan or automatic upgrade. The current search index has a likely cold-start CPU issue under the free request limit, so a successful bundle is not a successful free-tier deployment. See [hosting limits and measurements](hosting.md) before rollout. Storage free allowances can still have metered overages; review account billing settings and usage limits.
+Keep the account on Workers Free during evaluation. The current search index has a likely cold-start CPU issue under the free request limit, so a successful bundle is not a successful free-tier deployment. See [hosting limits and measurements](hosting.md) before rollout. A free allowance with metered overages does not satisfy the budget.
 
 Use a separate set of buckets, database, KV namespace, OAuth application and credentials for production. Keep the existing `uclai.co.uk` website and GitHub Pages deployment in place.
 
@@ -74,7 +84,7 @@ Run local type, security/integration and bundle checks first. Then deploy auth, 
 ```sh
 pnpm typecheck
 pnpm test
-pnpm build
+pnpm build:legacy
 pnpm exec wrangler deploy --config wrangler.auth.jsonc
 pnpm exec wrangler deploy --config wrangler.admin.jsonc
 pnpm exec wrangler deploy --config wrangler.public.jsonc

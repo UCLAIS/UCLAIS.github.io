@@ -43,7 +43,7 @@ export function parseMarkdown(text: string, fallbackTitle: string): { title: str
   let heading = title; let lines: string[] = [];
   const flush = () => {
     const value = lines.join('\n').trim();
-    if (value) sections.push({ id: `section-${sections.length + 1}`, heading, text: value, kind: /solution/i.test(heading) ? 'solution' : /exercise|challenge/i.test(heading) ? 'exercise' : 'explanation' });
+    if (value) sections.push({ id: `section-${sections.length + 1}`, heading, text: value, kind: /solution/i.test(heading) ? 'solution' : /hint/i.test(heading) ? 'hint' : /exercise|challenge/i.test(heading) ? 'exercise' : 'explanation' });
     lines = [];
   };
   let inFence = false;
@@ -72,7 +72,7 @@ export function parseNotebook(input: string, filename: string): { title: string;
     const heading = cell.cell_type === 'markdown' ? source.match(/^#{1,6}\s+(.+)$/m)?.[1] : undefined;
     if (heading && sections.length === 0) title = heading;
     const text = cell.cell_type === 'code' ? `\`\`\`python\n${source}\n\`\`\`` : plainMarkup(source);
-    sections.push({ id: `cell-${index + 1}`, heading: heading ?? `Cell ${index + 1}`, text, kind: cell.cell_type === 'code' ? 'code' : isSolution ? 'solution' : /exercise|challenge|your turn/i.test(heading ?? '') ? 'exercise' : 'explanation', locator: `notebook cell ${index + 1} (${cell.cell_type})` });
+    sections.push({ id: `cell-${index + 1}`, heading: heading ?? `Cell ${index + 1}`, text, kind: cell.cell_type === 'code' ? 'code' : isSolution || /solution|answer/i.test(heading ?? '') ? 'solution' : /hint/i.test(heading ?? '') ? 'hint' : /exercise|challenge|your turn/i.test(heading ?? '') ? 'exercise' : 'explanation', locator: `notebook cell ${index + 1} (${cell.cell_type})` });
   }
   const text = sections.map(section => `${section.heading}\n${section.text}`).join('\n\n');
   if (new TextEncoder().encode(text).byteLength > MAX_TEXT_BYTES) throw new Error('Extracted notebook text exceeds limit');

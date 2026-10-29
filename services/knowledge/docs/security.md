@@ -1,5 +1,24 @@
 # Knowledge service security
 
+## Current GitHub publication boundary
+
+The free launch uses `knowledge/` plus the approved bootstrap to build one immutable release into `src/bundled-worker.ts`. The public Worker receives no draft database, GitHub/OAuth/deployment token, writable storage binding or publication route. The only outbound source is the fixed public Luma feed. The deployment configuration rejects extra storage, service, model, route and logging capabilities. Only the current release is readable; version preview URLs are disabled.
+
+GitHub repository permissions now authorise edits, and merge to `main` authorises publication. Protect `main` with required reviews and passing knowledge checks before enabling automatic deployment. This is an operational prerequisite, not something local tests prove. Public branches and files marked draft are still public. Confidential committee drafts cannot live here. Fork pull requests run validation without deployment credentials; only successful `main` builds can enter the staging deployment job. Shared workflow concurrency does not cancel an ongoing `main` deployment. Cloudflare activates a complete Worker bundle; a failed build leaves the deployed snapshot unchanged.
+
+The deployment token is a GitHub environment secret, scoped to the society account with Worker deployment permission and Billing Read. It never enters the public Worker or website. Preflight uses only GET subscription inspection, rejects unknown/paid/trial states and oversized/incomplete responses, and never modifies billing. It cannot prevent an operator changing the plan after deployment. Keep the account free-only. Quota exhaustion can deny service.
+
+Folder import checks real filesystem containment, rejects symlinks and unsupported metadata, bounds inputs and generated bundles, and never evaluates Markdown/MDX/notebooks/Python. Notebook output is omitted, but raw inputs are scanned for known credential patterns before import. This supplements review and does not prove the absence of arbitrary personal information or secrets. PDF extraction runs in the existing bounded subprocess; parser errors omit source fragments. External links become link-only records with no automatic fetch.
+
+Reviewed overrides stay separate from the pinned bootstrap. Missing references and duplicate IDs fail the build; unknown formats and excluded drafts appear in the build report. Withdrawals strip bodies/index/path references and suppress live event IDs. The public endpoint cannot request retired releases. GitHub history, operator-only historical Worker versions and previously downloaded copies are not erased; keep withdrawals during rollback and do not expose historical version preview URLs.
+
+`github-content.test.ts`, `deploy-budget.test.ts` and `bundled-runtime.test.ts` exercise additions/changes/removal, version consistency, notebook cells, inert imports, drafts, unsafe paths, credentials, metadata, free-account/configuration guards and the actual public Worker/MCP with no storage credentials. Live account, branch rules, quota behaviour and real assistant clients still require staging verification.
+
+## Retained original editor architecture
+
+The remaining sections describe the separately configured R2/D1/OAuth editor implementation. It is not deployed by the free launch workflow.
+
+
 The service separates public retrieval, OAuth identity and privileged editing. None of the checked-in configurations contains deployed resource IDs or credentials. Replace `.invalid` origins and resource identifiers, apply the private database migration, and provision secrets before staging deployment.
 
 ## Trust boundaries

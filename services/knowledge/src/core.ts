@@ -56,7 +56,11 @@ export function makeIndex(corpus: Corpus) {
 
 export class KnowledgeReader {
   private cache = new Map<string, { release: Release; index: MiniSearch }>();
-  constructor(private store: PublishedReader, private calendar?: Pick<LumaCalendar, 'listEvents'>) {}
+  constructor(private store: PublishedReader, private calendar?: Pick<LumaCalendar, 'listEvents'>, initialRelease?: Release) {
+    // A GitHub-built immutable release can be loaded during Worker startup,
+    // rather than deserialising its full index during the first HTTP request.
+    if (initialRelease) this.cache.set(initialRelease.id, { release: initialRelease, index: MiniSearch.loadJS(initialRelease.index as ReturnType<MiniSearch['toJSON']>, { fields: ['title', 'text', 'topics'], storeFields: ['documentId', 'sectionId', 'heading'], searchOptions: { boost: { title: 3 }, prefix: true, fuzzy: 0.15 } }) });
+  }
   async snapshot(releaseId?: string) {
     const { pointer } = await this.store.readActive();
     if (!pointer) throw new KnowledgeError('not_published', 'Knowledge has not been published yet.', 503);

@@ -32,7 +32,13 @@ An assistant with configuration tools may complete setup from that prompt. Brows
 
 Both services must be able to reach the endpoint from their cloud infrastructure. Loopback development verifies the SDK, not those products. Do not put a privileged editor URL into a public member onboarding shortcut.
 
-## Maintainers' connection
+## Current maintainers' route
+
+Use the authenticated GitHub connection already available in your assistant to add or edit files in `knowledge/`, create a pull request and review its diff/checks on GitHub. Merging to `main` publishes automatically after the one-time deployment setup. No separate editor token or OAuth application is needed for this route. Set branch protection before enabling it. All files in this repository are public, including drafts. See the [folder guide](../../../knowledge/README.md).
+
+## Optional legacy editor connection
+
+The following applies only if the separate privileged editor deployment is provisioned later. It is not part of the free launch.
 
 Add the deployed **Admin Worker's** `/mcp` endpoint as a separate connector called **UCL AI Society Editor**, selecting OAuth. The client discovers the separate OAuth Worker for sign-in. Sign in with an explicitly approved GitHub account. GitHub sign-in establishes identity; a current service role separately controls access.
 
@@ -63,10 +69,10 @@ Start with a reviewed staging release. Record actual observations below for each
 | Tutorial | Search finds a relevant notebook; fetch returns actual ordered cells with locators |
 | Dates | Archived tutorials remain archived; expired records are not reported as upcoming |
 | Gaps | Unavailable slides/recordings are described as links or unavailable, not as imported text |
-| Update | A maintainer prepares a factual correction; only browser approval activates the immutable candidate |
-| Refresh | Both clients retrieve the new release in subsequent calls; pinned old-release fetch remains consistent |
-| Revocation | Removing the maintainer role rejects the next privileged request using the existing token |
+| Update | A maintainer submits a factual correction in a pull request; review/merge and passing checks deploy the next complete bundle |
+| Refresh | Both clients retrieve the new release in subsequent calls; a pinned retired-release fetch explicitly reports unavailable |
+| Permissions | Removing repository write access prevents further merges; no editor credentials exist in the public Worker |
 | Restrictions | Public connection cannot discover editor tools or retrieve draft IDs |
-| Recovery | Concurrent approval and interrupted publication preserve one complete active release |
+| Recovery | A failed build/deployment preserves a complete deployed release; rollback retains withdrawals |
 
 Initial status: **not yet verified against deployed ChatGPT or Claude connections**. Add dated results, endpoint hostnames and release IDs after running the checks. Do not record credentials or full member prompts.

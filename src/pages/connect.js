@@ -138,9 +138,10 @@ export default function Connect() {
       <div className={styles.values}><h3>What we stand for</h3><p>We bring students together to make AI accessible, support student research and build a community around safe and ethical AI.</p><Link className="society-text-link" to="/about-us/">Our purpose and principles <Arrow /></Link></div>
     </section>
     <section className={`society-section ${styles.maintainers}`} aria-labelledby="maintain-title">
-      <div><h2 id="maintain-title">Keep the library useful.</h2><p>Approved maintainers can connect the editor service using GitHub sign-in, work on shared drafts and prepare a review. Publishing happens separately on the authenticated review website.</p></div>
-      <Endpoint label="Editor MCP" url={editorMcpUrl} description="For explicitly approved maintainers. Choose OAuth when adding this connection." />
-      <p>Connecting does not grant a role. Ask the society administrator for access through the normal committee channel.</p>
+      <div><h2 id="maintain-title">Keep the library useful.</h2><p>Add a tutorial, Nexus session or FAQ to the knowledge folder on GitHub. Maintainers review the change, then merge it to publish the next library update once automatic deployment is enabled.</p></div>
+      <a className="society-text-link" href="https://github.com/UCLAIS/UCLAIS.github.io/tree/main/knowledge" target="_blank" rel="noopener noreferrer">Add or update material <Arrow external /></a>
+      <p>Your assistant can prepare the files using your own GitHub connection. Only authorised repository maintainers can merge changes. Files in this public repository are public, including draft files.</p>
+      {editorMcpUrl && <Endpoint label="Editor MCP" url={editorMcpUrl} description="Optional separate editor deployment for explicitly approved maintainers. Choose OAuth when adding this connection." />}
     </section>
     <section className={`society-section ${styles.privacy}`} aria-labelledby="privacy-title"><h2 id="privacy-title">What reaches the service?</h2><p>Your assistant sends search terms and resource requests to our service. Avoid including private information or student code in a query. The service is designed to avoid retaining raw member queries; your AI provider has its own data policies.</p><p>Compatible browser agents can also use public, read-only WebMCP tools while this page is open. Browser support is experimental; the remote connection works independently.</p></section>
   </Page>

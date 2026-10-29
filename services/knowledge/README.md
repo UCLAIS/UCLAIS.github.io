@@ -1,87 +1,54 @@
 # AI Society knowledge service
 
-The public MCP serves approved releases to members' own assistants. The editor MCP uses GitHub identities and explicit maintainer roles to prepare shared drafts. Publishing, rollback, withdrawal and role changes require an authenticated browser review.
+The current launch route is **GitHub files → reviewed merge → validated snapshot → one read-only Cloudflare Worker**. Add tutorials, Nexus sessions and FAQs under the root [`knowledge/`](../../knowledge/README.md) folder. GitHub Actions checks every relevant pull request and can publish successful `main` builds after the one-time account setup. No hosted resources have been provisioned yet.
 
-This package does not call a language model. Knowledge is retrieved with citations; each connected assistant generates its own answer. The existing Docusaurus/GitHub Pages site remains separate from the Worker deployments.
+This replaces the original editor MCP for the free launch: maintainers use their existing GitHub permissions and review changes on GitHub. The public MCP has no GitHub token, private draft database, writable storage binding or publishing tool. The original three-Worker OAuth/editor implementation remains available for separate evaluation; its R2 deployment is on hold because it can incur overage charges.
 
-Public responses include society guidance: AI-generated answers may be incorrect or out of date; check sources, and email `info@uclai.co.uk` when records cannot answer, are conflicting or unavailable, or a question needs committee judgement. The MCP instructions ask connected assistants to explain the gap and give that contact. The society's purpose and eight principles are linked from the guidance and connection page. The server supplies this guidance but cannot guarantee how an external assistant phrases its answer.
+The service performs retrieval and full-text search. It calls no answer-generation model, embedding API or paid AI service. Each member's own assistant generates the answer under that provider's account terms.
 
-## Local development
+## Add and publish knowledge
 
-Use Node 24 and pnpm 11.25.0. From this directory:
+Read the [folder contribution guide](../../knowledge/README.md) for examples, optional metadata, notebooks, PDF page references, withdrawals and one-time deployment settings. A Markdown heading and body are enough. Templates and files marked `draft` or `review-required` stay out of the MCP. **All files in this public GitHub repository are public, including drafts.** Confidential material belongs elsewhere.
 
-```sh
-pnpm install --frozen-lockfile
-pnpm typecheck
-pnpm test
-pnpm build
-pnpm dev
-```
-
-Copy `.env.example` to `.env` for local CLI settings. The scripts load it automatically, while exported variables take precedence. The repository-root `.env.example` contains only public website URLs; supply them to the website build environment. Never copy editor or storage credentials into the website environment. Real `.env`/`.dev.vars` files, private imports, local databases, keys and logs are ignored; templates contain empty values only.
-
-For local auth/public Worker secrets, copy the matching `.dev.vars.auth.example` or `.dev.vars.public.example` and pass that file explicitly with Wrangler's `--env-file` flag. Do not share a combined privileged secret file with the public Worker. Deployed secrets use `wrangler secret put`.
+Merging a change approves its publication. Configure GitHub branch protection and required knowledge checks to enforce review; the workflow cannot establish that review occurred on an unprotected branch. Pull requests do not receive deployment secrets. Source bodies are never executed. Notebook outputs are discarded, imported links are not crawled, and metadata, credential patterns, paths, input sizes and release size are validated before deployment.
 
 ## Where the data lives
 
-Before deployment, `data/bootstrap-corpus.json` holds approved public material, while `data/corpus.json` and `data/raw/` contain local imports which may still need rights review. Only the public bootstrap and body-free inventory belong in Git. Local Wrangler state stays in ignored `.wrangler/`.
+Editable material lives in `knowledge/`. The approved portal and external tutorial archive is pinned in `data/bootstrap-corpus.json`; refresh it separately with the existing importer and review the changes. Missing, inaccessible and rights-unconfirmed sources remain in its source registry rather than being invented or silently imported.
 
-After deployment, the separate published R2 bucket holds approved immutable release documents and their MiniSearch index. Private R2 holds draft/candidate bodies; D1 stores draft revisions, maintainer roles, browser approvals, audit events and aggregate counters; OAuth KV holds service-token state. Editing does not change public answers until a publisher approves the candidate in the browser. The public Worker can read only the published bucket. Member conversations are not stored by this service, and raw member queries are not retained by default.
+The build writes an ignored `.generated/knowledge.release.json` containing the approved documents, metadata, source gaps and MiniSearch index. Deployment bundles it into Worker code. **The current route uses no R2, D1 or KV.** The public runtime reads its immutable bundled release and caches the approved public Luma calendar feed for up to 12 hours. No database holds member conversations, and application code does not retain raw queries.
 
-`dev` runs a loopback-only public HTTP/MCP adapter using the checked-in `data/bootstrap-corpus.json` and the same public handler as the Worker. It does not run authentication, grant roles, expose an editor service or publish to Cloudflare. No remote credentials or re-import are required. Missing or unapproved source bodies remain absent. Pass `--corpus` to use a freshly imported corpus.
+Each result includes its release ID. Only the currently deployed release is served: fetching a retired version fails explicitly. Remove a new file to delete its document; use `knowledge/withdrawn.json` to suppress archive documents or live Luma IDs. Keep withdrawals when reverting a content change. Git history and copies already downloaded by others retain earlier text.
 
-Run `pnpm ingest` separately to refresh the source inventory and proposed imported material. This can access approved external sources; inspect the resulting report before staging an update.
+## Local checks
 
-In another terminal:
-
-```sh
-pnpm run doctor --url http://127.0.0.1:8787/mcp
-```
-
-The doctor uses the official MCP SDK v2 to initialise a connection, inspect the expected public tools and run one read-only search. It does not print retrieved text, tokens or server response bodies. Run `pnpm run doctor --help` for environment options. These checks do not establish real ChatGPT or Claude compatibility.
-
-`scripts/upload.ts` stages a local corpus through the authenticated editor `/mcp/imports` route using `KNOWLEDGE_EDITOR_ACCESS_TOKEN`. It cannot publish. `scripts/storage-permissions.ts` provides an explicit, expected-denial deployment probe; read the runbook before running its disposable write/delete attempts.
-
-## Service boundaries
-
-| Deployment | Access | Storage |
-| --- | --- | --- |
-| Public Worker | Anonymous, approved release retrieval | Published bucket via bucket-scoped **Object Read** S3 credentials; no writable R2/D1 bindings |
-| Admin Worker | Resource-bound OAuth bearer tokens for MCP; authenticated browser sessions for review | Private D1/R2, published R2 write binding |
-| OAuth Worker | GitHub sign-in, MCP authorisation | OAuth state/tokens; token validation exposed to admin through a service binding |
-
-Public tools: `search`, `fetch`, `list_learning_paths`, `get_learning_path`, `list_events`. Editor tools prepare drafts and immutable review candidates. No editor MCP tool can publish or manage roles.
-
-Use `source_status` to inspect the complete inventory or a draft's import report. `refresh_sources` stages up to five registered notebook, Markdown or Python sources from the five allowlisted teaching repositories. It checks the latest commit, Git blob hash and licence, preserves curated corrections, and returns a new private draft and conflicts. Use the offline importer and authenticated uploader for full refreshes, PDFs, slides and recordings. Every refresh still requires candidate preparation and browser review before publication.
-
-Public HTTP routes: `GET /health`, `GET /api/search?query=…`, `GET /api/resources/:id`, `GET /api/paths`, `GET /api/events`; MCP uses `/mcp`. Resource fetches can specify `?releaseId=…` to retain the version returned by search and `sectionId=…` to retrieve a section. The service reads the current release pointer afresh and caches only immutable releases.
-
-`list_events` and `/api/events` additionally read the society's approved public Luma iCalendar subscription, without an API key. They return upcoming events with source links, a feed version, retrieval time and expiry. Public edge caching honours Luma's advertised 12-hour refresh interval. This is live calendar data controlled on Luma, separate from immutable knowledge releases and draft publication. Missing feeds and unsupported entries remain visible as gaps. Guest lists, registrations and account records are neither queried nor retained. Reviewed withdrawal can suppress live event IDs too.
-
-Imported content is untrusted data. MDX/components and notebook cells are never executed. Notebook outputs are omitted. Imports propose changes; they cannot overwrite reviewed corrections or activate a release. See the source inventory/report generated in `data/` for inaccessible, blocked and review-required material.
-
-Imports redact recognisable credentials from teaching text and cells; release validation rejects remaining credential-like content. This does not prove arbitrary material is non-sensitive, so inspect proposed content before publication. Private source caches remain ignored by Git.
-
-## Connecting and staging
-
-See the [staging provisioning runbook](docs/deployment.md) and [connection setup and acceptance checks](docs/connections.md). Deployment and GitHub OAuth provisioning require society-controlled accounts and real credentials. `pnpm build` only bundles the Workers and does not deploy anything.
-
-For the website connection page, set these **public** build variables before the Docusaurus build:
+Use Node 24, pnpm 11.25.0 and Python with the pinned PDF dependencies. From this directory:
 
 ```sh
-KNOWLEDGE_PUBLIC_MCP_URL=https://PUBLIC_HOST/mcp
-KNOWLEDGE_EDITOR_MCP_URL=https://EDITOR_HOST/mcp
-KNOWLEDGE_PUBLIC_API_URL=https://PUBLIC_HOST
+pnpm install --frozen-lockfile
+python3 -m pip install -r requirements-pdf.txt
+pnpm knowledge:build
+pnpm typecheck
+pnpm test
+pnpm build
 ```
 
-Values flow through `customFields.knowledge`. Never put credentials, bearer tokens or GitHub secrets in Docusaurus config. If URLs are absent, `/connect/` shows deployment pending. Add the website's exact origin to the public API's allowed origins for its read-only diagnostic and optional WebMCP adapter.
+`pnpm build` creates the snapshot and performs a Wrangler dry run without deploying. `pnpm build:legacy` checks the original three Workers. The default local preview includes the GitHub folder too; `pnpm dev -- --corpus data/bootstrap-corpus.json` previews only the pinned archive. The read-only CLI diagnostic is `pnpm doctor --url https://PUBLIC_HOST/mcp`. SDK tests do not prove real ChatGPT or Claude compatibility.
 
-Do not change production DNS until staging has a reviewed release, a passing SDK diagnostic and actual ChatGPT/Claude acceptance evidence. Keep staging and production storage, OAuth applications and secrets separate.
+Real `.env`/`.dev.vars`, private imports, generated releases, local Wrangler databases, keys and logs are ignored. Blank examples are tracked. Use `.env.example` for local CLI configuration, GitHub environment secrets for deployment, and public website variables only for connection URLs. Never copy deployment or editor credentials into Docusaurus variables. Inspect the actual Git diff before pushing because ignore rules do not remove tracked files.
 
-## Checks and operations
+## Public interface
 
-The dedicated GitHub Actions workflow runs locked dependency installation, type checks, security/integration tests and non-deploying Worker bundles. The existing website workflows continue to check/build Docusaurus.
+MCP at `/mcp` exposes only `search`, `fetch`, `list_learning_paths`, `get_learning_path` and `list_events`. HTTP retrieval is available at `/health`, `/api/search`, `/api/resources/:id`, `/api/paths` and `/api/events`. Fetch accepts `releaseId` and `sectionId` so tutorial cells retain their source and version.
 
-Production acceptance additionally requires testing real R2 credential permissions, live OAuth and revocation, publication recovery and actual assistant clients. Local/memory tests cannot prove deployed account or bucket configuration. Record date, release, client and observed results without storing member chat transcripts.
+Luma uses the single approved public calendar subscription with no API key. Event responses include retrieval time, expiry and feed version separately from the knowledge release. Failed feeds and unsupported entries are reported honestly; an unavailable feed does not establish that no events exist. Attendees and private account records are not queried.
 
-Monitor health, authentication failures, import status and publication attempts. Do not enable raw request-body, query-string, cookie or authorisation-header logging. Follow the threat model and deployment runbook for approval boundaries, interrupted publications and withdrawals. Browser approval is an authorisation boundary, not proof of human presence or prompt-injection immunity.
+Public responses include an AI accuracy disclaimer, source/date guidance, the society's principles and `info@uclai.co.uk` for unanswered, conflicting or out-of-scope questions. An external assistant still controls how it phrases its answer. The site provides short ChatGPT, Claude and Gemini setup instructions and an optional public WebMCP adapter.
+
+## Deployment and acceptance
+
+The [GitHub setup instructions](../../knowledge/README.md#one-time-deployment-setup) describe the free-only account check and required secret/variables. The deployment script reads subscription information and refuses paid, trial, incomplete or unrecognised account states. It never upgrades a plan or provisions storage. Free quotas can cause an outage; rate limiting does not guarantee availability or a global spend cap if an operator later changes the account plan.
+
+Before enabling publishing, protect `main`, inspect the society account's actual subscriptions, and validate deployed startup/request CPU on Workers Free. Then run the [real-client acceptance checks](docs/connections.md). Local runtime success cannot establish production latency, quota adequacy or account permissions. Preserve the existing website deployment and do not expose production connection URLs until staging passes.
+
+The [security model](docs/security.md), [hosting evidence](docs/hosting.md) and [deployment runbook](docs/deployment.md) distinguish this route from the retained legacy editor architecture. No credentials or member transcripts belong in acceptance records.

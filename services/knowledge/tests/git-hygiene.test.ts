@@ -8,7 +8,7 @@ function ignored(path: string) {
   catch (error) { if ((error as { status?: number }).status === 1) return false; throw error; }
 }
 describe('repository publication hygiene', () => {
-  it.each(['../../.env', '../../.env.production', '.env', '.env.staging', '.dev.vars', '.dev.vars.auth', '.dev.vars.public', '.wrangler/state/private.sqlite', 'local-backup.sqlite', 'data/corpus.json', 'data/raw/source.bin', 'data/private-drafts/draft.json', 'local-secret.pem', 'oauth.key', 'request.log'])('excludes local sensitive path %s', path => {
+  it.each(['../../.env', '../../.env.production', '.env', '.env.staging', '.dev.vars', '.dev.vars.auth', '.dev.vars.public', '.wrangler/state/private.sqlite', '.generated/knowledge.release.json', '.generated/wrangler.deploy.json', 'local-backup.sqlite', 'data/corpus.json', 'data/raw/source.bin', 'data/private-drafts/draft.json', 'local-secret.pem', 'oauth.key', 'request.log'])('excludes local sensitive path %s', path => {
     expect(ignored(path)).toBe(true);
   });
   it.each(['../../.env.example', '.env.example', '.dev.vars.auth.example', '.dev.vars.public.example', 'data/bootstrap-corpus.json', 'data/inventory.json'])('keeps approved public artefact or blank template %s eligible', path => {

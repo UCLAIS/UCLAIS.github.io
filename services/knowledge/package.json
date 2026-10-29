@@ -14,7 +14,11 @@
     "upload": "node --env-file-if-exists=.env --import tsx scripts/upload.ts",
     "permissions:probe": "node --env-file-if-exists=.env --import tsx scripts/storage-permissions.ts",
     "dev": "node --env-file-if-exists=.env --import tsx scripts/dev.ts",
-    "build": "wrangler deploy --dry-run --config wrangler.public.jsonc && wrangler deploy --dry-run --config wrangler.admin.jsonc && wrangler deploy --dry-run --config wrangler.auth.jsonc"
+    "knowledge:build": "node --import tsx scripts/build-knowledge.ts",
+    "build": "node --import tsx scripts/build-knowledge.ts && wrangler deploy --dry-run --config wrangler.bundled.jsonc",
+    "build:bundled": "node --import tsx scripts/build-knowledge.ts && wrangler deploy --dry-run --config wrangler.bundled.jsonc",
+    "build:legacy": "wrangler deploy --dry-run --config wrangler.public.jsonc && wrangler deploy --dry-run --config wrangler.admin.jsonc && wrangler deploy --dry-run --config wrangler.auth.jsonc",
+    "deploy:knowledge": "node --env-file-if-exists=.env --import tsx scripts/deploy-knowledge.ts"
   },
   "dependencies": {
     "@babel/parser": "8.0.8",

@@ -11,5 +11,6 @@ data/corpus.json
 data/private*/
 data/releases/
 coverage/
+.generated/
 __pycache__/
 *.pyc

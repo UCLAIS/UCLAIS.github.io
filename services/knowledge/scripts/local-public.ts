@@ -1,9 +1,12 @@
 import { createServer, type Server } from 'node:http';
+import { execFileSync } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { approvedCorpus, makeIndex } from '../src/core';
 import { createPublicHandler } from '../src/public-worker';
-import { MemoryPublishedStore, sha256 } from '../src/storage';
+import { sha256 } from '../src/storage';
+import { bundledStore } from '../src/bundled-store';
+import { buildGithubKnowledge } from '../src/ingestion/github-content';
 import type { Corpus, Release } from '../src/types';
 import { LumaCalendar } from '../src/luma';
 
@@ -13,11 +16,10 @@ export async function startPublicDev(options: { port?: number; corpusFile?: stri
   if (!Number.isInteger(port) || port < 0 || port > 65535) throw new Error('Choose a port from 0 to 65535.');
   const corpusFile = options.corpusFile ?? fileURLToPath(new URL('../data/bootstrap-corpus.json', import.meta.url));
   const corpus = approvedCorpus(JSON.parse(await readFile(corpusFile, 'utf8')) as Corpus);
-  const store = new MemoryPublishedStore();
-  const release: Release = { id: crypto.randomUUID(), hash: await sha256(JSON.stringify(corpus)), createdAt: new Date().toISOString(), previousReleaseId: null, corpus, index: makeIndex(corpus).toJSON(), operationId: crypto.randomUUID() };
-  await store.putRelease(release);
-  await store.compareAndSwapActive({ releaseId: release.id, hash: release.hash, operationId: release.operationId, previousReleaseId: null }, null);
-  const handler = createPublicHandler(store, new LumaCalendar());
+  const root = fileURLToPath(new URL('../../../', import.meta.url));
+  const built = options.corpusFile ? undefined : await buildGithubKnowledge({ repoRoot: root, baseline: corpus, repository: 'UCLAIS/UCLAIS.github.io', revision: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(), generatedAt: new Date().toISOString() });
+  const release: Release = built?.release ?? { id: crypto.randomUUID(), hash: await sha256(JSON.stringify(corpus)), createdAt: new Date().toISOString(), previousReleaseId: null, corpus, index: makeIndex(corpus).toJSON(), operationId: crypto.randomUUID() };
+  const handler = createPublicHandler(bundledStore(release, built?.withdrawnDocumentIds), new LumaCalendar(), release);
   const server = createServer(async (incoming, outgoing) => {
     const host = incoming.headers.host;
     const address = server.address();
