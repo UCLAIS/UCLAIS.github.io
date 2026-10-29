@@ -2,12 +2,6 @@ name: Knowledge service checks
 
 on:
   pull_request:
-    paths:
-      - 'knowledge/**'
-      - 'services/knowledge/**'
-      - 'src/pages/connect*'
-      - 'docusaurus.config.js'
-      - '.github/workflows/knowledge.yml'
   push:
     branches: [main]
     paths:
@@ -27,6 +21,7 @@ concurrency:
 
 jobs:
   security-and-integration:
+    name: Knowledge security and integration
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:

@@ -5,6 +5,7 @@ import type { KnowledgeDocument } from './types';
 const patterns = [
   /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----[\s\S]*?-----END (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/,
   /(?:gh[pousr]_[A-Za-z0-9]{32,}|github_pat_[A-Za-z0-9_]{40,})/,
+  /\b(?:cfk_|cfut_|cfat_|cfoat_)[A-Za-z0-9_-]{40,}/,
   /(?:sk-(?:proj-|live-)?[A-Za-z0-9_-]{32,}|AIza[0-9A-Za-z_-]{30,}|GOCSPX-[A-Za-z0-9_-]{20,}|xox[baprs]-[A-Za-z0-9-]{20,})/,
   /\b(?:AKIA|ASIA)[A-Z0-9]{16}\b/,
   /https?:\/\/[^\s/<>"']+:[^\s/<>"']+@/,

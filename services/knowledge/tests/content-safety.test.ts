@@ -7,7 +7,7 @@ const document = (text: string): KnowledgeDocument => ({ id: 'tutorial:example',
 const corpus = (doc: KnowledgeDocument): Corpus => ({ schemaVersion: 1, generatedAt: new Date().toISOString(), documents: [doc], sources: [], learningPaths: [] });
 
 describe('credential redaction and publication guard', () => {
-  it.each(['sk-' + 'A1b2C3d4'.repeat(6), 'ghp_' + 'A1b2C3d4'.repeat(5), 'AIza' + 'A1b2C3d4'.repeat(5), 'AKIA' + 'A1B2'.repeat(4)])('redacts recognised credential format without echoing it', secret => {
+  it.each(['sk-' + 'A1b2C3d4'.repeat(6), 'ghp_' + 'A1b2C3d4'.repeat(5), 'AIza' + 'A1b2C3d4'.repeat(5), 'AKIA' + 'A1B2'.repeat(4), ...['cfk_', 'cfut_', 'cfat_', 'cfoat_'].map(prefix => prefix + 'A1b2C3d4'.repeat(6))])('redacts recognised credential format without echoing it', secret => {
     expect(containsSensitiveText(secret)).toBe(true);
     expect(redactSensitiveText(`key = "${secret}"`)).toBe('key = "[REDACTED_CREDENTIAL]"');
     const result = redactDocument(document(secret));
