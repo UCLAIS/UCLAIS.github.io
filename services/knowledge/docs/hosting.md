@@ -1,6 +1,6 @@
 # Current free launch route
 
-The GitHub folder build now bundles approved knowledge and its search index directly into one public Worker. `wrangler.bundled.jsonc` contains no R2/D1/KV bindings. This removes the original R2 overage exposure and editor hosting from the launch. The deployment script requires a verified free-only account; GitHub publication remains disabled until account settings and secrets are configured. See the [contribution/setup guide](../../../knowledge/README.md).
+The GitHub folder build now bundles approved knowledge and its search index directly into one public Worker. `wrangler.bundled.jsonc` contains no R2/D1/KV bindings. This removes the original R2 overage exposure and editor hosting from the launch. The deployment script requires a verified free-only account. Staging is now deployed and GitHub settings are configured; see the [dated live evidence](staging-2026-10-29.md) and [contribution/setup guide](../../../knowledge/README.md). The workflow awaits review/merge onto `main`.
 
 A local workerd prototype loaded 183 approved documents, completed an MCP connection in about 23 ms after runtime startup and retrieved real tutorial cells. The bundle was about 5.9 MB uncompressed / 1.2 MB gzip, with about 40 MB used heap. These are local measurements, not deployed CPU, startup or latency guarantees. The production entry point now loads the immutable index at module startup rather than during the first request. Measure actual Workers Free startup and request CPU before launch, especially broad searches and event parsing.
 

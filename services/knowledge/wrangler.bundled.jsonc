@@ -8,7 +8,7 @@
   "preview_urls": false,
   "vars": {
     "PUBLIC_ORIGIN": "https://PUBLIC_HOST_REQUIRED",
-    "ALLOWED_ORIGINS": "https://uclai.co.uk,https://chatgpt.com,https://claude.ai"
+    "ALLOWED_ORIGINS": "https://uclai.co.uk,https://chatgpt.com,https://claude.ai,http://127.0.0.1:4173,http://localhost:4173"
   },
   "ratelimits": [{ "name": "RATE_LIMITER", "namespace_id": "1001", "simple": { "limit": 60, "period": 60 } }],
   "observability": { "enabled": false }

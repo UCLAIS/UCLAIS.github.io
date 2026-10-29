@@ -2,7 +2,7 @@
 
 ## Current GitHub route
 
-Use the [knowledge folder setup guide](../../../knowledge/README.md#one-time-deployment-setup). It deploys only `wrangler.bundled.jsonc`, with no R2/D1/KV, editor service or GitHub OAuth registration. Run `pnpm knowledge:build`, type checks, security/runtime tests and `pnpm build` before enabling the GitHub publication job. Configure the society account and exact staging endpoint, protect `main`, then verify actual free-tier runtime behaviour and real ChatGPT/Claude connections. Publication is currently disabled until those settings exist.
+Use the [knowledge folder setup guide](../../../knowledge/README.md#one-time-deployment-setup). It deploys only `wrangler.bundled.jsonc`, with no R2/D1/KV, editor service or GitHub OAuth registration. Run `pnpm knowledge:build`, type checks, security/runtime tests and `pnpm build` before enabling the GitHub publication job. Staging has been configured and deployed on the society's `info@uclai.co.uk` account; see the [dated evidence and remaining acceptance](staging-2026-10-29.md). The implementation PR still needs review/merge before the workflow can run on `main`.
 
 The generated release and index ship as Worker code. Revert a reviewed content change through GitHub to roll back, preserving `knowledge/withdrawn.json`; retired releases are not available through public retrieval. Do not enable version preview URLs. Restrict access to historical Worker deployments in the Cloudflare account, and never redeploy a withdrawn snapshot.
 

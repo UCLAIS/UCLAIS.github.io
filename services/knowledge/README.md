@@ -1,6 +1,6 @@
 # AI Society knowledge service
 
-The current launch route is **GitHub files → reviewed merge → validated snapshot → one read-only Cloudflare Worker**. Add tutorials, Nexus sessions and FAQs under the root [`knowledge/`](../../knowledge/README.md) folder. GitHub Actions checks every relevant pull request and can publish successful `main` builds after the one-time account setup. No hosted resources have been provisioned yet.
+The current launch route is **GitHub files → reviewed merge → validated snapshot → one read-only Cloudflare Worker**. Add tutorials, Nexus sessions and FAQs under the root [`knowledge/`](../../knowledge/README.md) folder. GitHub Actions checks every pull request and can publish successful `main` builds. Staging is deployed on the society's `info@uclai.co.uk` account; see the [dated deployment evidence](docs/staging-2026-10-29.md). Automatic publication becomes active on `main` once the implementation PR is reviewed and merged.
 
 This replaces the original editor MCP for the free launch: maintainers use their existing GitHub permissions and review changes on GitHub. The public MCP has no GitHub token, private draft database, writable storage binding or publishing tool. The original three-Worker OAuth/editor implementation remains available for separate evaluation; its R2 deployment is on hold because it can incur overage charges.
 
