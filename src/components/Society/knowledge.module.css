@@ -7,20 +7,35 @@
 .materialLink svg { width: 14px; flex-shrink: 0; }
 .metadata { display: block; font-size: 13px; color: var(--soc-muted); margin-top: 10px; }
 .empty { color: var(--soc-muted); }
-.resource { padding-top: 26px; max-width: 900px; }
-.resource h2 { font-size: 30px; margin-bottom: 20px; }
-.resource h3 { font-size: 23px; margin-block: 28px 16px; }
-.resource p, .resource li { font-size: 16px; line-height: 1.8; overflow-wrap: anywhere; }
-.resource p { margin-bottom: 20px; }
+.resource { width: min(calc(100% - 2 * var(--soc-gutter)), 1100px); margin-inline: auto; padding-block: 32px 48px; min-width: 0; }
+.resourceHeader { padding-block: 28px 24px; }
+.resource .resourceHeader h1 { font-size: clamp(38px, 4.5vw, 60px); line-height: 1.08; max-width: none; text-wrap: balance; }
+.resource .resourceHeader p { margin: 16px 0 0; font-size: 14px; }
+:global(.society-page) .resource h2 { font-size: clamp(27px, 3vw, 34px); line-height: 1.2; max-width: none; margin-bottom: 12px; }
+:global(.society-page) .resource h3 { font-size: 21px; margin-block: 28px 14px; }
+:global(.society-page) .resource p, .resource li { font-size: 16px; line-height: 1.75; overflow-wrap: anywhere; }
+:global(.society-page) .resource p { max-width: none; margin-bottom: 18px; }
+.resource ul, .resource ol { padding-left: 24px; margin-block: 16px 24px; }
+.resource li + li { margin-top: 8px; }
+.resource li p { margin-bottom: 8px; }
 .resource a { color: var(--soc-accent); }
+.resource p a, .resource li a { text-decoration: underline; text-underline-offset: 3px; }
 .resource pre { white-space: pre; }
-.provenance { padding: 24px 0; margin-block: 18px 30px; border-block: 1px solid var(--soc-line); }
-.provenance p { font-size: 14px; margin-bottom: 12px; }
-.provenance p:last-child { margin-bottom: 0; }
+.provenance { padding-block: 16px; margin-bottom: 28px; border-block: 1px solid var(--soc-line); }
+.resource .provenance p { font-size: 13px; margin-bottom: 8px; }
+.resource .provenance p:last-child { margin-bottom: 0; }
 .provenance svg { width: 12px; }
 .section { margin-block: 36px; scroll-margin-top: 100px; }
-.locator { color: var(--soc-muted); font-size: 13px !important; }
+.resource .locator { color: var(--soc-muted); font-size: 13px; margin-bottom: 14px; }
 .answer { border-block: 1px solid var(--soc-line); margin-block: 24px; padding-block: 18px; }
 .answer summary { color: var(--soc-accent); font-size: 20px; cursor: pointer; }
 .answer > div { padding-top: 20px; }
 .pdfText { white-space: pre-wrap; }
+@media (max-width: 767px) {
+  .resource { padding-top: 20px; }
+  .resourceHeader { padding-top: 22px; }
+  .resource .resourceHeader h1 { font-size: clamp(34px, 8vw, 46px); text-wrap: initial; }
+  .section { margin-block: 28px; }
+  .answer summary { font-size: 18px; }
+  .materialLink { gap: 16px; }
+}

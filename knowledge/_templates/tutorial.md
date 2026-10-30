@@ -11,16 +11,16 @@ status: draft
 
 # Replace with your tutorial title
 
-Explain the topic and cite your sources. Copy this file into `knowledge/tutorials/`, update the metadata and content, then set `status: published` when it is ready for review. Merging publishes it to both the website tutorial library and the MCP.
+Copy this file into `knowledge/tutorials/`, update the metadata and transcribe the source's words and headings with slide/page/cell references. Add only essential, separately labelled notes. Set `status: published` when ready for review. Merging publishes it to both the website tutorial library and the MCP.
 
 ## Exercise
 
-Write the learner's task.
+Include the source exercise, if supplied.
 
 ## Hint
 
-Give a smaller prompt before the answer.
+Include the source hint, if supplied.
 
 ## Solution
 
-Explain the solution separately.
+Include the source solution, if supplied.

@@ -369,7 +369,7 @@ html[data-theme='dark'] .society-career26-logo { filter: invert(1); }
 
 /* Reading pages share the society layout; archives do not use the docs rails. */
 .society-document-page { padding-bottom: 64px; }
-.society-document { width: min(calc(100% - 2 * var(--soc-gutter)), 960px); margin-inline: auto; padding-top: 36px; }
+.society-document { width: min(calc(100% - 2 * var(--soc-gutter)), 1100px); margin-inline: auto; padding-top: 36px; }
 .society-document__nav { display: flex; flex-wrap: wrap; gap: 12px 28px; margin-bottom: 32px; }
 .society-document__nav a { font-size: 13px; color: var(--soc-muted); text-decoration: underline; text-underline-offset: 5px; min-height: 32px; display: inline-flex; align-items: center; }
 .society-archive-status { background: var(--soc-surface); border-left: 3px solid var(--soc-accent); padding: 20px 24px; margin-bottom: 38px; }

@@ -63,9 +63,12 @@ try {
   const nexus = readFileSync(path.join(output, 'our-initiatives/Nexus-Labs/index.html'), 'utf8')
   assert.ok(tutorials.includes('Website publication check'))
   assert.ok(nexus.includes('Nexus publication check'))
-  assert.ok(tutorials.includes('Publication check series') && tutorials.includes('Lesson 3'))
+  assert.ok(tutorials.includes('Publication check series') && tutorials.includes('Session 3'))
   assert.ok(nexus.includes('Publication check series') && nexus.includes('Session 2'))
   assert.doesNotMatch(tutorials, /2026\/27 tutorial materials are not published here/)
+  assert.doesNotMatch(tutorials, /aria-label="Archive status"|Learning archive/)
+  const earlierTutorials = readFileSync(path.join(output, 'our-initiatives/tutorials/2024-2025/index.html'), 'utf8')
+  assert.match(earlierTutorials, /aria-label="Archive status"/)
   console.log('Shared publication passed: Markdown, notebook cells, PDF pages and Nexus notes appear in both outputs; drafts, unsafe markup and execution outputs do not.')
 } finally {
   rmSync(root, { recursive: true, force: true })
