@@ -2,11 +2,11 @@
 
 ## Public members' connection
 
-The public MCP uses Streamable HTTP at the deployed public Worker's `/mcp` URL and requires no authentication. The site displays only configured endpoint URLs; an absent URL means deployment is pending.
+The public MCP uses Streamable HTTP at the public service's `/mcp` URL and requires no authentication. The site displays only configured endpoint URLs; an absent URL means deployment is pending.
 
 Connect once, then just ask: add the URL in the assistant's MCP settings, approve the connection and enable it for the chat.
 
-The proposed shorter hostname `mcp.uclai.co.uk` uses an optional Pages gateway while retaining IONOS DNS. It is not the advertised endpoint until domain, TLS and MCP checks pass. See the [custom-hostname activation guide](custom-hostname.md).
+The public endpoint is `https://mcp.uclai.co.uk/mcp`, using a read-only Pages gateway while retaining IONOS DNS. DNS, TLS and SDK checks passed on 30 October 2026. See the [custom-hostname activation and deployment record](custom-hostname.md). Actual ChatGPT/Claude product acceptance remains separate from SDK verification.
 
 ### ChatGPT
 
