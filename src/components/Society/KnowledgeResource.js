@@ -4,6 +4,8 @@ import CodeBlock from '@theme/CodeBlock'
 import { Page, Arrow } from './shared'
 import { MaterialDate } from './KnowledgeCollection'
 import styles from './knowledge.module.css'
+import SlideViewer from './SlideViewer'
+import useBaseUrl from '@docusaurus/useBaseUrl'
 
 // Only explicit React elements are rendered. Imported HTML/MDX is never inserted
 // with innerHTML, compiled as JSX, or evaluated. Code remains a displayed string.
@@ -40,20 +42,33 @@ function MaterialSection({ section, pdf, hideHeading }) {
 
 export default function KnowledgeResource({ resource }) {
   const { document: doc } = resource
+  const presentation = resource.presentation
+  const pdfUrl = useBaseUrl(presentation?.pdf || '/')
   const nexus = resource.collection === 'nexus'
   const parent = nexus ? '/our-initiatives/Nexus-Labs/#session-notes' : '/our-initiatives/tutorials/'
   return <Page title={doc.title} description={`${nexus ? 'Nexus Labs session notes' : 'Tutorial material'} from UCL AI Society.`} canonical={resource.route}>
-    <article className={styles.resource}>
+    <article className={`${styles.resource}${presentation ? ` ${styles.presentationPage}` : ''}`}>
       <Link className="society-text-link" to={parent}>Back to {nexus ? 'Nexus Labs' : 'tutorials'} <Arrow /></Link>
       <header className={styles.resourceHeader}>
         <h1>{doc.title}</h1>
         <p>{[doc.year, doc.series, doc.order && `Session ${doc.order}`].filter(Boolean).join(' · ')}{resource.date && <> · <MaterialDate date={resource.date} /></>}</p>
       </header>
-      <aside className={styles.provenance} aria-label="Material source">
+      {presentation && <>
+        <SlideViewer key={presentation.pdf} presentation={presentation} title={doc.title} />
+        <section className={styles.files} aria-labelledby="material-files"><h2 id="material-files">Files</h2>
+          <ul><li><a href={pdfUrl} target="_blank" rel="noopener noreferrer">Slides (PDF) <Arrow external /></a></li>{presentation.files.map(file => <MaterialFile key={file.url} file={file} />)}</ul>
+        </section>
+      </>}
+      {!presentation && <aside className={styles.provenance} aria-label="Material source">
         {doc.source.attribution && <p>{doc.source.attribution}</p>}
         <p><a href={resource.fileUrl} target="_blank" rel="noopener noreferrer">View on GitHub <Arrow external /></a>{doc.source.url !== resource.fileUrl && <> · <a href={doc.source.url} target="_blank" rel="noopener noreferrer">Source</a></>}{doc.source.license && <> · {doc.source.license}</>}</p>
-      </aside>
-      {doc.sections.map((section, index) => <MaterialSection key={section.id} section={section} hideHeading={index === 0 && section.heading === doc.title} pdf={resource.format === 'pdf'} />)}
+      </aside>}
+      {doc.sections.map((section, index) => <MaterialSection key={section.id} section={presentation ? { ...section, heading: 'Additional information' } : section} hideHeading={!presentation && index === 0 && section.heading === doc.title} pdf={resource.format === 'pdf'} />)}
+      {presentation && <footer className={styles.materialSource}><p>{doc.source.attribution} · <a href={resource.fileUrl} target="_blank" rel="noopener noreferrer">Text source</a></p></footer>}
     </article>
   </Page>
+}
+
+function MaterialFile({ file }) {
+  return <li><a href={useBaseUrl(file.url)} download>{file.label} <Arrow external /></a></li>
 }

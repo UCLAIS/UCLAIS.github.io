@@ -29,6 +29,20 @@ For an attachment-based agent workflow, open this repository in your authenticat
 
 Website pages retain nested filenames under `/learn/tutorials/` or `/learn/nexus/`, including the extension. Renaming a file changes its website URL and its default MCP identifier. Markdown is rendered as data; MDX components/imports and notebook code never execute. Notebook cells and PDF page locators are preserved, with hints and solutions in expandable sections. External images are explicit links rather than automatic embeds.
 
+## Slide-hosting pages
+
+For a PDF/PPTX deck, show the original slides in a viewer and put downloads and essential additional information underneath. The canonical source transcript remains available to MCP search/fetch without becoming a second long article on the website. Source wording and visual layouts stay intact.
+
+Export PowerPoint to PDF locally, then prepare approved static assets with Poppler and `scripts/requirements-slides.txt` installed:
+
+```sh
+python3 scripts/prepare-slides.py --source knowledge/tutorials/lesson.md --pdf /path/to/slides.pdf --file 'Answers notebook=static/materials/tutorials/answers.ipynb'
+```
+
+Use the real canonical path; Nexus works the same way. Omit `--file` or repeat it for more downloads. Additional files must already be sanitised under `static/materials/`. The helper creates a `presentation.json` record and raster slide images in `static/materials/<knowledge-relative-path-without-extension>/`. For example, `knowledge/nexus/2026-27/launch.md` uses `static/materials/nexus/2026-27/launch/presentation.json`. Commit the generated static assets. Rendering happens locally when preparing an upload; CI and the public Worker need no slide renderer, external embedding service or model API.
+
+The record contains the PDF path, ordered slide images with dimensions and source text, and labelled files. Only validated local `/materials/` assets are supported. Put brief essential corrections or other extra information under `## Additional information` in the canonical knowledge file. This section appears below the files; the remaining transcript stays in the MCP. Existing `Publication notes` headings are supported too. Resources without a presentation record retain their text/notebook reading page.
+
 Listings group by academic year (newest first) and series, then use the recorded `order` within a series. Missing positions fall back to session date (newest first) and natural title order. Dates, series and positions are optional for standalone material. Duplicate positions within a collection/year/series fail validation. This display order is separate from MCP search relevance, which matches the question against titles, series, text and topics. MCP results retain the series/position; curated learning paths can specify a sequence through `learning-paths.json`.
 
 Optional flat front matter adds useful metadata:

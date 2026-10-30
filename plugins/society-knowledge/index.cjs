@@ -4,13 +4,14 @@ const path = require('node:path')
 const { promisify } = require('node:util')
 const { createHash } = require('node:crypto')
 const { markdownNodes } = require('./markdown.cjs')
+const { loadPresentation } = require('./presentation.cjs')
 const run = promisify(execFile)
 
 module.exports = function societyKnowledge(context) {
   const service = path.join(context.siteDir, 'services/knowledge')
   return {
     name: 'society-knowledge-pages',
-    getPathsToWatch: () => [path.join(context.siteDir, 'knowledge/**/*'), path.join(service, 'data/bootstrap-corpus.json')],
+    getPathsToWatch: () => [path.join(context.siteDir, 'knowledge/**/*'), path.join(context.siteDir, 'static/materials/**/*'), path.join(service, 'data/bootstrap-corpus.json')],
     async loadContent() {
       try {
         // Every website build runs the same validation/importer as the MCP build.
@@ -27,8 +28,10 @@ module.exports = function societyKnowledge(context) {
       const collections = { tutorials: [], nexus: [] }
       for (const material of content.materials) {
         const doc = material.document
-        const sections = (doc.sections?.length ? doc.sections : [{ id: 'body', heading: doc.title, text: doc.text }]).map(section => ({ ...section, nodes: material.format === 'pdf' ? [] : markdownNodes(section.text, doc.source.url) }))
-        const resource = { ...material, document: { ...doc, text: undefined, sections }, releaseId: content.releaseId }
+        const presentation = await loadPresentation(context.siteDir, material.sourcePath)
+        const allSections = doc.sections?.length ? doc.sections : [{ id: 'body', heading: doc.title, text: doc.text }]
+        const sections = (presentation ? allSections.filter(section => /^(?:Additional information|Publication notes)$/i.test(section.heading)) : allSections).map(section => ({ ...section, nodes: material.format === 'pdf' ? [] : markdownNodes(section.text, doc.source.url) }))
+        const resource = { ...material, presentation, document: { ...doc, text: undefined, sections }, releaseId: content.releaseId }
         const filename = createHash('sha256').update(material.route).digest('hex') + '.json'
         const data = await actions.createData(filename, JSON.stringify(resource))
         actions.addRoute({ path: context.baseUrl.replace(/\/$/, '') + material.route, component: '@site/src/components/Society/KnowledgeResource.js', exact: true, modules: { resource: data } })
