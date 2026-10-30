@@ -4,13 +4,15 @@
 
 The public MCP uses Streamable HTTP at the deployed public Worker's `/mcp` URL and requires no authentication. The site displays only configured endpoint URLs; an absent URL means deployment is pending.
 
+Connect once, then just ask: add the URL in the assistant's MCP settings, approve the connection and enable it for the chat. The prompt below is for use after that setup.
+
 ### ChatGPT
 
 Plugins → Add custom MCP server → paste the public URL, select no authentication and install. [Official OpenAI guide](https://developers.openai.com/api/docs/guides/custom-mcp-server).
 
 ### Claude
 
-Customize → Connectors → Add custom connector → paste the public URL and enable it for your chat. [Official Claude guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
+Customize → Connectors → Add custom connector → paste the public URL and choose **No sign in**. Enable it in the chat through **+ → Connectors**. [Official Claude guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
 
 ### Gemini
 
@@ -24,11 +26,11 @@ gemini mcp add --transport http ucl-ai-society https://PUBLIC_HOST/mcp
 
 See the [official Gemini CLI guide](https://geminicli.com/docs/tools/mcp-server/). Gemini is additional documented setup, with no completed product-compatibility claim.
 
-### One prompt after setup
+### Once connected, try this prompt
 
-“Connect to the public UCL AI Society MCP at PUBLIC_MCP_URL and answer my society questions using its cited sources.”
+“Use the UCL AI Society connector to answer my society questions from its FAQs, tutorials and upcoming Luma events. Cite sources and check dates.”
 
-An assistant with configuration tools may complete setup from that prompt. Browser apps may require adding or approving the connection first. Once installed, select the society app with `@` when needed. A prompt alone does not grant installation permissions.
+An assistant with configuration tools may be able to add an MCP connection when explicitly asked, subject to approval. Ordinary web chats such as Claude's cannot install their own connector from a prompt. Members should complete the one-time setup above, then use normal questions. Once installed, select the society app with `@` when needed.
 
 Both services must be able to reach the endpoint from their cloud infrastructure. Loopback development verifies the SDK, not those products. Do not put a privileged editor URL into a public member onboarding shortcut.
 

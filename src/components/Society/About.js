@@ -9,13 +9,14 @@ const cleanText = value => String(value || '').replace(/[\u2013\u2014]/g, '-')
 export default function About() {
   return (
     <Page title="About Us" description="UCL AI Society brings students together to learn, research and build AI with safety, ethics and people at the centre.">
-      <Hero title="About Us" actions={<Button href={links.membership}>Join us</Button>} compact>
+      <Hero title="About Us" actions={<Button href={links.membership}>Join for £5</Button>} compact>
         A student community for learning, building and researching AI, safely and ethically.
       </Hero>
       <section className="society-section society-about" aria-labelledby="about-title">
         <div className="society-section__intro"><h2 id="about-title">A society for everyone interested in AI.</h2><p>UCL AI Society brings together students who want to understand AI, use it thoughtfully and help shape its future.</p></div>
         <p className="society-about__statement">We want AI to be useful to people. That means asking what a system can do, where it can fail and who is affected by the way it is built and used.</p>
         <p>Our community connects technical work with questions about safety, fairness, privacy and accountability. You can learn the foundations, join a research team or build with others, while thinking critically about the consequences.</p>
+        <p>Standard membership costs £5 through <Link to={links.membership}>Students’ Union UCL</Link>.</p>
       </section>
       <section className="society-section" aria-labelledby="goals-title">
         <h2 id="goals-title">Our goals</h2>
