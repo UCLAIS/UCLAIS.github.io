@@ -13,6 +13,8 @@ status: published
 
 Session 1 of 7
 
+[Slides (PDF)](https://uclai.co.uk/materials/tutorials/machine-learning/session-1-intro-to-machine-learning/slides.pdf)
+
 ## What is Machine Learning? (slide 2)
 
 **Key idea:** Instead of writing rules, show examples and let the model find the rules.
@@ -300,6 +302,6 @@ all but red (they settle at a low value whereas red increases with iterations)
 
 **Notebook correction:** Section 5 uses twice the gradient of the stated half mean squared error. The matching gradients are `dw = -np.mean(x * e)` and `db = -np.mean(e)`, where `e = y - predict(x, w, b)`. Original code and equations are preserved.
 
-Saved notebook outputs are omitted, including the plot colours referenced in Exercise 6. Slide diagrams are not reproduced here; slide and notebook references identify the source material.
+Saved notebook outputs are omitted, including the plot colours referenced in Exercise 6.
 
 For unanswered questions or corrections, email [info@uclai.co.uk](mailto:info@uclai.co.uk). AI answers may be incorrect; check the sources.
