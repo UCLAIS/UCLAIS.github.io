@@ -1,0 +1,7 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "uclai-mcp",
+  "pages_build_output_dir": ".generated/hostname",
+  "compatibility_date": "2026-10-30",
+  "services": [{ "binding": "PUBLIC_KNOWLEDGE", "service": "uclai-knowledge-public-staging" }]
+}

@@ -4,7 +4,9 @@
 
 The public MCP uses Streamable HTTP at the deployed public Worker's `/mcp` URL and requires no authentication. The site displays only configured endpoint URLs; an absent URL means deployment is pending.
 
-Connect once, then just ask: add the URL in the assistant's MCP settings, approve the connection and enable it for the chat. The prompt below is for use after that setup.
+Connect once, then just ask: add the URL in the assistant's MCP settings, approve the connection and enable it for the chat.
+
+The proposed shorter hostname `mcp.uclai.co.uk` uses an optional Pages gateway while retaining IONOS DNS. It is not the advertised endpoint until domain, TLS and MCP checks pass. See the [custom-hostname activation guide](custom-hostname.md).
 
 ### ChatGPT
 
@@ -26,11 +28,9 @@ gemini mcp add --transport http ucl-ai-society https://PUBLIC_HOST/mcp
 
 See the [official Gemini CLI guide](https://geminicli.com/docs/tools/mcp-server/). Gemini is additional documented setup, with no completed product-compatibility claim.
 
-### Once connected, try this prompt
+### After setup
 
-“Use the UCL AI Society connector to answer my society questions from its FAQs, tutorials and upcoming Luma events. Cite sources and check dates.”
-
-An assistant with configuration tools may be able to add an MCP connection when explicitly asked, subject to approval. Ordinary web chats such as Claude's cannot install their own connector from a prompt. Members should complete the one-time setup above, then use normal questions. Once installed, select the society app with `@` when needed.
+Ask ordinary society questions once the connector is added and enabled. Members should complete the one-time client setup above. A prompt alone does not install a connector in an ordinary web chat. Select the society app with `@` when needed.
 
 Both services must be able to reach the endpoint from their cloud infrastructure. Loopback development verifies the SDK, not those products. Do not put a privileged editor URL into a public member onboarding shortcut.
 

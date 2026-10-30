@@ -14,7 +14,7 @@ function configuredUrl(value) {
   } catch { return '' }
 }
 
-function Endpoint({ label, url, description, copyLabel = 'Copy URL' }) {
+function Endpoint({ label, url, description }) {
   const [copied, setCopied] = useState(false)
   async function copy() {
     try {
@@ -24,7 +24,7 @@ function Endpoint({ label, url, description, copyLabel = 'Copy URL' }) {
   }
   return <div className={styles.endpoint}>
     <div><h3>{label}</h3><p>{description}</p></div>
-    {url ? <div className={styles.address}><code>{url}</code><button type="button" onClick={copy}>{copied ? 'Copied' : copyLabel}</button></div> : <p className={styles.pending}>Deployment pending. A connection URL will appear here once the service is configured.</p>}
+    {url ? <div className={styles.address}><code>{url}</code><button type="button" onClick={copy}>{copied ? 'Copied' : 'Copy URL'}</button></div> : <p className={styles.pending}>Deployment pending. A connection URL will appear here once the service is configured.</p>}
   </div>
 }
 
@@ -111,7 +111,6 @@ export default function Connect() {
   const config = siteConfig.customFields?.knowledge || {}
   const publicMcpUrl = configuredUrl(config.publicMcpUrl)
   const apiUrl = configuredUrl(config.publicApiUrl) || (publicMcpUrl ? new URL(publicMcpUrl).origin : '')
-  const connectionPrompt = publicMcpUrl ? 'Use the UCL AI Society connector to answer my society questions from its FAQs, tutorials and upcoming Luma events. Cite sources and check dates.' : ''
   const geminiCommand = publicMcpUrl ? `gemini mcp add --transport http ucl-ai-society ${publicMcpUrl}` : ''
   usePublicWebMcp(apiUrl)
 
@@ -129,7 +128,6 @@ export default function Connect() {
       </div>
       <p className={styles.note}>Gemini web custom apps currently require a US personal account, age 18+, with Keep Activity on. Account and workspace permissions also apply in other clients. The service is in beta; the retrieval check does not verify your assistant’s connection.</p>
       {geminiCommand && <details className={styles.cli}><summary>Using Gemini CLI instead?</summary><p>Run this once, then ask your question in Gemini CLI.</p><div className={styles.address}><code>{geminiCommand}</code></div><a href="https://geminicli.com/docs/tools/mcp-server/" target="_blank" rel="noopener noreferrer">Gemini CLI setup guide <Arrow external /></a></details>}
-      {connectionPrompt && <Endpoint label="Once connected, try this prompt" url={connectionPrompt} description="Add and enable the connector using the steps above first, then paste this into your assistant." copyLabel="Copy prompt" />}
     </section>
     <section className={`society-section ${styles.examples}`} aria-labelledby="try-title">
       <h2 id="try-title">Start with a question.</h2><ul><li>“Using UCL AI Society, how can I get involved? Cite the current sources.”</li><li>“Find a beginner neural networks tutorial. Fetch a notebook section and help me understand it.”</li><li>“Which tutorials are archived, and what events are currently listed? Check the dates.”</li></ul>

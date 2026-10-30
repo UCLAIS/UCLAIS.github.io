@@ -53,6 +53,8 @@ jobs:
         run: pnpm test
       - name: Bundle the storage-free Worker without deploying
         run: pnpm build
+      - name: Bundle the public hostname gateway without deploying
+        run: pnpm hostname:build
 
   publish:
     name: Publish approved knowledge
