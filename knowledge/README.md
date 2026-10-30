@@ -48,7 +48,7 @@ attribution: UCL AI Society
 
 # Evaluating an AI system
 
-Write the session notes, exercises and source links here.
+Use the source's own words, headings, code and page/slide/cell references here. Add only essential, separately labelled notes.
 
 ## Exercise
 

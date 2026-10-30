@@ -1,84 +1,124 @@
 ---
-title: "Session 1: Intro to Machine Learning and Linear Regression"
+title: Intro to Machine Learning
 type: tutorial
 series: Machine Learning Tutorial Series
 order: 1
 topics: [machine-learning, supervised-learning, linear-regression, least-squares, gradient-descent, numpy]
-attribution: "UCL AI Society; supplied tutorial slides and notebook (authors not named in the slide text or notebook cells)."
+attribution: UCL AI Society
 archived: true
 status: published
 ---
 
-# Session 1: Intro to Machine Learning and Linear Regression
+# Intro to Machine Learning
 
-Session 1 of the seven-session Machine Learning Tutorial Series. These notes cover slides 1–19 of `Tutorial1.pptx`, followed by the 19 ordered cells of `Tutorial1NotebookAnswers.ipynb`. The source files do not state an academic year or session date.
+Session 1 of 7
 
-[Download the answers notebook](https://uclai.co.uk/materials/tutorials/machine-learning/tutorial-1-linear-regression-answers.ipynb). Saved outputs and execution counts have been removed. The notebook was not run during publication; its teaching code is unchanged.
+## What is Machine Learning? (slide 2)
 
-The slide illustrations are described in words here. Their source links are retained where the deck supplies them. Third-party images, animations and speaker notes are not reproduced, and the original PowerPoint is not offered as a download in this publication.
+**Key idea:** Instead of writing rules, show examples and let the model find the rules.
 
-## What is machine learning? (slides 1–2)
+- **Data + Model:** A systematic way to measure and improve predictions.
+- **Data-Driven Logic:** Programs learn patterns from examples instead of explicit code.
+- **No Hand-Written Rules:** Complex problems evade rigid if-else programming structures.
+- **Classic Application:** Email spam filters trained on thousands of labelled messages.
 
-Instead of writing a rule for every case, supply examples and fit a model to learn patterns. Data and a model provide a way to measure and improve predictions. A spam filter trained on labelled messages is the deck's example.
+## Types of Learning (slides 3–5)
 
-## Types of learning (slides 3–5)
+- **Supervised:** Predict target outcomes using labelled historical examples.
+- **Unsupervised:** Discover hidden structures in data without explicit labels.
+- **Reinforcement:** Learn optimal actions via trial, error, and reward signals.
 
-- **Supervised learning:** use labelled input–target examples to learn a mapping from `x` to `y`.
-- **Unsupervised learning:** find structure in input data without supplied target labels.
-- **Reinforcement learning:** learn actions through interaction and reward signals.
+Most of this tutorial series focuses on supervised learning: predicting y from x.
 
-Slide 4 contrasts clustering unlabelled points with learning a boundary between labelled classes. Slide 5 contrasts recognising a labelled cat with discovering that two unlabelled examples are similar. Most of the series focuses on supervised learning.
+## Supervised Learning (slide 6)
 
-## A supervised learning workflow (slide 6)
+- **Data:** Collect and clean raw information.
+- **Features:** Choose inputs (x) and labels (y).
+- **Model:** Pick architecture and loss function.
+- **Train:** Evaluate parameters on unseen data.
+- **Test:** Compare results against test data, diagnose overfitting
 
-Collect and clean data, choose features and targets, select a model and loss, fit the model, then assess performance on held-out data.
+**Correction:** The “Train” caption should refer to fitting training data. Unseen data belongs to testing, as slide 7 explains.
 
-**Editorial clarification:** the caption under “Train” on slide 6 mentions unseen data. Fitting uses training data; evaluation on held-out data is the testing step, as distinguished on slide 7 and in the notebook.
+## Generalisation (slide 7)
 
-## Generalisation and dataset splits (slide 7)
+**Train Split**
 
-The training split is used to fit parameters. The test split is held out to assess performance on unseen examples. The slide's diagram also includes validation data, with illustrative train/validation/test proportions of 80/10/10, 70/15/15 and 60/20/20. These are examples rather than a required split.
+Fit the parameters.
 
-## Linear regression: fitting a line (slides 8–12)
+Model learns patterns directly from this specific dataset.
 
-The aim is to predict a continuous number by fitting a line to input–target pairs. Slides 9–11 show the same upward-trending scatter plot: first the data, then a flat prediction at 10, then a sloping fitted line. The question is how to choose a line that fits the observations.
+**Test Split**
 
-## Predictions, weights and intercepts (slide 13)
+Judge the performance.
 
-For one feature, the prediction is `ŷ = wx + b`. The weight `w` controls the slope and the intercept `b` controls the baseline. With several features, `ŷ = w₁x₁ + w₂x₂ + … + w_d x_d + b = wᵀx + b`.
+Unseen data used strictly to verify real-world accuracy.
 
-## Least squares and residuals (slide 14)
+## Linear Regression (slides 8–12)
 
-A residual is `eᵢ = yᵢ − ŷᵢ`, the observed value minus its prediction. Squaring prevents positive and negative residuals from cancelling and gives large errors more weight. The slide and notebook define the loss as half the mean squared residual:
+**Basic Idea:** How can a machine create a line of best fit for any given graph?
 
-`L(w,b) = (1 / (2n)) Σᵢ₌₁ⁿ (yᵢ − ŷᵢ)²`.
+## Predict a Number (slide 13)
 
-## Two approaches to fitting parameters (slides 15–18)
+Output is continuous (e.g. house price).
 
-The normal-equation approach finds a least-squares solution directly. The deck writes `w = (XᵀX)⁻¹Xᵀy`; in the notebook the parameter vector includes both slope and intercept. The notebook uses `np.linalg.solve` rather than explicitly computing an inverse.
+**One feature:** `ŷ = wx + b`
 
-Gradient descent instead repeatedly moves parameters opposite to the gradient: `w ← w − η ∂L/∂w` and `b ← b − η ∂L/∂b`. The learning rate `η` sets the step size. For this linear least-squares problem, the loss is convex, which motivates the bowl analogy on slide 16.
+**Weights and Intercept:** Learn the slope (w) and baseline (b).
 
-**Editorial qualifications:** the inverse formula requires `XᵀX` to be invertible. The slide 18 surface is a generic non-convex illustration; it should not be taken as the shape of this linear least-squares loss. Claims on slide 18 about a single-step solution and scaling describe the two approaches broadly, rather than guaranteeing numerical stability or convergence for every dataset.
+**Multiple Features:** Expand to many input variables.
 
-Slide 17 credits its gradient-descent illustrations to [GeeksforGeeks](https://www.geeksforgeeks.org/machine-learning/what-is-gradient-descent/) and [Data Science Wizards on Medium](https://medium.com/@datasciencewizards/a-simple-guide-to-gradient-descent-algorithm-60cbb66a0df9). Those links are attributions supplied by the deck; their bodies are not imported here.
+**Many features:** `ŷ = w₁x₁ + w₂x₂ + … + w_d x_d + b = wᵀx + b`
 
-## When to stop (slide 19)
+## Least Squares (slide 14)
 
-The slide shows training cost decreasing and flattening over successive iterations, then asks where to stop. The notebook explores a loss-change tolerance, a maximum iteration count and several learning rates.
+**Residuals:** The difference between the actual value and the prediction.
 
-## Notebook consistency note
+`eᵢ = yᵢ − ŷᵢ`
 
-The supplied notebook defines half mean squared error, but its section 5 formula and code use twice the gradient of that loss. For `e = y - predict(x, w, b)`, the matching gradients are `dw = -np.mean(x * e)` and `db = -np.mean(e)`. The original implementation below uses `-(2 / n) * sum(...)`, equivalent to doubling the learning rate for the stated loss. Its code is preserved as supplied, with this correction made explicit rather than silently changing the exercise.
+**Squared Error:** Squaring stops negative/positive signs from cancelling out and amplifies large error.
 
-All notebook cells follow in their original order. Markdown headings and equation typography are normalised for this reading page, code is preserved, and exercise prompts are separate from solution code. The final supplied answer refers to a red curve in removed plot output; that colour-based claim has not been revalidated.
+`L(w,b) = (1 / (2n)) Σᵢ₌₁ⁿ (yᵢ − ŷᵢ)²`
 
-## Notebook overview (notebook cell 1)
+## Solving It (slides 15–18)
 
-Source notebook title: “Session 1: Linear Regression - Hands-on Exercises”.
+**Method 1: Finding the minimum directly**
 
+**Normal Equations**
 
+Exact closed-form mathematical solution in a single step.
 
+Gets very slow with millions of features.
+
+`w = (XᵀX)⁻¹Xᵀy`
+
+**Method 2: Using Gradient Descent**
+
+**Key idea:** The loss function is a bowl. Gradient descent rolls to the bottom.
+
+Repeatedly step downhill opposite to the gradient.
+
+Scales efficiently to massive datasets.
+
+`w ← w − η ∂L/∂w`, `b ← b − η ∂L/∂b`
+
+From [GeeksforGeeks](https://www.geeksforgeeks.org/machine-learning/what-is-gradient-descent/) and [Data Science Wizards](https://medium.com/@datasciencewizards/a-simple-guide-to-gradient-descent-algorithm-60cbb66a0df9) (slide 17).
+
+**Note:** The inverse requires `XᵀX` to be invertible. Slide 18's non-convex illustration is not the shape of this linear least-squares loss.
+
+## Where do we stop? (slide 19)
+
+**Gradient Descent**
+
+Repeatedly step downhill opposite to the gradient.
+
+Scales efficiently to massive datasets.
+
+Where do we stop?
+
+## Session 1: Linear Regression - Hands-on Exercises (notebook cell 1)
+
+[Answers notebook](https://uclai.co.uk/materials/tutorials/machine-learning/tutorial-1-linear-regression-answers.ipynb)
 ## Notebook setup (notebook cell 2)
 
 ```python
@@ -202,7 +242,7 @@ Instead of solving in one step, repeatedly step downhill:
 
 with
 
-`∂L/∂w = −(2/n) Σ xᵢ(yᵢ − ŷᵢ)`, `∂L/∂b = −(2/n) Σ (yᵢ − ŷᵢ)` (the supplied formula; see the consistency note above)
+`∂L/∂w = −(2/n) Σ xᵢ(yᵢ − ŷᵢ)`, `∂L/∂b = −(2/n) Σ (yᵢ − ŷᵢ)`
 
 `η` (eta) is the **learning rate**. We stop when the loss barely changes (`tol`) or after `max_iter` steps.
 
@@ -254,6 +294,12 @@ Which values converge (work)?
 
 ## Solution to Exercise 6 (notebook cell 19)
 
-Supplied answer: all but red (they settle at a low value whereas red increases with iterations)
+all but red (they settle at a low value whereas red increases with iterations)
 
-This refers to the saved plot colours. The plots have been removed and this answer was not revalidated during publication.
+## Publication notes
+
+**Notebook correction:** Section 5 uses twice the gradient of the stated half mean squared error. The matching gradients are `dw = -np.mean(x * e)` and `db = -np.mean(e)`, where `e = y - predict(x, w, b)`. Original code and equations are preserved.
+
+Saved notebook outputs are omitted, including the plot colours referenced in Exercise 6. Slide diagrams are not reproduced here; slide and notebook references identify the source material.
+
+For unanswered questions or corrections, email [info@uclai.co.uk](mailto:info@uclai.co.uk). AI answers may be incorrect; check the sources.

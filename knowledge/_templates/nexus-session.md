@@ -11,12 +11,12 @@ status: draft
 
 # Replace with your Nexus session title
 
-Copy this file into `knowledge/nexus/`. Add the actual session date, notes, attribution and source links, then set `status: published` when it is ready for review. Merging publishes it to both the Nexus website session notes and the MCP.
+Copy this file into `knowledge/nexus/`. Add the actual session date, attribution and source links, then set `status: published` when it is ready for review. Merging publishes it to both the Nexus website session notes and the MCP.
 
-## What we covered
+## Source heading (page/slide reference)
 
-Record the session's evidenced content.
+Transcribe the source's words. Add only essential, separately labelled notes.
 
 ## Exercise
 
-Record any practice activity.
+Include the source exercise, if supplied.

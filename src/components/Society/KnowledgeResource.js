@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from '@docusaurus/Link'
 import CodeBlock from '@theme/CodeBlock'
-import { Page, Hero, Arrow } from './shared'
+import { Page, Arrow } from './shared'
 import { MaterialDate } from './KnowledgeCollection'
 import styles from './knowledge.module.css'
 
@@ -29,10 +29,13 @@ export function MarkdownNodes({ nodes }) {
   })}</>
 }
 
-function MaterialSection({ section, pdf }) {
-  const content = <>{section.locator && <p className={styles.locator}>{section.locator}</p>}{pdf ? <p className={styles.pdfText}>{section.text}</p> : <MarkdownNodes nodes={section.nodes} />}</>
-  if (section.kind === 'hint' || section.kind === 'solution') return <details className={styles.answer} id={section.id}><summary>{new RegExp(section.kind, 'i').test(section.heading) ? section.heading : `${section.kind === 'hint' ? 'Hint' : 'Solution'}: ${section.heading}`}</summary><div>{content}</div></details>
-  return <section className={styles.section} id={section.id}><h2>{section.heading}</h2>{section.kind === 'exercise' && <p className={styles.locator}>Exercise</p>}{content}</section>
+function MaterialSection({ section, pdf, hideHeading }) {
+  const reference = section.heading.match(/\s+\(((?:slides?|pages?|notebook cell)\s[^)]+)\)$/i)
+  const heading = reference ? section.heading.slice(0, reference.index) : section.heading
+  const locator = section.locator || reference?.[1]
+  const content = <>{locator && <p className={styles.locator}>{locator}</p>}{pdf ? <p className={styles.pdfText}>{section.text}</p> : <MarkdownNodes nodes={section.nodes} />}</>
+  if (section.kind === 'hint' || section.kind === 'solution') return <details className={styles.answer} id={section.id}><summary>{new RegExp(section.kind, 'i').test(heading) ? heading : `${section.kind === 'hint' ? 'Hint' : 'Solution'}: ${heading}`}</summary><div>{content}</div></details>
+  return <section className={styles.section} id={section.id}>{!hideHeading && <h2>{heading}</h2>}{content}</section>
 }
 
 export default function KnowledgeResource({ resource }) {
@@ -40,15 +43,17 @@ export default function KnowledgeResource({ resource }) {
   const nexus = resource.collection === 'nexus'
   const parent = nexus ? '/our-initiatives/Nexus-Labs/#session-notes' : '/our-initiatives/tutorials/'
   return <Page title={doc.title} description={`${nexus ? 'Nexus Labs session notes' : 'Tutorial material'} from UCL AI Society.`} canonical={resource.route}>
-    <Hero title={doc.title}>{nexus ? 'Nexus Labs session notes' : 'Tutorial material'}{doc.year && <> · {doc.year}</>}{doc.series && <> · {doc.series}</>}{doc.order && <> · {nexus ? 'Session' : 'Lesson'} {doc.order}</>}{resource.date && <> · <MaterialDate date={resource.date} /></>}</Hero>
-    <article className={`society-section ${styles.resource}`}>
+    <article className={styles.resource}>
       <Link className="society-text-link" to={parent}>Back to {nexus ? 'Nexus Labs' : 'tutorials'} <Arrow /></Link>
+      <header className={styles.resourceHeader}>
+        <h1>{doc.title}</h1>
+        <p>{[doc.year, doc.series, doc.order && `Session ${doc.order}`].filter(Boolean).join(' · ')}{resource.date && <> · <MaterialDate date={resource.date} /></>}</p>
+      </header>
       <aside className={styles.provenance} aria-label="Material source">
-        <p>{doc.archived ? 'Learning archive. ' : 'Learning material. '}For upcoming events, check the <Link to="/our-initiatives/opportunities/#events">society calendar</Link>.</p>
         {doc.source.attribution && <p>{doc.source.attribution}</p>}
-        <p><a href={resource.fileUrl} target="_blank" rel="noopener noreferrer">View original {resource.format.toUpperCase()} on GitHub <Arrow external /></a>{doc.source.url !== resource.fileUrl && <> · <a href={doc.source.url} target="_blank" rel="noopener noreferrer">Source</a></>}{doc.source.license && <> · {doc.source.license}</>}</p>
+        <p><a href={resource.fileUrl} target="_blank" rel="noopener noreferrer">View on GitHub <Arrow external /></a>{doc.source.url !== resource.fileUrl && <> · <a href={doc.source.url} target="_blank" rel="noopener noreferrer">Source</a></>}{doc.source.license && <> · {doc.source.license}</>}</p>
       </aside>
-      {doc.sections.map(section => <MaterialSection key={section.id} section={section} pdf={resource.format === 'pdf'} />)}
+      {doc.sections.map((section, index) => <MaterialSection key={section.id} section={section} hideHeading={index === 0 && section.heading === doc.title} pdf={resource.format === 'pdf'} />)}
     </article>
   </Page>
 }
