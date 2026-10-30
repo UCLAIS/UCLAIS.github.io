@@ -11,7 +11,7 @@ export default function Home() {
       <Emblem />
       <h1>UCL Artificial<br/>Intelligence Society</h1>
       <p>For everyone curious about AI. Learn, research and build with us.</p>
-      <div className="society-actions"><Button href={links.opportunities}>See events & opportunities</Button><Button href="/connect/" secondary>Connect your AI</Button><Link className="society-text-link" to={links.membership}>Join the society <Arrow external /></Link></div>
+      <div className="society-actions"><Button href={links.opportunities}>See events & opportunities</Button><Button href="/connect/" secondary>Connect your AI</Button><Link className="society-text-link" to={links.membership}>Join for £5 <Arrow external /></Link></div>
     </header>
     <section className="society-quote society-section" aria-label="Jensen Huang on UCL AI Society">
       <blockquote><p>“UCL AI Society. AI has a society now.”</p><footer>Jensen Huang <span>Founder and CEO, NVIDIA</span></footer></blockquote>

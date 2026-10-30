@@ -15,6 +15,7 @@
     "permissions:probe": "node --env-file-if-exists=.env --import tsx scripts/storage-permissions.ts",
     "dev": "node --env-file-if-exists=.env --import tsx scripts/dev.ts",
     "knowledge:build": "node --import tsx scripts/build-knowledge.ts",
+    "hostname:build": "node --import tsx scripts/build-hostname.ts",
     "build": "node --import tsx scripts/build-knowledge.ts && wrangler deploy --dry-run --config wrangler.bundled.jsonc",
     "build:bundled": "node --import tsx scripts/build-knowledge.ts && wrangler deploy --dry-run --config wrangler.bundled.jsonc",
     "build:legacy": "wrangler deploy --dry-run --config wrangler.public.jsonc && wrangler deploy --dry-run --config wrangler.admin.jsonc && wrangler deploy --dry-run --config wrangler.auth.jsonc",

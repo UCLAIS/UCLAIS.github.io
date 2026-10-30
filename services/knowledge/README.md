@@ -2,6 +2,8 @@
 
 The current launch route is **GitHub files → reviewed merge → validated snapshot → website pages and one read-only Cloudflare Worker**. Add tutorials, Nexus sessions and FAQs under the root [`knowledge/`](../../knowledge/README.md) folder. Tutorials and Nexus notes also become website pages/listings from the same importer; FAQs and guides feed the MCP. GitHub Actions checks every pull request and publishes successful `main` builds. Staging is deployed on the society's `info@uclai.co.uk` account; see the [dated deployment evidence](docs/staging-2026-10-29.md).
 
+The public connection URL is **https://mcp.uclai.co.uk/mcp**. A read-only Pages gateway forwards requests to the existing public Worker, keeping DNS at IONOS. See the [custom-hostname deployment and verification record](docs/custom-hostname.md).
+
 This replaces the original editor MCP for the free launch: maintainers use their existing GitHub permissions and review changes on GitHub. The public MCP has no GitHub token, private draft database, writable storage binding or publishing tool. The original three-Worker OAuth/editor implementation remains available for separate evaluation; its R2 deployment is on hold because it can incur overage charges.
 
 The service performs retrieval and full-text search. It calls no answer-generation model, embedding API or paid AI service. Each member's own assistant generates the answer under that provider's account terms.

@@ -14,7 +14,7 @@ function configuredUrl(value) {
   } catch { return '' }
 }
 
-function Endpoint({ label, url, description, copyLabel = 'Copy URL' }) {
+function Endpoint({ label, url, description }) {
   const [copied, setCopied] = useState(false)
   async function copy() {
     try {
@@ -24,7 +24,7 @@ function Endpoint({ label, url, description, copyLabel = 'Copy URL' }) {
   }
   return <div className={styles.endpoint}>
     <div><h3>{label}</h3><p>{description}</p></div>
-    {url ? <div className={styles.address}><code>{url}</code><button type="button" onClick={copy}>{copied ? 'Copied' : copyLabel}</button></div> : <p className={styles.pending}>Deployment pending. A connection URL will appear here once the service is configured.</p>}
+    {url ? <div className={styles.address}><code>{url}</code><button type="button" onClick={copy}>{copied ? 'Copied' : 'Copy URL'}</button></div> : <p className={styles.pending}>Deployment pending. A connection URL will appear here once the service is configured.</p>}
   </div>
 }
 
@@ -111,7 +111,6 @@ export default function Connect() {
   const config = siteConfig.customFields?.knowledge || {}
   const publicMcpUrl = configuredUrl(config.publicMcpUrl)
   const apiUrl = configuredUrl(config.publicApiUrl) || (publicMcpUrl ? new URL(publicMcpUrl).origin : '')
-  const connectionPrompt = publicMcpUrl ? `Connect to the public UCL AI Society MCP at ${publicMcpUrl} for society FAQs, tutorials and upcoming Luma events, and cite its sources.` : ''
   const geminiCommand = publicMcpUrl ? `gemini mcp add --transport http ucl-ai-society ${publicMcpUrl}` : ''
   usePublicWebMcp(apiUrl)
 
@@ -119,13 +118,12 @@ export default function Connect() {
     <Hero title="The society, in your AI.">Connect ChatGPT, Claude or another compatible assistant to the public UCL AI Society MCP. Ask about the society, explore tutorials and check upcoming events.</Hero>
     <aside className={`society-section society-section--first ${styles.accuracy}`} aria-label="AI accuracy and support"><p><strong>AI answers may be incorrect.</strong> Check the linked sources and dates. If the library cannot answer your question, or it falls outside our materials, contact <a href="mailto:info@uclai.co.uk">info@uclai.co.uk</a>.</p></aside>
     <section className={`society-section society-section--first ${styles.setup}`} aria-labelledby="public-title">
-      <div className="society-section__intro"><h2 id="public-title">Connect to the public MCP.</h2><p>MCP (Model Context Protocol) lets your assistant search our FAQs, read tutorial notebook cells and follow learning paths. Upcoming events come from our Luma calendar. This connection is read-only and open to everyone; no society account is required.</p></div>
-      <Endpoint label="Public MCP connection URL (beta)" url={publicMcpUrl} description="Copy this URL into your assistant’s MCP settings. Your assistant may ask you to approve the connection or its tool calls." />
-      {connectionPrompt && <Endpoint label="Start with one prompt" url={connectionPrompt} description="Paste this into your assistant. It may ask you to add or approve the connection first." copyLabel="Copy prompt" />}
+      <div className="society-section__intro"><h2 id="public-title">Connect once, then just ask.</h2><p>MCP (Model Context Protocol) lets your assistant search our FAQs, read tutorial notebook cells and follow learning paths. Upcoming events come from our Luma calendar. This connection is read-only and open to everyone; no society account is required.</p></div>
+      <Endpoint label="Public MCP connection URL (beta)" url={publicMcpUrl} description="Add this URL in your assistant’s MCP settings once, approve the connection and enable it for your chat. Then ask questions normally." />
       <RetrievalCheck apiUrl={apiUrl} />
       <div className={styles.clients}>
         <article><h3>ChatGPT</h3><p>Plugins → Add custom MCP server → paste the public URL, choose no authentication, then install.</p><a className="society-text-link" href="https://developers.openai.com/api/docs/guides/custom-mcp-server" target="_blank" rel="noopener noreferrer">Setup guide <Arrow external /></a></article>
-        <article><h3>Claude</h3><p>Customize → Connectors → Add custom connector → paste the public URL and enable it for your chat.</p><a className="society-text-link" href="https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp" target="_blank" rel="noopener noreferrer">Setup guide <Arrow external /></a></article>
+        <article><h3>Claude</h3><p>Customize → Connectors → Add custom connector → paste the public URL and choose No sign in. Enable it in your chat through + → Connectors.</p><a className="society-text-link" href="https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp" target="_blank" rel="noopener noreferrer">Setup guide <Arrow external /></a></article>
         <article><h3>Gemini</h3><p>Settings → Connected Apps → Custom apps → paste the public URL, where available.</p><a className="society-text-link" href="https://support.google.com/gemini/answer/17209137?hl=en" target="_blank" rel="noopener noreferrer">Setup guide <Arrow external /></a></article>
       </div>
       <p className={styles.note}>Gemini web custom apps currently require a US personal account, age 18+, with Keep Activity on. Account and workspace permissions also apply in other clients. The service is in beta; the retrieval check does not verify your assistant’s connection.</p>
