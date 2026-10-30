@@ -56,6 +56,26 @@ try {
   assert.equal(website.releaseId, release.id)
   const materials = website.materials.filter(item => item.sourcePath.includes(marker))
   assert.equal(materials.length, 5)
+  // Exercise real retrieval, including version-pinned section fetches. Hiding a
+  // transcript in the slide UI must never remove it from MCP search or fetch.
+  const retrievalCheck = path.join(root, 'services/knowledge/publication-retrieval-check.ts')
+  writeFileSync(retrievalCheck, `import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { KnowledgeReader } from './src/core';
+import { bundledStore } from './src/bundled-store';
+const release = JSON.parse(readFileSync('.generated/knowledge.release.json', 'utf8')).release;
+const reader = new KnowledgeReader(bundledStore(release), undefined, release);
+for (const token of ['SLIDE_TRANSCRIPT_SENTINEL', 'NOTEBOOK_SYNC_SENTINEL', 'NEXUS_SYNC_SENTINEL']) {
+  const result = await reader.search(token);
+  const hit = result.results.find(item => item.documentId.includes(${JSON.stringify(marker)}));
+  assert.ok(hit, 'Source material must remain searchable');
+  const section = await reader.fetch(hit.documentId, hit.sectionId as string, result.releaseId);
+  assert.ok(section.text.includes(token), 'Source material must remain fetchable');
+  assert.equal(section.releaseId, release.id);
+}
+console.log('MCP retention passed: hidden slide transcripts, notebook code and Nexus material are searchable and fetchable from the same release.');
+`)
+  execFileSync(process.execPath, ['--import', 'tsx', retrievalCheck], { cwd: path.join(root, 'services/knowledge'), stdio: 'inherit' })
   for (const item of materials) {
     const published = release.corpus.documents.find(doc => doc.id === item.document.id)
     assert.deepEqual(published, item.document)
