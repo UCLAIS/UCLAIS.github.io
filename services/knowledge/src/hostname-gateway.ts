@@ -2,7 +2,7 @@
 // The only backend is the existing public Worker, reached through a service binding.
 const upstreamOrigin = 'https://uclai-knowledge-public-staging.uclai-society.workers.dev';
 const hosts = new Set(['mcp.uclai.co.uk', 'uclai-mcp.pages.dev']);
-const requestHeaders = ['accept', 'content-type', 'origin', 'mcp-protocol-version', 'mcp-session-id', 'last-event-id', 'cf-connecting-ip'];
+const requestHeaders = ['accept', 'content-type', 'origin', 'mcp-protocol-version', 'mcp-method', 'mcp-name', 'mcp-session-id', 'last-event-id', 'cf-connecting-ip'];
 const responseHeaders = ['content-type', 'mcp-session-id', 'mcp-protocol-version', 'retry-after', 'allow', 'access-control-allow-origin', 'access-control-allow-methods', 'access-control-allow-headers', 'access-control-expose-headers', 'vary'];
 const maxBodyBytes = 65_536;
 
