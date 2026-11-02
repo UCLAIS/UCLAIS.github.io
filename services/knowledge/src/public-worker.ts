@@ -48,7 +48,7 @@ export function createPublicHandler(store: PublishedReader, calendar?: Pick<Luma
       else response = json({ error: 'not_found' }, 404);
       const headers = new Headers(response.headers); headers.set('X-Content-Type-Options', 'nosniff'); headers.set('Cache-Control', 'no-store');
       if (origin) { headers.set('Access-Control-Allow-Origin', origin); headers.set('Vary', 'Origin'); }
-      headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); headers.set('Access-Control-Allow-Headers', 'Content-Type, MCP-Protocol-Version, MCP-Session-Id'); headers.set('Access-Control-Expose-Headers', 'MCP-Session-Id');
+      headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); headers.set('Access-Control-Allow-Headers', 'Content-Type, MCP-Protocol-Version, MCP-Method, MCP-Name, MCP-Session-Id'); headers.set('Access-Control-Expose-Headers', 'MCP-Session-Id');
       return new Response(response.body, { status: response.status, headers });
     } catch (error) {
       return json({ error: error instanceof KnowledgeError ? error.code : 'unavailable', message: error instanceof KnowledgeError ? error.message : 'Knowledge is temporarily unavailable.' }, error instanceof KnowledgeError ? error.status : 503);

@@ -4,6 +4,8 @@ import { build } from 'esbuild';
 import { Miniflare, convertV4MiniflareOptions } from 'miniflare';
 import { Client, StreamableHTTPClientTransport } from '@modelcontextprotocol/client';
 import gateway from '../src/hostname-gateway';
+import { createPublicHandler } from '../src/public-worker';
+import { MemoryPublishedStore } from '../src/storage';
 
 const endpoint = 'https://mcp.uclai.co.uk';
 const upstream = 'https://uclai-knowledge-public-staging.uclai-society.workers.dev';
@@ -108,5 +110,46 @@ export default {fetch(request){if(request.headers.get('CF-Connecting-IP')==='192
     expect((await worker.fetch(`${endpoint}/health`, { headers: { Origin: 'https://hostile.example' } })).status).toBe(403);
     for (const path of ['/api/resources/draft%3Aguess', '/api/resources/..%2Fprivate', `/api/resources/faq%3Amembership?releaseId=${'c'.repeat(64)}`]) expect((await worker.fetch(`${endpoint}${path}`)).status).toBeGreaterThanOrEqual(400);
     const limited = await worker.fetch(`${endpoint}/health`, { headers: { 'CF-Connecting-IP': '192.0.2.99' } }); expect(limited.status).toBe(429); expect(limited.headers.get('Retry-After')).toBe('60');
+  });
+  it('serves modern MCP discovery, tool listing and search through the binding', async () => {
+    const meta = {
+      'io.modelcontextprotocol/protocolVersion': '2026-07-28',
+      'io.modelcontextprotocol/clientInfo': { name: 'modern-hostname-test', version: '1' },
+      'io.modelcontextprotocol/clientCapabilities': {},
+    };
+    for (const method of ['server/discover', 'tools/list', 'tools/call']) {
+      const response = await worker.fetch(`${endpoint}/mcp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'MCP-Protocol-Version': '2026-07-28', 'MCP-Method': method, ...(method === 'tools/call' ? { 'MCP-Name': 'search' } : {}) },
+        body: JSON.stringify({ jsonrpc: '2.0', id: method, method, params: { _meta: meta, ...(method === 'tools/call' ? { name: 'search', arguments: { query: 'membership' } } : {}) } }),
+      });
+      expect(response.status).toBe(200);
+      const body = await response.json() as any;
+      expect(body.error).toBeUndefined();
+      if (method === 'server/discover') expect(body.result.supportedVersions).toContain('2026-07-28');
+      if (method === 'tools/list') expect(body.result.tools.map((tool: any) => tool.name).sort()).toEqual(['fetch', 'get_learning_path', 'list_events', 'list_learning_paths', 'search']);
+      if (method === 'tools/call') expect(JSON.stringify(body.result)).toContain('£5');
+    }
+  });
+  it('advertises modern MCP request headers for browser preflight', async () => {
+    const handler = createPublicHandler(new MemoryPublishedStore());
+    const response = await gateway.fetch(new Request(`${endpoint}/mcp`, { method: 'OPTIONS', headers: { Origin: 'https://uclai.co.uk', 'Access-Control-Request-Method': 'POST', 'Access-Control-Request-Headers': 'mcp-protocol-version,mcp-method,mcp-name' } }), { PUBLIC_KNOWLEDGE: { fetch: request => handler(request, { PUBLIC_ORIGIN: upstream }) } });
+    expect(response.status).toBe(204);
+    const allowed = response.headers.get('Access-Control-Allow-Headers')!.toLowerCase().split(',').map(name => name.trim());
+    expect(allowed).toEqual(expect.arrayContaining(['mcp-protocol-version', 'mcp-method', 'mcp-name']));
+  });
+  it('still rejects modern requests whose routing headers disagree with their body', async () => {
+    for (const [method, routingHeaders, params] of [
+      ['tools/list', { 'MCP-Method': 'server/discover' }, {}],
+      ['tools/call', { 'MCP-Method': 'tools/call', 'MCP-Name': 'fetch' }, { name: 'search', arguments: { query: 'membership' } }],
+    ] as const) {
+      const response = await worker.fetch(`${endpoint}/mcp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'MCP-Protocol-Version': '2026-07-28', ...routingHeaders },
+        body: JSON.stringify({ jsonrpc: '2.0', id: method, method, params: { ...params, _meta: { 'io.modelcontextprotocol/protocolVersion': '2026-07-28', 'io.modelcontextprotocol/clientInfo': { name: 'mismatched-header-test', version: '1' }, 'io.modelcontextprotocol/clientCapabilities': {} } } }),
+      });
+      expect(response.status).toBe(400);
+      expect((await response.json() as any).error.code).toBe(-32020);
+    }
   });
 });
