@@ -6,11 +6,11 @@ function exactKeys(value, keys) {
 }
 
 // Presentation files are reviewed static assets, never arbitrary embeds or URLs.
-async function loadPresentation(siteDir, sourcePath) {
+async function loadPresentation(siteDir, sourcePath, generated = false) {
   if (!/^knowledge\/(tutorials|nexus)\/[^\x00-\x1f\x7f\\?#%:]+\.(mdx?|pdf|ipynb|py)$/i.test(sourcePath) || sourcePath.split('/').some(part => part === '.' || part === '..')) throw new Error('Invalid presentation source path.')
   const root = path.resolve(siteDir, 'static')
   let realRoot
-  const directory = `/materials/${sourcePath.slice('knowledge/'.length).replace(/\.[^.]+$/, '')}`
+  const directory = `/materials/${generated ? '_generated/' : ''}${sourcePath.slice('knowledge/'.length).replace(/\.[^.]+$/, '')}`
   async function asset(url, extensions, maximum = 25 * 1024 * 1024) {
     if (typeof url !== 'string' || url.length > 500 || !/^\/materials\/[A-Za-z0-9_./-]+$/.test(url)) throw new Error('Invalid presentation asset path.')
     const parts = url.slice(1).split('/')

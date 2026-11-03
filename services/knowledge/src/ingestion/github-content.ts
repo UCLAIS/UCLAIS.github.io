@@ -19,6 +19,7 @@ const metadataSchema = z.object({
   source: z.string().url().max(2048).refine(value => { const url = new URL(value); return url.protocol === 'https:' && !url.username && !url.password; }).optional(),
   attribution: z.string().max(2000).optional(), license: z.string().max(200).optional(),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(), start: z.string().datetime().optional(), end: z.string().datetime().optional(), expiresAt: z.string().datetime().optional(),
+  slides: z.string().max(500).regex(/^knowledge-assets\/slides\/[A-Za-z0-9_./-]+\/source\.pdf$/).optional(),
 }).strict();
 type Metadata = z.infer<typeof metadataSchema>;
 export interface GithubContentOptions {
@@ -38,8 +39,9 @@ export interface GithubBuild {
 export interface WebsiteMaterial {
   collection: 'tutorials' | 'nexus'; route: string; sourcePath: string; fileUrl: string; format: string; date?: string;
   document: KnowledgeDocument;
+  slideSource?: string;
 }
-export interface WebsiteKnowledge { schemaVersion: 1; releaseId: string; materials: WebsiteMaterial[] }
+export interface WebsiteKnowledge { schemaVersion: 1; releaseId: string; revision: string; materials: WebsiteMaterial[] }
 function compareWebsiteMaterials(a: WebsiteMaterial, b: WebsiteMaterial): number {
   const group = a.collection.localeCompare(b.collection) || (b.document.year ?? '').localeCompare(a.document.year ?? '', 'en', { numeric: true });
   if (group) return group;
@@ -153,6 +155,21 @@ export async function buildGithubKnowledge(options: GithubContentOptions): Promi
     } else if (extension === '.ipynb') { json(raw!, relative); parsed = parseNotebook(raw!, path.basename(relative)); }
     else if (extension === '.py') parsed = { title: fallback, text: raw!, sections: [{ id: 'code', heading: fallback, text: raw!, kind: 'code', locator: 'source file' }] };
     else parsed = parseMarkdown(raw!, fallback);
+    if (meta.slides) {
+      const expected = `knowledge-assets/slides/${relative.slice('knowledge/'.length).replace(/\.[^.]+$/, '')}/source.pdf`;
+      if (!/^knowledge\/(tutorials|nexus)\//.test(relative) || meta.slides !== expected) throw new Error('Slide sources must match their canonical tutorial or Nexus path.');
+      let candidate = options.repoRoot;
+      for (const segment of meta.slides.split('/')) { candidate = path.join(candidate, segment); if ((await lstat(candidate)).isSymbolicLink()) throw new Error('Symlinked slide sources are refused.'); }
+      const slideFile = await containedPath(options.repoRoot, meta.slides);
+      if ((await lstat(slideFile)).size > MAX_PDF_BYTES) throw new Error('Slide PDF exceeds its byte limit.');
+      let slides;
+      try { slides = await extractPdf(slideFile, meta.title || parsed.title); }
+      catch { throw new Error('Slide PDF extraction failed; parser output was not logged. Supply a supported PDF with selectable text.'); }
+      const slideUrl = `https://github.com/${options.repository}/blob/${options.revision}/${encoded(meta.slides)}`;
+      const slideSections = slides.sections.map(section => ({ ...section, id: `slides-${section.id}`, heading: `Slides: ${section.heading}`, text: `Source: ${slideUrl}\n\n${section.text}`, locator: `attached slides, ${section.locator}` }));
+      // Written notes remain author-controlled; new PDF text is explicitly identified.
+      parsed = { title: parsed.title, text: `${parsed.text}\n\nAttached slide deck\nSource: ${slideUrl}\n${slides.text}`, sections: [...parsed.sections, ...slideSections] };
+    }
     if (!parsed.text.trim()) throw new Error(`Knowledge file contains no extractable content: ${relative}`);
     const slug = relative.slice('knowledge/'.length).toLowerCase().replace(/[^a-z0-9._/-]+/g, '-');
     const id = meta.id ?? `knowledge:${slug}`;
@@ -170,7 +187,7 @@ export async function buildGithubKnowledge(options: GithubContentOptions): Promi
       ...(meta.start ? { event: { start: meta.start, end: meta.end, timezone: 'UTC', registrationUrl: sourceUrl } } : {}),
     };
     documents.set(id, document); addedFiles++;
-    if (folder === 'tutorials' || folder === 'nexus') websiteMaterials.push({ collection: folder, route: `/learn/${encoded(relative.slice('knowledge/'.length))}/`, sourcePath: relative, fileUrl: `https://github.com/${options.repository}/blob/${options.revision}/${encoded(relative)}`, format: extension.slice(1), date: meta.date ?? meta.start?.slice(0, 10), document });
+    if (folder === 'tutorials' || folder === 'nexus') websiteMaterials.push({ collection: folder, route: `/learn/${encoded(relative.slice('knowledge/'.length))}/`, sourcePath: relative, fileUrl: `https://github.com/${options.repository}/blob/${options.revision}/${encoded(relative)}`, format: extension.slice(1), date: meta.date ?? meta.start?.slice(0, 10), document, ...(meta.slides ? { slideSource: meta.slides } : {}) });
     const recordId = `github:${hash(relative).slice(0, 24)}`;
     sources.set(recordId, { id: recordId, url: sourceUrl, title: document.title, kind: type, status: 'imported', revision: options.revision, year: meta.year, license: meta.license, attribution: document.source.attribution, documentIds: [id] });
     for (const link of discoverLinks(document.text)) {
@@ -190,7 +207,7 @@ export async function buildGithubKnowledge(options: GithubContentOptions): Promi
   const corpus: Corpus = { ...base, generatedAt: options.generatedAt, documents: [...documents.values()].filter(document => available.has(document.id)).sort((a, b) => a.id.localeCompare(b.id)), sources: [...sources.values()].map(source => ({ ...source, documentIds: source.documentIds.filter(id => available.has(id)) })).sort((a, b) => a.id.localeCompare(b.id)), learningPaths: paths.map(item => ({ ...item, steps: item.steps.filter(step => available.has(step.documentId)) })).filter(item => item.steps.length > 0), curatedDeletions: [...new Set([...(base.curatedDeletions ?? []), ...withdrawnDocumentIds])] };
   if (!validateCorpus(corpus).valid) throw new Error('Knowledge validation failed. Check document sizes, duplicate identifiers, metadata and credential-like content; source contents were not logged.');
   const releaseId = hash(JSON.stringify(corpus));
-  const website: WebsiteKnowledge = { schemaVersion: 1, releaseId, materials: websiteMaterials.filter(item => available.has(item.document.id)).sort(compareWebsiteMaterials) };
+  const website: WebsiteKnowledge = { schemaVersion: 1, releaseId, revision: options.revision, materials: websiteMaterials.filter(item => available.has(item.document.id)).sort(compareWebsiteMaterials) };
   const positions = new Set<string>();
   for (const item of website.materials) if (item.document.order !== undefined) {
     const position = JSON.stringify([item.collection, item.document.year ?? '', item.document.series, item.document.order]);

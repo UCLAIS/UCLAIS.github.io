@@ -1,0 +1,6 @@
+MANAGEMENT_ORIGIN=https://manage.uclai.co.uk
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+SESSION_SECRET=
+# Optional comma-separated stable numeric IDs, in addition to repository write permission.
+ALLOWED_GITHUB_IDS=

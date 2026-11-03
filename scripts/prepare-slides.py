@@ -48,7 +48,10 @@ def prepare(args):
     texts = json.loads(result.stdout)
     if not 1 <= len(texts) <= 300:
         raise ValueError("Use a deck with 1–300 slides.")
-    folder = ROOT / "static/materials" / Path(relative.removeprefix("knowledge/")).with_suffix("")
+    base = ROOT / "static/materials"
+    if args.generated:
+        base /= "_generated"
+    folder = base / Path(relative.removeprefix("knowledge/")).with_suffix("")
     current = ROOT
     for part in folder.relative_to(ROOT).parts:
         current /= part
@@ -105,6 +108,7 @@ if __name__ == "__main__":
     parser.add_argument("--source", required=True, help="Canonical knowledge file, e.g. knowledge/tutorials/lesson.md")
     parser.add_argument("--pdf", required=True, help="Approved PDF or local PDF export of the PowerPoint")
     parser.add_argument("--file", action="append", default=[], help="Additional download: Label=static/materials/path")
+    parser.add_argument("--generated", action="store_true", help="Write ignored build-time assets beneath materials/_generated")
     try:
         prepare(parser.parse_args())
     except Exception:
