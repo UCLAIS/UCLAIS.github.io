@@ -34,7 +34,7 @@ Every save uses a fixed base commit. A changed `main` causes a conflict instead 
 
 New decks produce a canonical Markdown file, a `.meta.json` sidecar and a PDF under `knowledge-assets/slides/<canonical-path-without-extension>/source.pdf`. The sidecar's `slides` field must match that exact path. Replacing a deck preserves the canonical file, metadata and existing additional downloads. **Written notes remain independently maintained and must be reviewed for consistency with the replacement PDF.**
 
-The knowledge importer includes the PDF's extracted text with explicit slide/page locators. The website build uses the existing bounded PDF parser, sanitising slide preparation and Poppler renderer to create a download and raster images under ignored `static/materials/_generated/`. Generated decks go into the site build, not a second content database. Original uploads are outside the website's static directory. Existing decks without a `slides` sidecar retain their existing viewers. Draft or withdrawn documents do not produce generated viewers.
+The knowledge importer includes the PDF's extracted text with explicit slide/page locators. The website build uses the existing bounded PDF parser, sanitising slide preparation and Poppler renderer to create a download and raster images under ignored `static/materials/_generated/`. The downloadable copy rebuilds ordinary HTTPS links, drops internal destinations and page actions, and refuses chained actions and interactive annotations. Generated decks go into the site build, not a second content database. Original uploads are outside the website's static directory. Existing decks without a `slides` sidecar retain their existing viewers. Draft or withdrawn documents do not produce generated viewers.
 
 **The source repository is public.** PDFs, Markdown, sidecars and branches are visible in GitHub as soon as submitted, even before review or publication on the society site. Both forms explicitly require acknowledgement. Do not upload confidential drafts, student records or material without publication permission. Git history can retain replaced material.
 
@@ -67,3 +67,13 @@ Before release, verify:
 4. Website and MCP publication of the same merged release, and unavailable/stale service states.
 
 Local tests and dry runs do not establish that the GitHub App, DNS or Cloudflare deployment has been configured.
+
+See the [3 November security review](security-review-2026-11-03.md) for credential checks, the PDF sanitisation fix, dependency alerts and remaining acceptance checks.
+
+### Hosting setup checked on 3 November 2026
+
+The society account passed the existing free-only subscription check. The Pages project `uclai-management-gateway` has been created, and Cloudflare confirmed its hostname as `uclai-management-gateway.pages.dev`. The custom domain `manage.uclai.co.uk` is registered against that project and is awaiting DNS verification.
+
+In IONOS, add **CNAME `manage` → `uclai-management-gateway.pages.dev`**, with a one-hour TTL. No scheme or path belongs in the target. After saving, check the public DNS record and Cloudflare certificate/domain status. The latest check against two authoritative IONOS servers returned **A `217.160.0.122`** for `manage` and no CNAME. Replace that subdomain's A record with the CNAME; preserve the other DNS records.
+
+No successful initial gateway deployment has been confirmed. The management Worker, service binding, GitHub App and login secrets still need configuring and live acceptance. The existing deployment token can verify account subscriptions but returns 403 for Pages project access; it must not be replaced with a Global API Key.
