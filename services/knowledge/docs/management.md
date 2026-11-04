@@ -1,6 +1,6 @@
 # Committee management
 
-The management service is a separate authenticated Worker in this repository. Its proposed address is `https://manage.uclai.co.uk`. It edits GitHub source files through pull requests. The public website and MCP retain their existing deployment workflows. This service has no R2, D1, KV, model API, installation token or deployment credential.
+The management service is a separate authenticated Worker at `https://manage.uclai.co.uk`. It edits GitHub source files through pull requests. The public website and MCP retain their existing deployment workflows. This service has no R2, D1, KV, model API, installation token or deployment credential.
 
 ## What it does
 
@@ -13,7 +13,7 @@ The pinned external archive remains maintained through its existing importer. Ed
 
 ## Access and credentials
 
-Create a **GitHub App**, owned by the society, and install it on **only `UCLAIS/UCLAIS.github.io`**. Set its homepage to `https://manage.uclai.co.uk` and callback to `https://manage.uclai.co.uk/auth/callback`. Request these repository permissions:
+The registered **GitHub App** is **UCL AI Society Management**, owned by **UCLAIS** and installed on **only `UCLAIS/UCLAIS.github.io`**. Its homepage is `https://manage.uclai.co.uk` and callback is `https://manage.uclai.co.uk/auth/callback`. Retain these repository permissions:
 
 | Permission | Access | Purpose |
 | --- | --- | --- |
@@ -83,3 +83,15 @@ No successful initial gateway deployment has been confirmed. The management Work
 The CNAME is still correct on both checked authoritative servers and public DNS. HTTPS now completes normal certificate verification, but both `https://manage.uclai.co.uk/` and `https://uclai-management-gateway.pages.dev/` return Cloudflare HTTP 522. After the user signed back into Cloudflare, its dashboard confirmed `manage.uclai.co.uk` is **Active / SSL enabled**. The gateway shows **Create your first deployment**, its bindings list is empty, and the account's complete three-application inventory has no `uclai-management` Worker. The remaining problem is undeployed application infrastructure, not a pending IONOS change. The existing public MCP separately reports `ready`.
 
 The local security/tests/build rerun passed, including a fresh management dry-run bundle. No deployment was performed. Complete the GitHub App and management Worker, bind the Pages gateway to it, deploy the gateway and run the live access checks before launch. After the user's explicit approval, the gateway's production quota setting was saved as **Fail closed** and independently verified after a dashboard reload. Quota exhaustion will therefore show an error rather than serving static assets without the gateway check.
+
+### Initial deployment on 4 November 2026
+
+After explicit approval for the app, credentials and final installation/publication actions, the management Worker and gateway were deployed on the verified free-only account. The GitHub App ID is `5613474`, its public client ID is `Iv23ctU0nUHFpxvIAb1g`, and installation `178606665` is restricted to the website repository. User-to-server token expiry is enabled. Webhooks, device flow and callback wildcard matching are disabled.
+
+`uclai-management` has the expected assets/rate-limit bindings and the two encrypted Worker secrets. Client/session secret values were transferred in memory and were not written to source, local credential files or diagnostic output. The temporary credential setup process was stopped after deployment. The gateway's production binding is **MANAGEMENT → uclai-management**, its quota behaviour is **Fail closed**, and Pages deployment `5ff3e477-ce54-4dc9-b2ed-0397757b2a7b` succeeded. DNS and SSL are active.
+
+Twelve live boundary checks passed: the login page is available, anonymous private APIs reject access, private assets return the login screen, the Pages hostname is rejected, invalid OAuth state fails, and login starts with PKCE and a secure host-only cookie. Cloudflare rejects Python's stock HTTP User-Agent before the app with error 1010; the checks used a browser-compatible client without a cookie jar. No edge protection was disabled.
+
+The first real authorised sign-in is awaiting the user: open the management page, select **Continue with GitHub**, then **Authorize**. Starting from the management page creates a fresh short-lived login transaction. Dashboard checks, representative/maximum-size upload acceptance, logout and live permission revocation remain unverified until that sign-in. The unused initial client secret is queued for the approved revocation after its replacement is verified. Do not describe the 8 MiB limit as proven compatible with Workers Free yet.
+
+Source and publishing changes are in [PR #82](https://github.com/UCLAIS/UCLAIS.github.io/pull/82). Both CI checks passed at `4b85a61`; the protected branch still requires review. Merge the publishing support before expecting PDF content proposals to publish successfully on the website and MCP. Management does not bypass branch protection or merge its own content proposals.

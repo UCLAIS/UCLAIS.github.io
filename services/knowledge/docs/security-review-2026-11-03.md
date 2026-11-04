@@ -76,3 +76,13 @@ Rechecked commit `2f69b5d` with the local DNS/runbook updates. No code changes o
 - After explicit user approval, the gateway's production quota behaviour was saved as Fail closed and verified after reloading the dashboard. This is a persistent availability setting: exhaustion of the free Pages Functions quota will show an error rather than continue serving static assets. No application deployment was performed.
 
 Fresh temporary evidence is in `/private/tmp/uclai-security-review-20261104/`, with service/build logs in `/private/tmp/uclai-*-recheck-20261104.*`. The previous website advisory backlog and real GitHub/Workers Free acceptance checks remain outstanding. Management is not cleared for launch.
+
+## Initial management deployment, 4 November 2026
+
+The user subsequently approved building/deploying the society-owned app, its repository-only installation, encrypted Worker credentials, the separate Pages service binding and gateway publication. The new Worker is deployed, the Pages deployment succeeded, and `https://manage.uclai.co.uk/` serves the GitHub login page. Both CI jobs on [PR #82](https://github.com/UCLAIS/UCLAIS.github.io/pull/82) passed at `4b85a61`; the publishing changes still require protected-branch review.
+
+The installed app is owned by UCLAIS and restricted to UCLAIS/UCLAIS.github.io, with Contents/Pull requests write and Actions/Metadata read only. Token expiry is enabled; webhooks, device flow and wildcard callbacks are disabled. No app private key, installation token, deployment token, storage service or paid feature was added to the management runtime. Client/session credentials were handled in memory and stored as encrypted Cloudflare Worker secrets, with no credential values in source or diagnostic output.
+
+Twelve anonymous live checks passed, including API denial, gated assets, rejection of the Pages hostname, invalid OAuth state, PKCE and Secure/HttpOnly host-only login cookie attributes. The Python default User-Agent was rejected by Cloudflare's edge (1010); the same app checks passed with a browser-compatible, cookie-free client. Edge protections were retained.
+
+Authorised sign-in awaits the user's GitHub Authorize action. Live dashboard/upload tests, maximum-file CPU acceptance, logout and real GitHub permission revocation are therefore still pending. Revocation of the unused initial client secret is approved but deferred until the replacement is verified. The inherited website dependency advisories remain open; successful deployment of this separately audited Worker does not clear that backlog.
