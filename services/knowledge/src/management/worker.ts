@@ -37,9 +37,16 @@ export async function handleManagement(request: Request, env: ManagementEnv): Pr
       const transaction = await unseal<{ state: string; verifier: string; expires: number }>(env, 'login', readCookie(request, LOGIN_COOKIE));
       if (!transaction || url.searchParams.get('state') !== transaction.state || url.searchParams.has('error')) return login('GitHub sign-in expired or was declined. Start again.', 403);
       const code = requiredString(url.searchParams.get('code'), /^[A-Za-z0-9_\-]{1,200}$/, 'GitHub did not return an authorisation code.');
-      const upstream = await fetch('https://github.com/login/oauth/access_token', { method: 'POST', redirect: 'error', signal: AbortSignal.timeout(15000), headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ client_id: env.GITHUB_CLIENT_ID, client_secret: env.GITHUB_CLIENT_SECRET, redirect_uri: `${managementOrigin}/auth/callback`, code, code_verifier: transaction.verifier }) });
-      const token = await upstream.json() as { access_token?: string; expires_in?: number };
-      if (!upstream.ok || !token.access_token || token.access_token.length > 1000) throw new KnowledgeError('login_failed', 'GitHub could not complete sign-in.', 403);
+      let upstream: Response;
+      try {
+        upstream = await fetch('https://github.com/login/oauth/access_token', { method: 'POST', redirect: 'error', credentials: 'omit', signal: AbortSignal.timeout(15000), headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': 'UCLAI-Committee' }, body: new URLSearchParams({ client_id: env.GITHUB_CLIENT_ID, client_secret: env.GITHUB_CLIENT_SECRET, redirect_uri: `${managementOrigin}/auth/callback`, code, code_verifier: transaction.verifier }).toString() });
+      } catch { throw new KnowledgeError('login_network', 'GitHub sign-in is temporarily unavailable. Start again shortly.', 502); }
+      if (!upstream.ok) { await upstream.body?.cancel(); throw new KnowledgeError('login_response', 'GitHub could not complete sign-in. Start again shortly.', 502); }
+      let token: { access_token?: string; expires_in?: number; error?: string };
+      try { token = await upstream.json() as typeof token; }
+      catch { throw new KnowledgeError('login_response', 'GitHub returned an unexpected sign-in response. Start again shortly.', 502); }
+      if (token.error === 'incorrect_client_credentials' || token.error === 'redirect_uri_mismatch') throw new KnowledgeError('login_configuration', 'GitHub sign-in configuration needs committee attention.', 503);
+      if (typeof token.access_token !== 'string' || !token.access_token || token.access_token.length > 1000) throw new KnowledgeError('login_failed', 'GitHub could not complete sign-in. Start again.', 403);
       await new Github(token.access_token).actor(env.ALLOWED_GITHUB_IDS);
       const seconds = Math.min(token.expires_in || 3600, 3600);
       const session = await seal(env, 'session', { token: token.access_token, csrf: random(), expires: Date.now() + seconds * 1000 } satisfies Session);

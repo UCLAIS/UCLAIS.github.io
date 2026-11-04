@@ -8,7 +8,8 @@ export type Network = typeof fetch;
 export class Github {
   constructor(private token: string, private network: Network = fetch) {}
   async api<T = any>(path: string, options: { method?: string; body?: unknown } = {}): Promise<T> {
-    const response = await this.network(`https://api.github.com${path}`, {
+    const network = this.network; // Workers' native fetch must not receive this class as its receiver.
+    const response = await network(`https://api.github.com${path}`, {
       method: options.method || 'GET', redirect: 'error', signal: AbortSignal.timeout(20000),
       headers: { Authorization: `Bearer ${this.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'UCLAI-Committee' },
       ...(options.body !== undefined ? { body: JSON.stringify(options.body) } : {}),

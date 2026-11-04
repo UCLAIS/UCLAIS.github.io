@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { assertWrite, challenge, ManagementEnv, seal, SESSION_COOKIE, unseal } from '../src/management/auth';
+import { assertWrite, challenge, LOGIN_COOKIE, ManagementEnv, seal, SESSION_COOKIE, unseal } from '../src/management/auth';
 import { Github, knowledgePath, slidePath } from '../src/management/github';
 import { handleManagement } from '../src/management/worker';
 
@@ -35,6 +35,49 @@ describe('management security boundaries', () => {
     network.mockImplementation(async (url: any) => Response.json(String(url).endsWith('/user') ? { id: 123, login: 'member' } : { permissions: { push: true } }));
     await expect(github.actor('456')).rejects.toMatchObject({ code: 'forbidden' });
     await expect(github.actor('123')).resolves.toMatchObject({ id: 123 });
+  });
+  it('calls receiver-sensitive network APIs without binding the Github client as this', async () => {
+    const network = function(this: unknown, url: RequestInfo | URL) {
+      if (this !== undefined) throw new TypeError('Illegal invocation');
+      return Promise.resolve(Response.json(String(url).endsWith('/user') ? { id:123, login:'member' } : { permissions:{ push:true } }));
+    };
+    await expect(new Github('test-token', network as typeof fetch).actor()).resolves.toMatchObject({ id:123, login:'member' });
+  });
+  it.each(['html', 'json', 'network'])('reports a safe OAuth handoff failure for %s without source/credential fragments', async kind => {
+    const value = await seal(env, 'login', { state:'expected', verifier:'verifier', expires:Date.now()+60_000 });
+    const network = vi.fn(async (_url: RequestInfo | URL, options?: RequestInit) => {
+      expect(options?.headers).toMatchObject({ 'User-Agent':'UCLAI-Committee' });
+      expect(typeof options?.body).toBe('string');
+      if (kind === 'network') throw new Error('PRIVATE_UPSTREAM_FRAGMENT');
+      return new Response('PRIVATE_UPSTREAM_FRAGMENT', { status:kind === 'json' ? 200 : 403, headers:{ 'Content-Type':'text/html' } });
+    });
+    vi.stubGlobal('fetch', network);
+    const result = await handleManagement(new Request(env.MANAGEMENT_ORIGIN + '/auth/callback?code=test-code&state=expected', { headers:{ Cookie:`${LOGIN_COOKIE}=${value}` } }), env);
+    expect(result.status).toBe(502);
+    const body = await result.text();
+    expect(body).toContain(kind === 'network' ? 'login_network' : 'login_response');
+    expect(body).not.toContain('PRIVATE_UPSTREAM_FRAGMENT');
+    expect(body).not.toContain(env.GITHUB_CLIENT_SECRET);
+  });
+  it('completes OAuth and serves an authorised session without exposing the GitHub token', async () => {
+    const value = await seal(env, 'login', { state:'expected', verifier:'verifier', expires:Date.now()+60_000 });
+    vi.stubGlobal('fetch', function(this:unknown, url:RequestInfo | URL) {
+      if (this !== undefined && this !== globalThis) throw new TypeError('Illegal invocation');
+      if (String(url).endsWith('/login/oauth/access_token')) return Promise.resolve(Response.json({ access_token:'known-test-user-token', expires_in:28800 }));
+      return Promise.resolve(Response.json(String(url).endsWith('/user') ? { id:123, login:'member' } : { permissions:{ push:true } }));
+    });
+    const result = await handleManagement(new Request(env.MANAGEMENT_ORIGIN + '/auth/callback?code=test-code&state=expected', { headers:{ Cookie:`${LOGIN_COOKIE}=${value}` } }), env);
+    expect(result.status).toBe(302);
+    expect(result.headers.get('Location')).toBe('/');
+    const cookie = result.headers.get('Set-Cookie')!.match(/__Host-committee-session=([^;]+)/)![1];
+    const encrypted = await unseal<{ token:string; expires:number }>(env, 'session', cookie);
+    expect(encrypted?.token).toBe('known-test-user-token');
+    expect(encrypted!.expires - Date.now()).toBeLessThanOrEqual(3600_000);
+    const info = await handleManagement(new Request(env.MANAGEMENT_ORIGIN + '/api/session', { headers:{ Cookie:`${SESSION_COOKIE}=${cookie}` } }), env);
+    expect(info.status).toBe(200);
+    const body = await info.text();
+    expect(body).toContain('member');
+    expect(body).not.toContain('known-test-user-token');
   });
   it('refuses writes from other origins or without the session CSRF token', () => {
     const request = (origin: string, token: string) => new Request(env.MANAGEMENT_ORIGIN + '/api/knowledge', { method: 'POST', headers: { Origin: origin, 'X-CSRF-Token': token, 'Content-Type': 'application/json' } });
