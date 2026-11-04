@@ -26,7 +26,7 @@ function pdf() {
 try {
   // Copy only website sources and the approved importer input, never .env,
   // private raw imports, generated releases, credentials or deployment state.
-  for (const relative of ['docusaurus.config.js', 'package.json', 'sidebars.js', 'src', 'static', 'blog', 'our-initiatives', 'knowledge', 'plugins', 'scripts/preview-config.cjs', 'services/knowledge/package.json', 'services/knowledge/src', 'services/knowledge/scripts/build-knowledge.ts', 'services/knowledge/data/bootstrap-corpus.json']) {
+  for (const relative of ['docusaurus.config.js', 'package.json', 'sidebars.js', 'src', 'static', 'blog', 'our-initiatives', 'knowledge', 'plugins', 'scripts/preview-config.cjs', 'scripts/prepare-slides.py', 'services/knowledge/package.json', 'services/knowledge/src', 'services/knowledge/scripts/build-knowledge.ts', 'services/knowledge/data/bootstrap-corpus.json']) {
     mkdirSync(path.dirname(path.join(root, relative)), { recursive: true })
     cpSync(path.join(checkout, relative), path.join(root, relative), { recursive: true, filter: source => !/^(?:\.env(?:\..*)?|\.dev\.vars(?:\..*)?|\.wrangler|\.generated|secrets|credentials)$/.test(path.basename(source)) && !/\.(?:pem|key|p12|pfx)$/.test(source) })
   }
@@ -42,6 +42,11 @@ try {
   writeFileSync(path.join(tutorialDir, 'slides.pdf'), pdf())
   writeFileSync(path.join(nexusDir, 'session.md'), '---\ndate: 2026-10-20\nyear: 2026/27\nseries: Publication check series\norder: 2\n---\n# Nexus publication check\nNEXUS_SYNC_SENTINEL')
   writeFileSync(path.join(nexusDir, 'deck.md'), '# Slide publication check\nSLIDE_TRANSCRIPT_SENTINEL\n\n## Additional information\nEXTRA_INFO_SENTINEL')
+  writeFileSync(path.join(nexusDir, 'upload.md'), '# Management upload\nWritten notes are preserved.\n\n## Additional information\nUPLOAD_NOTE_SENTINEL')
+  const uploadedSource = `knowledge-assets/slides/nexus/${marker}/upload/source.pdf`
+  mkdirSync(path.dirname(path.join(root, uploadedSource)), { recursive: true })
+  writeFileSync(path.join(root, uploadedSource), pdf())
+  writeFileSync(path.join(nexusDir, 'upload.meta.json'), JSON.stringify({ slides: uploadedSource }))
   const slideDir = path.join(root, 'static/materials/nexus', marker, 'deck')
   mkdirSync(slideDir, { recursive: true })
   writeFileSync(path.join(slideDir, 'slides.pdf'), pdf())
@@ -55,7 +60,13 @@ try {
   const release = JSON.parse(readFileSync(path.join(generated, 'knowledge.release.json'), 'utf8')).release
   assert.equal(website.releaseId, release.id)
   const materials = website.materials.filter(item => item.sourcePath.includes(marker))
-  assert.equal(materials.length, 5)
+  assert.equal(materials.length, 6)
+  const liveManifest = JSON.parse(readFileSync(path.join(output, 'knowledge-status.json'), 'utf8'))
+  assert.equal(liveManifest.releaseId, release.id)
+  const uploaded = liveManifest.materials.find(item => item.path.endsWith(`${marker}/upload.md`))
+  assert.equal(uploaded.slideCount, 1)
+  assert.ok(readFileSync(path.join(output, uploaded.firstSlide.slice(1))).length > 100)
+  assert.ok(readFileSync(path.join(output, uploaded.presentation.slice(1))).subarray(0, 5).toString() === '%PDF-')
   // Exercise real retrieval, including version-pinned section fetches. Hiding a
   // transcript in the slide UI must never remove it from MCP search or fetch.
   const retrievalCheck = path.join(root, 'services/knowledge/publication-retrieval-check.ts')
@@ -93,6 +104,14 @@ console.log('MCP retention passed: hidden slide transcripts, notebook code and N
       assert.ok(published.text.includes('SLIDE_TRANSCRIPT_SENTINEL'))
       assert.doesNotMatch(html, /SLIDE_TRANSCRIPT_SENTINEL|<script>SLIDE_TEXT_EXECUTION_SENTINEL/)
       assert.ok(html.includes('&lt;script&gt;SLIDE_TEXT_EXECUTION_SENTINEL'))
+    }
+    if (item.sourcePath.endsWith('/upload.md')) {
+      assert.ok(html.includes('UPLOAD_NOTE_SENTINEL'))
+      assert.ok(published.text.includes('PDF_SYNC_SENTINEL'))
+      assert.ok(published.text.includes('Written notes are preserved.'))
+      assert.ok(published.sections.some(section => section.locator === 'attached slides, page 1'))
+      assert.ok(html.includes('/materials/_generated/'))
+      assert.ok(!require('node:fs').existsSync(path.join(output, uploadedSource)))
     }
   }
   assert.doesNotMatch(JSON.stringify(website), /PRIVATE_OUTPUT_SENTINEL|DRAFT_ONLY_SENTINEL|REVIEW_ONLY_SENTINEL/)

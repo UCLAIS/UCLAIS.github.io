@@ -1,3 +1,3 @@
-# Local publication helper only; rendering is not required in CI or the backend.
+# Local and website CI slide preparation; never installed in a public Worker.
 pypdf==6.10.0
 Pillow==12.3.0

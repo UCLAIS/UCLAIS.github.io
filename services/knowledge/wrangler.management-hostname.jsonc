@@ -1,0 +1,7 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "uclai-management-gateway",
+  "pages_build_output_dir": ".generated/management-gateway",
+  "compatibility_date": "2026-11-03",
+  "services": [{ "binding": "MANAGEMENT", "service": "uclai-management" }]
+}

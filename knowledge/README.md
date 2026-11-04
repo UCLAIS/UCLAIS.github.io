@@ -71,6 +71,8 @@ Keep exercises, hints and solutions under separate headings.
 
 Front matter supports `id`, `title`, `type`, `topics`, `year`, `series`, `order`, `date`, `archived`, `status`, `source`, `attribution`, `license`, `start`, `end` and `expiresAt`. It accepts only flat values and a comma-separated topic list. `order` is a positive whole number up to 10,000 and requires `series`; the same keys work in JSON sidecars. Dates use `YYYY-MM-DD`; event timestamps use UTC ISO format such as `2026-11-03T18:00:00Z`. No YAML objects, tags, aliases or executable MDX are evaluated.
 
+The committee management service can also add a `slides` sidecar field pointing to `knowledge-assets/slides/<knowledge-relative-path-without-extension>/source.pdf`. Both builds extract that PDF's text; the website build prepares a sanitised download and slide images automatically. Existing written notes and additional downloads are preserved. Review written notes when replacing a deck. See the [management setup and publication guide](../services/knowledge/docs/management.md).
+
 - **Tutorials and Nexus notes default to archived learning material**, so a session write-up does not become an upcoming event. Live events still come from Luma. Explicit `start`/`end` timestamps can describe an upcoming session; it expires at its end (or start if no end is supplied).
 - `status: draft` and `status: review-required` exclude a file from the MCP build. **They do not make a file private in GitHub.** Confidential drafts belong in a private repository, and credentials/student personal data must never be committed here.
 - `source` is an optional HTTPS citation. Otherwise the build cites the exact GitHub file and commit.

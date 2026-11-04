@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'knowledge/**'
+      - 'knowledge-assets/**'
       - 'services/knowledge/**'
       - 'src/pages/connect*'
       - 'docusaurus.config.js'
@@ -55,6 +56,10 @@ jobs:
         run: pnpm build
       - name: Bundle the public hostname gateway without deploying
         run: pnpm hostname:build
+      - name: Bundle committee management without deploying
+        run: |
+          pnpm management:build
+          pnpm management:gateway
 
   publish:
     name: Publish approved knowledge

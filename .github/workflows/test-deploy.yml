@@ -10,6 +10,7 @@ on:
 jobs:
   test-deploy:
     name: Test deployment
+    timeout-minutes: 20
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -31,6 +32,13 @@ jobs:
         run: pnpm --dir services/knowledge install --frozen-lockfile
       - name: Install bounded PDF parser
         run: python -m pip install -r services/knowledge/requirements-pdf.txt
+      - name: Install slide preparation tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y poppler-utils
+          python -m pip install -r scripts/requirements-slides.txt
+      - name: Test public slide PDF sanitisation
+        run: python -m unittest discover -s scripts -p 'test_prepare_slides.py' -v
       - name: Test shared website and MCP publication
         run: yarn test:knowledge-site
       - name: Test build website

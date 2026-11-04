@@ -1,5 +1,7 @@
 # AI Society knowledge service
 
+The separate [committee management service](docs/management.md) provides GitHub-gated editing, PDF deck submission and tooling status. Its setup is independent of the public read-only MCP and the retained legacy R2 editor.
+
 The current launch route is **GitHub files → reviewed merge → validated snapshot → website pages and one read-only Cloudflare Worker**. Add tutorials, Nexus sessions and FAQs under the root [`knowledge/`](../../knowledge/README.md) folder. Tutorials and Nexus notes also become website pages/listings from the same importer; FAQs and guides feed the MCP. GitHub Actions checks every pull request and publishes successful `main` builds. Staging is deployed on the society's `info@uclai.co.uk` account; see the [dated deployment evidence](docs/staging-2026-10-29.md).
 
 The public connection URL is **https://mcp.uclai.co.uk/mcp**. A read-only Pages gateway forwards requests to the existing public Worker, keeping DNS at IONOS. See the [custom-hostname deployment and verification record](docs/custom-hostname.md).

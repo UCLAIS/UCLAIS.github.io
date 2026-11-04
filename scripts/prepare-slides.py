@@ -6,16 +6,63 @@ code are executed. Text extraction uses the existing bounded PDF subprocess.
 """
 import argparse
 import json
+import math
 from pathlib import Path
 import re
 import subprocess
 import sys
 import tempfile
+from urllib.parse import urlsplit
 
 from PIL import Image
 from pypdf import PdfReader, PdfWriter
+from pypdf.generic import ArrayObject, DictionaryObject, FloatObject, NameObject, TextStringObject
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def sanitise_page(page):
+    annotations = page.get("/Annots", [])
+    if len(annotations) > 1000:
+        raise ValueError("Slide has too many annotations.")
+    safe_links = ArrayObject()
+    for reference in annotations:
+        annotation = reference.get_object()
+        if annotation.get("/Subtype") != "/Link" or annotation.get("/AA"):
+            raise ValueError("Export a non-interactive PDF without forms or active annotations.")
+        action = annotation.get("/A")
+        if not action:
+            # Named/internal destinations can pull other unsanitised page trees
+            # into the writer. The downloadable copy preserves HTTPS links only.
+            continue
+        action = action.get_object()
+        uri = action.get("/URI")
+        if action.get("/S") != "/URI" or set(action) - {"/Type", "/S", "/URI", "/IsMap"} or not isinstance(uri, TextStringObject):
+            raise ValueError("Export a PDF with ordinary HTTPS links and no chained actions.")
+        url = urlsplit(str(uri))
+        if url.scheme != "https" or not url.hostname or url.username or url.password or any(ord(char) < 32 or ord(char) == 127 for char in str(uri)):
+            raise ValueError("Slide links must use credential-free HTTPS URLs.")
+        rectangle = annotation.get("/Rect")
+        if not isinstance(rectangle, (list, ArrayObject)) or len(rectangle) != 4:
+            raise ValueError("Slide link has an invalid rectangle.")
+        coordinates = [float(value) for value in rectangle]
+        if not all(math.isfinite(value) and abs(value) <= 1_000_000 for value in coordinates):
+            raise ValueError("Slide link has an invalid rectangle.")
+        # Rebuild annotations and actions, rather than copying optional fields
+        # which may contain /Next, /PA or additional action-bearing objects.
+        safe_links.append(DictionaryObject({
+            NameObject("/Type"): NameObject("/Annot"),
+            NameObject("/Subtype"): NameObject("/Link"),
+            NameObject("/Rect"): ArrayObject([FloatObject(value) for value in coordinates]),
+            NameObject("/Border"): ArrayObject([FloatObject(0), FloatObject(0), FloatObject(0)]),
+            NameObject("/A"): DictionaryObject({NameObject("/S"): NameObject("/URI"), NameObject("/URI"): TextStringObject(str(uri))}),
+        }))
+    if safe_links:
+        page[NameObject("/Annots")] = safe_links
+    else:
+        page.pop("/Annots", None)
+    for key in ("/AA", "/PresSteps", "/Metadata", "/AF"):
+        page.pop(key, None)
 
 
 def repository_file(value, prefix):
@@ -48,7 +95,10 @@ def prepare(args):
     texts = json.loads(result.stdout)
     if not 1 <= len(texts) <= 300:
         raise ValueError("Use a deck with 1–300 slides.")
-    folder = ROOT / "static/materials" / Path(relative.removeprefix("knowledge/")).with_suffix("")
+    base = ROOT / "static/materials"
+    if args.generated:
+        base /= "_generated"
+    folder = base / Path(relative.removeprefix("knowledge/")).with_suffix("")
     current = ROOT
     for part in folder.relative_to(ROOT).parts:
         current /= part
@@ -65,17 +115,12 @@ def prepare(args):
     if len(files) > 20:
         raise ValueError("At most 20 additional files are supported.")
     # A fresh document root drops document-level actions, attachments and metadata.
-    # Interactive annotations are refused; ordinary HTTPS link annotations remain.
+    # Sanitise every page before cloning any cross-page objects into the writer.
     reader = PdfReader(pdf)
     writer = PdfWriter()
     for page in reader.pages:
-        for annotation in page.get("/Annots", []):
-            value = annotation.get_object()
-            action = value.get("/A", {})
-            if value.get("/Subtype") != "/Link" or value.get("/AA") or (action and (action.get("/S") != "/URI" or not str(action.get("/URI", "")).startswith("https://"))):
-                raise ValueError("Export a non-interactive PDF without forms or active annotations.")
-        page.pop("/AA", None)
-        page.pop("/Metadata", None)
+        sanitise_page(page)
+    for page in reader.pages:
         writer.add_page(page)
     writer.metadata = None
     target = pdf if pdf.is_relative_to(ROOT / "static/materials") else folder / "slides.pdf"
@@ -105,6 +150,7 @@ if __name__ == "__main__":
     parser.add_argument("--source", required=True, help="Canonical knowledge file, e.g. knowledge/tutorials/lesson.md")
     parser.add_argument("--pdf", required=True, help="Approved PDF or local PDF export of the PowerPoint")
     parser.add_argument("--file", action="append", default=[], help="Additional download: Label=static/materials/path")
+    parser.add_argument("--generated", action="store_true", help="Write ignored build-time assets beneath materials/_generated")
     try:
         prepare(parser.parse_args())
     except Exception:
