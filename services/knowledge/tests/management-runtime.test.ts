@@ -55,7 +55,7 @@ export default { async fetch(request) {
 }};`;
     // The pinned local workerd predates the production compatibility date.
     // These native fetch/receiver contracts are unchanged by that date.
-    mf = new Miniflare(convertV4MiniflareOptions({ workers:[{name:'management',modules:true,script,compatibilityDate:'2026-10-29',compatibilityFlags:['nodejs_compat'],bindings:{MANAGEMENT_ORIGIN:origin,GITHUB_CLIENT_ID:'fixture-client',GITHUB_CLIENT_SECRET:'fixture-secret',SESSION_SECRET:'s'.repeat(64)},outboundService:'upstream'},{name:'upstream',modules:true,script:remote}] }));
+    mf = new Miniflare(convertV4MiniflareOptions({ workers:[{name:'management',modules:true,script,compatibilityDate:'2026-10-29',compatibilityFlags:['nodejs_compat','global_fetch_strictly_public'],bindings:{MANAGEMENT_ORIGIN:origin,GITHUB_CLIENT_ID:'fixture-client',GITHUB_CLIENT_SECRET:'fixture-secret',SESSION_SECRET:'s'.repeat(64)},outboundService:'upstream'},{name:'upstream',modules:true,script:remote}] }));
     app = await mf.getWorker('management'); upstream = await mf.getWorker('upstream');
   },60_000);
   afterAll(async()=>{await mf?.dispose();});
