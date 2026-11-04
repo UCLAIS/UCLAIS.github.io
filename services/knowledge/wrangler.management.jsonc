@@ -7,7 +7,7 @@
   "workers_dev": false,
   "preview_urls": false,
   "assets": { "directory": "./management-ui", "binding": "ASSETS", "run_worker_first": true },
-  "vars": { "MANAGEMENT_ORIGIN": "https://manage.uclai.co.uk", "GITHUB_CLIENT_ID": "" },
+  "vars": { "MANAGEMENT_ORIGIN": "https://manage.uclai.co.uk", "GITHUB_CLIENT_ID": "Iv23ctU0nUHFpxvIAb1g" },
   "ratelimits": [{ "name": "RATE_LIMITER", "namespace_id": "1002", "simple": { "limit": 60, "period": 60 } }],
   "observability": { "enabled": false }
   // Set GITHUB_CLIENT_SECRET and a random 32-byte base64 SESSION_SECRET as Worker secrets.
