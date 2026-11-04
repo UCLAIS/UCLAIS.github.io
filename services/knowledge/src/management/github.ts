@@ -3,6 +3,8 @@ import { KnowledgeError } from '../types';
 
 export const REPOSITORY = 'UCLAIS/UCLAIS.github.io';
 export const REPO_URL = `https://github.com/${REPOSITORY}`;
+const ORGANIZATION_ID = 61075473;
+const ACCESS_MESSAGE = 'This GitHub account must be an active UCLAIS member with write access to the society website repository.';
 export interface TreeEntry { path: string; type: string; sha: string; size?: number; mode: string }
 export type Network = typeof fetch;
 export class Github {
@@ -21,10 +23,25 @@ export class Github {
     return response.status === 204 ? undefined as T : await response.json() as T;
   }
   repo<T = any>(path = '', options: { method?: string; body?: unknown } = {}) { return this.api<T>(`/repos/${REPOSITORY}${path}`, options); }
+  private async activeMember() {
+    // The authenticated user's own memberships need no additional app permission.
+    // Construct bounded page URLs here; never follow provider-controlled links.
+    for (let page = 1; page <= 10; page++) {
+      const memberships = await this.api<{ state?: string; organization?: { id?: number } }[]>(`/user/memberships/orgs?state=active&per_page=100&page=${page}`);
+      if (!Array.isArray(memberships) || memberships.length > 100) throw new KnowledgeError('github_unavailable', 'GitHub organisation membership could not be verified. Try again shortly.', 502);
+      if (memberships.some(item => item?.state === 'active' && item.organization?.id === ORGANIZATION_ID)) return true;
+      if (memberships.length < 100) return false;
+    }
+    return false; // Excessive or unverifiable membership data never grants access.
+  }
   async actor(allowedIds?: string) {
-    const [user, repo] = await Promise.all([this.api<{ id: number; login: string }>('/user'), this.repo<{ permissions?: { push?: boolean; maintain?: boolean; admin?: boolean } }>()]);
+    const [user, repo, membership] = await Promise.all([
+      this.api<{ id: number; login: string }>('/user'),
+      this.repo<{ permissions?: { push?: boolean; maintain?: boolean; admin?: boolean } }>(),
+      this.activeMember(),
+    ]);
     const allowed = (allowedIds || '').split(',').map(value => value.trim()).filter(Boolean);
-    if (!Number.isSafeInteger(user.id) || !user.login || !repo.permissions?.push || (allowed.length && !allowed.includes(String(user.id)))) throw new KnowledgeError('forbidden', 'This GitHub account needs write access to the society website repository.', 403);
+    if (!Number.isSafeInteger(user.id) || !user.login || repo.permissions?.push !== true || !membership || (allowed.length && !allowed.includes(String(user.id)))) throw new KnowledgeError('forbidden', ACCESS_MESSAGE, 403);
     return { id: user.id, login: user.login, admin: repo.permissions.admin === true };
   }
   async snapshot() {

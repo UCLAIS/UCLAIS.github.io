@@ -5,6 +5,14 @@ import { handleManagement } from '../src/management/worker';
 
 const env = { MANAGEMENT_ORIGIN: 'https://manage.uclai.co.uk', GITHUB_CLIENT_ID: 'configured-id', GITHUB_CLIENT_SECRET: 'configured-secret', SESSION_SECRET: 'a'.repeat(64), ASSETS: { fetch: vi.fn(async () => new Response('PRIVATE UI')) }, RATE_LIMITER: { limit: vi.fn(async () => ({ success: true })) } } as unknown as ManagementEnv;
 const session = { token: 'test-token', csrf: 'csrf-test', expires: Date.now() + 60_000 };
+const activeMembership = { state: 'active', organization: { id: 61075473 } };
+function actorResponse(url: RequestInfo | URL, push = true) {
+  const path = new URL(String(url)).pathname;
+  if (path === '/user') return Response.json({ id: 123, login: 'member' });
+  if (path === '/user/memberships/orgs') return Response.json([activeMembership]);
+  if (path === '/repos/UCLAIS/UCLAIS.github.io') return Response.json({ permissions: { push } });
+  throw new Error('Unexpected actor request.');
+}
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe('management security boundaries', () => {
@@ -28,18 +36,72 @@ describe('management security boundaries', () => {
     expect(network).not.toHaveBeenCalled();
     vi.unstubAllGlobals();
   });
-  it('requires both live repository write permission and any configured stable-ID restriction', async () => {
-    const network = vi.fn(async (url: any) => Response.json(String(url).endsWith('/user') ? { id: 123, login: 'member' } : { permissions: { push: false } }));
+  it('requires active membership, live repository write permission and any configured stable-ID restriction', async () => {
+    const network = vi.fn(async (url: RequestInfo | URL) => actorResponse(url, false));
     const github = new Github('token', network as typeof fetch);
     await expect(github.actor()).rejects.toMatchObject({ code: 'forbidden' });
-    network.mockImplementation(async (url: any) => Response.json(String(url).endsWith('/user') ? { id: 123, login: 'member' } : { permissions: { push: true } }));
+    network.mockImplementation(async (url: RequestInfo | URL) => actorResponse(url));
     await expect(github.actor('456')).rejects.toMatchObject({ code: 'forbidden' });
     await expect(github.actor('123')).resolves.toMatchObject({ id: 123 });
+  });
+  it.each([
+    { state: 'pending', organization: { id: 61075473 } },
+    { state: 'active', organization: { id: 1 } },
+    { state: 'active' },
+    {},
+    null,
+  ])('denies malformed, pending or different-organisation membership even with write access: %j', async membership => {
+    const network = vi.fn(async (url: RequestInfo | URL) => new URL(String(url)).pathname === '/user/memberships/orgs' ? Response.json([membership]) : actorResponse(url));
+    await expect(new Github('token', network as typeof fetch).actor()).rejects.toMatchObject({ code: 'forbidden', status: 403 });
+  });
+  it.each([404, 403, 500])('fails closed when the membership endpoint returns %i', async status => {
+    const network = vi.fn(async (url: RequestInfo | URL) => new URL(String(url)).pathname === '/user/memberships/orgs' ? new Response('PRIVATE_PROVIDER_BODY', { status }) : actorResponse(url));
+    await expect(new Github('token', network as typeof fetch).actor()).rejects.toMatchObject({ status: 502 });
+  });
+  it.each([{}, null, [activeMembership, ...Array(100).fill({})]])('denies malformed membership pages: %j', async page => {
+    const network = vi.fn(async (url: RequestInfo | URL) => new URL(String(url)).pathname === '/user/memberships/orgs' ? Response.json(page) : actorResponse(url));
+    await expect(new Github('token', network as typeof fetch).actor()).rejects.toMatchObject({ status: 502 });
+  });
+  it('checks later membership pages using bounded fixed GitHub URLs', async () => {
+    const pages: string[] = [];
+    const network = vi.fn(async (url: RequestInfo | URL) => {
+      const target = new URL(String(url));
+      if (target.pathname !== '/user/memberships/orgs') return actorResponse(url);
+      pages.push(target.href);
+      return Response.json(target.searchParams.get('page') === '1' ? Array(100).fill({state:'active',organization:{id:1}}) : [activeMembership]);
+    });
+    await expect(new Github('token', network as typeof fetch).actor()).resolves.toMatchObject({ id:123 });
+    expect(pages).toEqual([1,2].map(page => `https://api.github.com/user/memberships/orgs?state=active&per_page=100&page=${page}`));
+  });
+  it('denies missing membership and stops after ten full pages', async () => {
+    let pages = 0;
+    const network = vi.fn(async (url: RequestInfo | URL) => {
+      if (new URL(String(url)).pathname !== '/user/memberships/orgs') return actorResponse(url);
+      pages++; return Response.json(Array(100).fill({state:'active',organization:{id:1}}));
+    });
+    await expect(new Github('token', network as typeof fetch).actor()).rejects.toMatchObject({code:'forbidden'});
+    expect(pages).toBe(10);
+  });
+  it.each(['pending', 'missing', 'wrong-org', 'unavailable'])('denies authenticated writes before any repository mutation when membership is %s', async state => {
+    // Miniflare's external proxy rejects synthetic POST Origin headers before
+    // entering the Worker. Exercise a valid Origin/CSRF POST at the handler here;
+    // native tests separately prove OAuth and existing private-session denial.
+    const network = vi.fn(async (url: RequestInfo | URL, _init?: RequestInit) => {
+      if (new URL(String(url)).pathname !== '/user/memberships/orgs') return actorResponse(url);
+      if (state === 'unavailable') return new Response('PRIVATE_PROVIDER_BODY', {status:503});
+      return Response.json(state === 'missing' ? [] : [{state:state === 'pending' ? 'pending' : 'active',organization:{id:state === 'wrong-org' ? 1 : 61075473}}]);
+    });
+    vi.stubGlobal('fetch', network);
+    const cookie = await seal(env, 'session', session);
+    const result = await handleManagement(new Request(env.MANAGEMENT_ORIGIN+'/api/knowledge',{method:'POST',headers:{Cookie:`${SESSION_COOKIE}=${cookie}`,Origin:env.MANAGEMENT_ORIGIN,'Content-Type':'application/json','X-CSRF-Token':session.csrf},body:'{}'}),env);
+    expect(result.status).toBe(state === 'unavailable' ? 502 : 403);
+    expect(await result.text()).not.toContain('PRIVATE_PROVIDER_BODY');
+    expect(network.mock.calls.every(([,init]) => init?.method === 'GET')).toBe(true);
   });
   it('calls receiver-sensitive network APIs without binding the Github client as this', async () => {
     const network = function(this: unknown, url: RequestInfo | URL) {
       if (this !== undefined) throw new TypeError('Illegal invocation');
-      return Promise.resolve(Response.json(String(url).endsWith('/user') ? { id:123, login:'member' } : { permissions:{ push:true } }));
+      return Promise.resolve(actorResponse(url));
     };
     await expect(new Github('test-token', network as typeof fetch).actor()).resolves.toMatchObject({ id:123, login:'member' });
   });
@@ -64,7 +126,7 @@ describe('management security boundaries', () => {
     vi.stubGlobal('fetch', function(this:unknown, url:RequestInfo | URL) {
       if (this !== undefined && this !== globalThis) throw new TypeError('Illegal invocation');
       if (String(url).endsWith('/login/oauth/access_token')) return Promise.resolve(Response.json({ access_token:'known-test-user-token', expires_in:28800 }));
-      return Promise.resolve(Response.json(String(url).endsWith('/user') ? { id:123, login:'member' } : { permissions:{ push:true } }));
+      return Promise.resolve(actorResponse(url));
     });
     const result = await handleManagement(new Request(env.MANAGEMENT_ORIGIN + '/auth/callback?code=test-code&state=expected', { headers:{ Cookie:`${LOGIN_COOKIE}=${value}` } }), env);
     expect(result.status).toBe(302);
@@ -98,7 +160,7 @@ describe('management security boundaries', () => {
   });
   it('refuses revoked permissions on an existing session before serving private assets', async () => {
     const value = await seal(env, 'session', session);
-    vi.stubGlobal('fetch', vi.fn(async (url: any) => Response.json(String(url).endsWith('/user') ? { id: 123, login: 'member' } : { permissions: { push: false } })));
+    vi.stubGlobal('fetch', vi.fn(async (url: RequestInfo | URL) => actorResponse(url, false)));
     const result = await handleManagement(new Request(env.MANAGEMENT_ORIGIN + '/app.js', { headers: { Cookie: `${SESSION_COOKIE}=${value}` } }), env);
     expect(result.status).toBe(403); expect(await result.text()).not.toContain('PRIVATE UI');
     vi.unstubAllGlobals();

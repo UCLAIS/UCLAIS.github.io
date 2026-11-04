@@ -10,7 +10,7 @@ function redirect(location: string, cookies: string[] = []) {
   const values = headers(); values.set('Location', location); for (const cookie of cookies) values.append('Set-Cookie', cookie);
   return new Response(null, { status: 302, headers: values });
 }
-function login(message = 'Sign in with a GitHub account that has write access to the society website repository.', status = 200) {
+function login(message = 'Sign in with a GitHub account that is an active UCLAIS member and has write access to the society website repository.', status = 200) {
   const values = headers(); values.set('Content-Type', 'text/html; charset=utf-8');
   return new Response(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Society Management · UCL AI Society</title><style>body{background:#fdfbf8;color:#261c2e;font:16px/1.6 system-ui;margin:0}main{max-width:540px;margin:14vh auto;padding:32px;border-top:5px solid #2c1748}small{letter-spacing:.14em;text-transform:uppercase;color:#655b6a}h1{font:52px/1.1 Georgia;margin:28px 0}p{color:#655b6a}a{display:inline-block;padding:12px 20px;background:#2c1748;color:#fff;text-decoration:none;margin:20px 0}a:focus-visible{outline:3px solid #9472b8;outline-offset:4px}footer{font-size:13px;border-top:1px solid #d9d0dc;padding-top:24px;margin-top:30px}</style><main><small>UCL AI Society / Committee</small><h1>Society<br>Management.</h1><p>${escapeHtml(message)}</p><a href="/login">Continue with GitHub</a><footer>Knowledge, teaching materials and service status.<br>Uploads submitted to our public GitHub repository are public before a merge.</footer></main></html>`, { status, headers: values });
 }
@@ -55,7 +55,7 @@ export async function handleManagement(request: Request, env: ManagementEnv): Pr
     const session = await unseal<Session>(env, 'session', readCookie(request, SESSION_COOKIE));
     if (!session) return url.pathname.startsWith('/api/') ? response({ message: 'Sign in to continue.' }, 401) : login();
     const github = new Github(session.token);
-    const actor = await github.actor(env.ALLOWED_GITHUB_IDS); // Recheck permissions on every request, including assets.
+    const actor = await github.actor(env.ALLOWED_GITHUB_IDS); // Recheck active organisation membership and write access, including assets.
     if (request.method === 'POST') assertWrite(request, env, session);
     else if (!['GET', 'HEAD'].includes(request.method)) return response({ message: 'Method not allowed.' }, 405);
     if (url.pathname === '/api/session' && request.method === 'GET') return response({ user: actor, csrf: session.csrf, repository: REPO_URL });
