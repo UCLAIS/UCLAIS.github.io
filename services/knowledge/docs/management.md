@@ -53,7 +53,7 @@ pnpm management:gateway
 
 `management:build` bundles without deploying. `management:gateway` prepares a separate Pages advanced-mode gateway under `.generated/management-gateway/`. The knowledge CI workflow runs both without secrets. No workflow automatically deploys management.
 
-Keep the society's Cloudflare account on Workers Free. Deploy `wrangler.management.jsonc` only after configuring the GitHub App and secrets. The Worker has public `workers.dev` and preview URLs disabled, and its assets run through the Worker before delivery. A custom domain and free-plan upload CPU/memory/latency acceptance still require live verification. The 8 MiB upload limit bounds memory; it does not prove that maximum uploads fit Workers Free CPU. Quota exhaustion may stop access. Do not enable paid resources to bypass a failed check.
+Keep the society's Cloudflare account on Workers Free. Deploy `wrangler.management.jsonc` only after configuring the GitHub App and secrets. The Worker has public `workers.dev` and preview URLs disabled, and its assets run through the Worker before delivery. A live exact-8-MiB upload succeeded on Free on 4 November 2026; this is an acceptance check, not a guarantee of throughput or spare CPU under load. Quota exhaustion may stop access. Do not enable paid resources to bypass a failed check.
 
 DNS remains at IONOS, so do not assume a Workers Custom Domain can be attached directly without a Cloudflare zone. Use a **new, separate** Pages project named `uclai-management-gateway`, upload the generated gateway and bind **MANAGEMENT → uclai-management**. Configure its free-quota behaviour to **Fail closed**. Associate `manage.uclai.co.uk` in Pages first, then add only the `manage` CNAME pointing to the returned Pages hostname in IONOS. Preserve root, mail and MCP records. See [Pages subdomains with external DNS](https://developers.cloudflare.com/pages/configuration/custom-domains/).
 
@@ -66,32 +66,27 @@ Before release, verify:
 3. New and replacement deck pull requests, retained notes/downloads, source text search, safe viewer images and branch-protection checks.
 4. Website and MCP publication of the same merged release, and unavailable/stale service states.
 
-Local tests and dry runs do not establish that the GitHub App, DNS or Cloudflare deployment has been configured.
+Local tests and dry runs alone do not establish the external configuration. Keep actual provider and browser evidence separate from fixtures.
 
 See the [3 November security review](security-review-2026-11-03.md) for credential checks, the PDF sanitisation fix, dependency alerts and remaining acceptance checks.
 
-### Hosting setup checked on 3 November 2026
-
-The society account passed the existing free-only subscription check. The Pages project `uclai-management-gateway` has been created, and Cloudflare confirmed its hostname as `uclai-management-gateway.pages.dev`. The custom domain `manage.uclai.co.uk` is registered against that project and is awaiting DNS verification.
-
-IONOS now serves **CNAME `manage` → `uclai-management-gateway.pages.dev`**, with a 30-minute TTL. Both checked authoritative IONOS servers and public resolvers (1.1.1.1 and 8.8.8.8) confirmed the record after the user's correction. Cloudflare's DNS verification was retriggered; its dashboard reports that the records are being rechecked. Domain activation and a valid HTTPS connection still need confirmation. No further IONOS record changes are currently indicated.
-
-No successful initial gateway deployment has been confirmed. The management Worker, service binding, GitHub App and login secrets still need configuring and live acceptance. The existing deployment token can verify account subscriptions but returns 403 for Pages project access; it must not be replaced with a Global API Key.
-
-### Recheck on 4 November 2026
-
-The CNAME is still correct on both checked authoritative servers and public DNS. HTTPS now completes normal certificate verification, but both `https://manage.uclai.co.uk/` and `https://uclai-management-gateway.pages.dev/` return Cloudflare HTTP 522. After the user signed back into Cloudflare, its dashboard confirmed `manage.uclai.co.uk` is **Active / SSL enabled**. The gateway shows **Create your first deployment**, its bindings list is empty, and the account's complete three-application inventory has no `uclai-management` Worker. The remaining problem is undeployed application infrastructure, not a pending IONOS change. The existing public MCP separately reports `ready`.
-
-The local security/tests/build rerun passed, including a fresh management dry-run bundle. No deployment was performed. Complete the GitHub App and management Worker, bind the Pages gateway to it, deploy the gateway and run the live access checks before launch. After the user's explicit approval, the gateway's production quota setting was saved as **Fail closed** and independently verified after a dashboard reload. Quota exhaustion will therefore show an error rather than serving static assets without the gateway check.
-
-### Initial deployment on 4 November 2026
+### Deployment and acceptance, 4 November 2026
 
 After explicit approval for the app, credentials and final installation/publication actions, the management Worker and gateway were deployed on the verified free-only account. The GitHub App ID is `5613474`, its public client ID is `Iv23ctU0nUHFpxvIAb1g`, and installation `178606665` is restricted to the website repository. User-to-server token expiry is enabled. Webhooks, device flow and callback wildcard matching are disabled.
 
-`uclai-management` has the expected assets/rate-limit bindings and the two encrypted Worker secrets. Client/session secret values were transferred in memory and were not written to source, local credential files or diagnostic output. The temporary credential setup process was stopped after deployment. The gateway's production binding is **MANAGEMENT → uclai-management**, its quota behaviour is **Fail closed**, and Pages deployment `5ff3e477-ce54-4dc9-b2ed-0397757b2a7b` succeeded. DNS and SSL are active.
+`uclai-management` has the expected assets/rate-limit bindings and the two encrypted Worker secrets. Client/session secret values were transferred in memory and were not written to source, local credential files or diagnostic output. The temporary credential setup process was stopped after deployment. The gateway's production binding is **MANAGEMENT → uclai-management**, its quota behaviour is **Fail closed** (verified after reload), and Pages deployment `5ff3e477-ce54-4dc9-b2ed-0397757b2a7b` succeeded. IONOS serves CNAME `manage` → `uclai-management-gateway.pages.dev` with a 30-minute TTL. DNS and SSL are active; no further DNS change is indicated. The deployment token cannot access Pages, so its gateway was uploaded through the dashboard without broadening that token.
 
 Twelve live boundary checks passed: the login page is available, anonymous private APIs reject access, private assets return the login screen, the Pages hostname is rejected, invalid OAuth state fails, and login starts with PKCE and a secure host-only cookie. Cloudflare rejects Python's stock HTTP User-Agent before the app with error 1010; the checks used a browser-compatible client without a cookie jar. No edge protection was disabled.
 
-The first real authorised sign-in is awaiting the user: open the management page, select **Continue with GitHub**, then **Authorize**. Starting from the management page creates a fresh short-lived login transaction. Dashboard checks, representative/maximum-size upload acceptance, logout and live permission revocation remain unverified until that sign-in. The unused initial client secret is queued for the approved revocation after its replacement is verified. Do not describe the 8 MiB limit as proven compatible with Workers Free yet.
+The first production callback exposed Workers-specific fetch differences that Node mocks missed. GitHub requests now detach the native fetch receiver, use supported `redirect: 'manual'` and reject redirects. OAuth form encoding and safe error categories are explicit. Public status calls use `global_fetch_strictly_public` and an honest status User-Agent, allowing this Worker to reach the separate public MCP through its normal edge protections. Do not replace these settings with an authentication bypass or forward GitHub credentials to redirected hosts.
 
-Source and publishing changes are in [PR #82](https://github.com/UCLAIS/UCLAIS.github.io/pull/82). Both CI checks passed at `4b85a61`; the protected branch still requires review. Merge the publishing support before expecting PDF content proposals to publish successfully on the website and MCP. Management does not bypass branch protection or merge its own content proposals.
+Live browser acceptance passed as `@sometimesyash`:
+
+- Authorisation and repeat sign-in, account display, editable library and current workflow reads.
+- A Markdown proposal (#83), a 637-byte PDF proposal (#84), an exact 8,388,608-byte PDF proposal (#85) and a replacement proposal (#86). Downloaded Git blobs exactly matched both uploaded fixtures; paths and sidecars were correct. Replacement left the existing Markdown/notes and downloads unchanged. All four synthetic PRs were closed and their proposal branches deleted; none was merged or published.
+- Sign-out returned the login screen and the same browser's private session API denied access. Sign-in succeeded again after the unused initial client secret ending `5395e977` was revoked. GitHub confirms only the working replacement remains.
+- MCP and Luma report Healthy. Website and slide publication remain Unverified because the production website has not yet received the build-manifest support.
+
+The actual Workers runtime fixture checks native OAuth/fetch, redirects and immediate denial of an existing session after its repository-write permission is revoked. The full service suite has 319 passing tests across 25 files. No real maintainer permission was removed and no second non-maintainer GitHub account was used: those are not claimed as live acceptance results. The local pinned runtime predates the production compatibility date; that limitation is documented in the fixture.
+
+Source and publishing changes are in [PR #82](https://github.com/UCLAIS/UCLAIS.github.io/pull/82). Both CI checks passed at `1fe8286`; the protected branch still requires review. Merge the publishing support before expecting PDF content proposals to publish successfully on the website and MCP. A successful proposal is not a production publication. Management does not merge its own content proposals or invoke an administrator bypass.
