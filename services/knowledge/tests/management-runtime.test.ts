@@ -43,12 +43,11 @@ export default { async fetch(request) {
     if(request.headers.get('Authorization')!=='Bearer runtime-test-user-token') return new Response('Invalid test token',{status:401});
     if(redirectApi) return new Response('Do not follow',{status:302,headers:{Location:'https://forbidden.example/collect'}});
     if(url.pathname==='/user') return Response.json({id:123,login:'member'});
-    if(url.pathname==='/user/memberships/orgs') {
-      if(url.searchParams.get('state')!=='active'||url.searchParams.get('per_page')!=='100') return new Response('Unexpected membership query',{status:400});
-      if(membership==='missing') return Response.json([]);
+    if(url.pathname==='/user/memberships/orgs/UCLAIS') {
+      if(membership==='missing') return new Response('Not a member',{status:404});
       if(membership==='unavailable') return new Response('Provider unavailable',{status:503});
       if(membership==='blocked') return new Response('Missing app permission',{status:403});
-      return Response.json([{state:membership==='wrong-org'?'active':membership,organization:{id:membership==='wrong-org'?1:61075473}}]);
+      return Response.json({state:membership==='wrong-org'?'active':membership,organization:{id:membership==='wrong-org'?1:61075473}});
     }
     if(url.pathname==='/repos/UCLAIS/UCLAIS.github.io') return Response.json({permissions:{push:!revoked}});
     if(url.pathname.endsWith('/actions/runs')) return Response.json({workflow_runs:[]});

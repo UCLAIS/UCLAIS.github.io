@@ -9,7 +9,7 @@ const activeMembership = { state: 'active', organization: { id: 61075473 } };
 function actorResponse(url: RequestInfo | URL, push = true) {
   const path = new URL(String(url)).pathname;
   if (path === '/user') return Response.json({ id: 123, login: 'member' });
-  if (path === '/user/memberships/orgs') return Response.json([activeMembership]);
+  if (path === '/user/memberships/orgs/UCLAIS') return Response.json(activeMembership);
   if (path === '/repos/UCLAIS/UCLAIS.github.io') return Response.json({ permissions: { push } });
   throw new Error('Unexpected actor request.');
 }
@@ -51,45 +51,22 @@ describe('management security boundaries', () => {
     {},
     null,
   ])('denies malformed, pending or different-organisation membership even with write access: %j', async membership => {
-    const network = vi.fn(async (url: RequestInfo | URL) => new URL(String(url)).pathname === '/user/memberships/orgs' ? Response.json([membership]) : actorResponse(url));
+    const network = vi.fn(async (url: RequestInfo | URL) => new URL(String(url)).pathname === '/user/memberships/orgs/UCLAIS' ? Response.json(membership) : actorResponse(url));
     await expect(new Github('token', network as typeof fetch).actor()).rejects.toMatchObject({ code: 'forbidden', status: 403 });
   });
   it.each([404, 403, 500])('fails closed when the membership endpoint returns %i', async status => {
-    const network = vi.fn(async (url: RequestInfo | URL) => new URL(String(url)).pathname === '/user/memberships/orgs' ? new Response('PRIVATE_PROVIDER_BODY', { status }) : actorResponse(url));
-    await expect(new Github('token', network as typeof fetch).actor()).rejects.toMatchObject({ status: 502 });
-  });
-  it.each([{}, null, [activeMembership, ...Array(100).fill({})]])('denies malformed membership pages: %j', async page => {
-    const network = vi.fn(async (url: RequestInfo | URL) => new URL(String(url)).pathname === '/user/memberships/orgs' ? Response.json(page) : actorResponse(url));
-    await expect(new Github('token', network as typeof fetch).actor()).rejects.toMatchObject({ status: 502 });
-  });
-  it('checks later membership pages using bounded fixed GitHub URLs', async () => {
-    const pages: string[] = [];
-    const network = vi.fn(async (url: RequestInfo | URL) => {
-      const target = new URL(String(url));
-      if (target.pathname !== '/user/memberships/orgs') return actorResponse(url);
-      pages.push(target.href);
-      return Response.json(target.searchParams.get('page') === '1' ? Array(100).fill({state:'active',organization:{id:1}}) : [activeMembership]);
-    });
-    await expect(new Github('token', network as typeof fetch).actor()).resolves.toMatchObject({ id:123 });
-    expect(pages).toEqual([1,2].map(page => `https://api.github.com/user/memberships/orgs?state=active&per_page=100&page=${page}`));
-  });
-  it('denies missing membership and stops after ten full pages', async () => {
-    let pages = 0;
-    const network = vi.fn(async (url: RequestInfo | URL) => {
-      if (new URL(String(url)).pathname !== '/user/memberships/orgs') return actorResponse(url);
-      pages++; return Response.json(Array(100).fill({state:'active',organization:{id:1}}));
-    });
-    await expect(new Github('token', network as typeof fetch).actor()).rejects.toMatchObject({code:'forbidden'});
-    expect(pages).toBe(10);
+    const network = vi.fn(async (url: RequestInfo | URL) => new URL(String(url)).pathname === '/user/memberships/orgs/UCLAIS' ? new Response('PRIVATE_PROVIDER_BODY', { status }) : actorResponse(url));
+    await expect(new Github('token', network as typeof fetch).actor()).rejects.toMatchObject({ status: status === 404 ? 403 : 502 });
   });
   it.each(['pending', 'missing', 'wrong-org', 'unavailable'])('denies authenticated writes before any repository mutation when membership is %s', async state => {
     // Miniflare's external proxy rejects synthetic POST Origin headers before
     // entering the Worker. Exercise a valid Origin/CSRF POST at the handler here;
     // native tests separately prove OAuth and existing private-session denial.
     const network = vi.fn(async (url: RequestInfo | URL, _init?: RequestInit) => {
-      if (new URL(String(url)).pathname !== '/user/memberships/orgs') return actorResponse(url);
+      if (new URL(String(url)).pathname !== '/user/memberships/orgs/UCLAIS') return actorResponse(url);
       if (state === 'unavailable') return new Response('PRIVATE_PROVIDER_BODY', {status:503});
-      return Response.json(state === 'missing' ? [] : [{state:state === 'pending' ? 'pending' : 'active',organization:{id:state === 'wrong-org' ? 1 : 61075473}}]);
+      if (state === 'missing') return new Response('Not a member', {status:404});
+      return Response.json({state:state === 'pending' ? 'pending' : 'active',organization:{id:state === 'wrong-org' ? 1 : 61075473}});
     });
     vi.stubGlobal('fetch', network);
     const cookie = await seal(env, 'session', session);
