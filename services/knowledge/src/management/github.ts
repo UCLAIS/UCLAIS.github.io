@@ -10,11 +10,14 @@ export class Github {
   async api<T = any>(path: string, options: { method?: string; body?: unknown } = {}): Promise<T> {
     const network = this.network; // Workers' native fetch must not receive this class as its receiver.
     const response = await network(`https://api.github.com${path}`, {
-      method: options.method || 'GET', redirect: 'error', signal: AbortSignal.timeout(20000),
+      method: options.method || 'GET', redirect: 'manual', signal: AbortSignal.timeout(20000),
       headers: { Authorization: `Bearer ${this.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'UCLAI-Committee' },
       ...(options.body !== undefined ? { body: JSON.stringify(options.body) } : {}),
     });
-    if (!response.ok) throw new KnowledgeError('github_unavailable', response.status === 401 ? 'GitHub sign-in expired. Sign out and sign in again.' : response.status === 403 || response.status === 429 ? 'GitHub refused this request. Check repository access or try again later.' : 'GitHub could not complete this request. Refresh before retrying.', response.status === 401 ? 401 : 502);
+    if (!response.ok) {
+      await response.body?.cancel();
+      throw new KnowledgeError('github_unavailable', response.status === 401 ? 'GitHub sign-in expired. Sign out and sign in again.' : response.status === 403 || response.status === 429 ? 'GitHub refused this request. Check repository access or try again later.' : 'GitHub could not complete this request. Refresh before retrying.', response.status === 401 ? 401 : 502);
+    }
     return response.status === 204 ? undefined as T : await response.json() as T;
   }
   repo<T = any>(path = '', options: { method?: string; body?: unknown } = {}) { return this.api<T>(`/repos/${REPOSITORY}${path}`, options); }

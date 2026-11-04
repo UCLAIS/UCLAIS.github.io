@@ -39,7 +39,7 @@ export async function handleManagement(request: Request, env: ManagementEnv): Pr
       const code = requiredString(url.searchParams.get('code'), /^[A-Za-z0-9_\-]{1,200}$/, 'GitHub did not return an authorisation code.');
       let upstream: Response;
       try {
-        upstream = await fetch('https://github.com/login/oauth/access_token', { method: 'POST', redirect: 'error', credentials: 'omit', signal: AbortSignal.timeout(15000), headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': 'UCLAI-Committee' }, body: new URLSearchParams({ client_id: env.GITHUB_CLIENT_ID, client_secret: env.GITHUB_CLIENT_SECRET, redirect_uri: `${managementOrigin}/auth/callback`, code, code_verifier: transaction.verifier }).toString() });
+        upstream = await fetch('https://github.com/login/oauth/access_token', { method: 'POST', redirect: 'manual', credentials: 'omit', signal: AbortSignal.timeout(15000), headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': 'UCLAI-Committee' }, body: new URLSearchParams({ client_id: env.GITHUB_CLIENT_ID, client_secret: env.GITHUB_CLIENT_SECRET, redirect_uri: `${managementOrigin}/auth/callback`, code, code_verifier: transaction.verifier }).toString() });
       } catch { throw new KnowledgeError('login_network', 'GitHub sign-in is temporarily unavailable. Start again shortly.', 502); }
       if (!upstream.ok) { await upstream.body?.cancel(); throw new KnowledgeError('login_response', 'GitHub could not complete sign-in. Start again shortly.', 502); }
       let token: { access_token?: string; expires_in?: number; error?: string };

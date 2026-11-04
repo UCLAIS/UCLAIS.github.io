@@ -4,8 +4,8 @@ type State = 'ready' | 'degraded' | 'unavailable' | 'unknown';
 export interface Check { id: string; name: string; state: State; detail: string; url: string; checkedAt: string }
 export interface WebsiteStatus { releaseId: string; commit: string; materials: { path: string; presentation?: string; firstSlide?: string; slideCount: number }[] }
 async function json(url: string) {
-  const response = await fetch(url, { redirect: 'error', signal: AbortSignal.timeout(12000), headers: { Accept: 'application/json', 'Cache-Control': 'no-cache' } });
-  if (!response.ok) throw new Error('unavailable');
+  const response = await fetch(url, { redirect: 'manual', signal: AbortSignal.timeout(12000), headers: { Accept: 'application/json', 'Cache-Control': 'no-cache' } });
+  if (!response.ok) { await response.body?.cancel(); throw new Error('unavailable'); }
   return await response.json() as any;
 }
 
@@ -30,7 +30,7 @@ export async function toolingStatus(github: Github) {
   // Sample one cover per deck, bounded to eight. Never fetch a manifest-controlled external URL.
   const samples = await Promise.allSettled(decks.slice(0, 8).map(async deck => {
     if (!/^\/materials\/[A-Za-z0-9_./-]+\.(webp|png|jpe?g)$/.test(deck.firstSlide || '') || deck.firstSlide!.split('/').some(part => part === '..')) throw new Error('invalid_asset');
-    const response = await fetch(`https://uclai.co.uk${deck.firstSlide}`, { method: 'HEAD', redirect: 'error', signal: AbortSignal.timeout(12000) });
+    const response = await fetch(`https://uclai.co.uk${deck.firstSlide}`, { method: 'HEAD', redirect: 'manual', signal: AbortSignal.timeout(12000) });
     if (!response.ok || !response.headers.get('Content-Type')?.startsWith('image/')) throw new Error('missing_asset');
   }));
   add('slides', 'Slide library', !manifest || !decks.length ? 'unknown' : samples.some(item => item.status === 'rejected') ? 'degraded' : 'ready', !manifest ? 'The website build manifest is unavailable.' : !decks.length ? 'No published decks were recorded in the build.' : `${decks.length} decks validated at build time. Spot checked ${samples.length} cover images on the live site.`, 'https://uclai.co.uk/our-initiatives/tutorials/');
