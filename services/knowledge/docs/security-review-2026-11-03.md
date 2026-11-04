@@ -60,6 +60,19 @@ Other matches include old parsers, bundlers, network helpers, KaTeX and PrismJS.
 1. Configure the GitHub App and Worker secrets, then verify real authorised and rejected sign-ins, exact host enforcement, private asset rejection, logout and access revocation. Local mocked tests do not establish the external configuration.
 2. Verify representative and maximum-size PDF submissions on Workers Free, including CPU/memory limits, and keep quota handling fail closed.
 3. Submit and review a content proposal, then verify both website and MCP publication of the same approved release. Existing CI checks have been run locally; no audit changes have been deployed.
-4. Correct IONOS `manage`: authoritative DNS currently returns A `217.160.0.122`, rather than CNAME `uclai-management-gateway.pages.dev`. Verify the certificate and domain after correcting that record.
+4. Complete the management Worker, service binding and gateway deployment. The user corrected IONOS after the initial audit: two authoritative servers and public resolvers confirm CNAME `manage` → `uclai-management-gateway.pages.dev` (TTL 1,800 seconds). HTTPS verification failed on 3 November but passes on 4 November. Cloudflare confirms the custom domain is active with SSL enabled; the undeployed infrastructure and remaining HTTP 522 are recorded below.
 
 Local scan details and redacted machine reports are in `/private/tmp/uclai-security-review-20261103/`. They contain no intentionally recorded credential values and are temporary audit evidence, not deployment inputs.
+
+## Verification rerun, 4 November 2026
+
+Rechecked commit `2f69b5d` with the local DNS/runbook updates. No code changes or deployments were made during this rerun.
+
+- Credential scans of the 454-file source snapshot, all reachable history, regenerated knowledge/gateway artefacts, the fresh management bundle and sampled live website text assets returned no candidates. Exact comparison against the locally configured credential found no matches in 4,811 reachable Git blobs or 470 checked artefact files.
+- GitHub secret scanning and push protection remain enabled. The secret alerts API returned no alerts.
+- The refreshed management/knowledge dependency audit has zero advisories. The unchanged website lockfile still has 54 affected packages: the current registry response contains 162 distinct advisory URLs and 174 package/advisory matches, including four critical matches. The difference from the previous count reflects advisory metadata, not a dependency fix.
+- Passed: all 311 service tests, TypeScript checking, two slide PDF regression tests, seven extraction/security tests, seven website plugin tests, the isolated production publication integration build, and public/management Worker dry-run bundles. The first website trial selected system Python without pypdf; rerunning with the existing bundled PDF runtime passed. No production setting was changed to bypass a failed check.
+- DNS correctly resolves `manage` to `uclai-management-gateway.pages.dev`. HTTPS passes certificate verification, but the management hostname and Pages hostname both return HTTP 522. The public MCP health endpoint still reports `ready`. After the user signed in again, Cloudflare confirmed the domain is Active / SSL enabled, the gateway has no deployments or service binding, and the complete application inventory has no management Worker. This is incomplete application setup, rather than a DNS propagation issue.
+- After explicit user approval, the gateway's production quota behaviour was saved as Fail closed and verified after reloading the dashboard. This is a persistent availability setting: exhaustion of the free Pages Functions quota will show an error rather than continue serving static assets. No application deployment was performed.
+
+Fresh temporary evidence is in `/private/tmp/uclai-security-review-20261104/`, with service/build logs in `/private/tmp/uclai-*-recheck-20261104.*`. The previous website advisory backlog and real GitHub/Workers Free acceptance checks remain outstanding. Management is not cleared for launch.
