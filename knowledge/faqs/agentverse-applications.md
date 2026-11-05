@@ -13,7 +13,7 @@ attribution: UCL AI Society
 
 AgentVerse applications are closed.
 
-Decisions will be sent out by early Monday 2 November 2026 at the latest. Some partner decisions will be sent by late Monday 2 November 2026.
+Decisions will be sent out by early Monday 2 November 2026 at the latest. Some partner decisions will be sent by late Monday 2 November 2026. All decisions have now been sent out.
 
 If your application is accepted, we will send you a check-in email shortly afterwards. Completing the check-in is mandatory. You must complete it by **23:59 (UK time) on Tuesday 3 November 2026**.
 
