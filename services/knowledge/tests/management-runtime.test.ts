@@ -50,6 +50,8 @@ export default { async fetch(request) {
       return Response.json({state:membership==='wrong-org'?'active':membership,organization:{id:membership==='wrong-org'?1:61075473}});
     }
     if(url.pathname==='/repos/UCLAIS/UCLAIS.github.io') return Response.json({permissions:{push:!revoked}});
+    if(url.pathname==='/repos/UCLAIS/UCLAIS.github.io/pulls/89') return Response.json({state:'open',draft:false,title:'Review fixture',user:{id:456,login:'author'},base:{ref:'main',repo:{full_name:'UCLAIS/UCLAIS.github.io'}},head:{sha:'a'.repeat(40),ref:'committee/fixture',repo:{full_name:'UCLAIS/UCLAIS.github.io'}},changed_files:1});
+    if(url.pathname==='/repos/UCLAIS/UCLAIS.github.io/pulls/89/files') return Response.json([{filename:'knowledge/faqs/example.md',status:'modified',patch:'@@ -1 +1 @@\\n-Old\\n+New'}]);
     if(url.pathname.endsWith('/actions/runs')) return Response.json({workflow_runs:[]});
     if(url.pathname.endsWith('/commits/main')) return Response.json({sha:'b'.repeat(40),commit:{tree:{sha:'c'.repeat(40)}}});
     if(url.pathname.includes('/git/trees/')) return Response.json({truncated:false,tree:[{path:'knowledge/faqs/example.md',type:'blob',mode:'100644',size:20,sha:'d'.repeat(40)}]});
@@ -76,6 +78,8 @@ export default { async fetch(request) {
     expect(await ui.text()).toBe('PRIVATE MANAGEMENT UI');
     const library = await app.fetch(origin+'/api/library',{headers});
     expect(library.status).toBe(200); expect(await library.json()).toMatchObject({files:[{path:'knowledge/faqs/example.md'}]});
+    const review = await app.fetch(origin+'/api/proposal?number=89',{headers});
+    expect(review.status).toBe(200); expect(await review.json()).toMatchObject({number:89,canApprove:true,head:'a'.repeat(40),files:[{path:'knowledge/faqs/example.md'}]});
     const status = await app.fetch(origin+'/api/status',{headers});
     expect(status.status).toBe(200);
     const body = await status.json() as any;

@@ -7,7 +7,7 @@ The management service is a separate authenticated Worker at `https://manage.ucl
 - Edit Markdown under `knowledge/faqs`, `guides`, `tutorials` and `nexus`.
 - Add or replace PDF slide decks up to 8 MiB. Export PowerPoint or Google Slides to PDF before uploading. Selectable PDF text is required; image-only decks fail the knowledge checks.
 - Show website publication, MCP health and release alignment, Luma feed freshness, slide build validation and bounded cover-image checks. Checks run on opening Overview or pressing Refresh. There is no unattended monitoring.
-- Show pending management pull requests and recent website/knowledge workflow runs. Review and merge on GitHub using the repository's normal rules.
+- Show open management pull requests and recent website/knowledge workflow runs. Another member can review the changed files and approve through this page; GitHub records the review under their own account. Merge on GitHub using the repository's normal rules.
 
 The pinned external archive remains maintained through its existing importer. Editing arbitrary website code, notebook uploads, learning-path administration, deleting material, merging pull requests and rerunning workflows are outside this first version.
 
@@ -34,6 +34,8 @@ All management assets and APIs check the user's current active UCLAIS membership
 ## Publication and PDF processing
 
 Every save uses a fixed base commit. A changed `main` causes a conflict instead of silently overwriting newer work. Successful submissions create unique `committee/*` branches and pull requests. If GitHub saves a branch but does not confirm a pull request, the error names the branch for recovery; do not blindly resubmit.
+
+**Review and approve** opens the submission's file changes and links to its GitHub files, including PDFs. Text is displayed as plain text. Previews are bounded; omitted or truncated changes must be reviewed on GitHub before confirming. The API supports only open, non-draft `committee/*` branches within the website repository targeting `main`, checks a complete file list (at most 100 files), rejects the author's own approval and refuses a head commit changed since the reviewer opened it. Approval requires a valid session, CSRF/Origin checks and explicit confirmation, then sends `APPROVE` with the reviewed `commit_id` through the reviewer's own GitHub token. It neither merges the PR nor changes branch rules; GitHub decides whether the review satisfies its requirements. No new app permission is needed. A reviewer should still inspect build failures and all changed files, including any manually added code.
 
 New session paths are generated on the server from the collection, academic year, optional series/session number and title. For example, “Multivariate Regression” in Tutorials for 2026/27 becomes `knowledge/tutorials/2026-27/multivariate-regression.md`. The upload form needs no manually entered path. A collision with an existing source, sidecar or PDF is refused; choose the existing session in the replacement list or use a different title. Replacements retain their existing URL.
 

@@ -3,6 +3,7 @@ import { limitedText, escapeHtml } from '../browser';
 import { assertWrite, challenge, LOGIN_COOKIE, ManagementEnv, origin, random, readCookie, seal, Session, SESSION_COOKIE, sessionCookie, unseal } from './auth';
 import { Github, knowledgePath, newSlideDetails, REPO_URL, safeText, slidePath } from './github';
 import { toolingStatus } from './status';
+import { approveProposal, proposalNumber, proposalReview } from './reviews';
 
 const headers = () => new Headers({ 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', 'X-Frame-Options': 'DENY', 'Content-Security-Policy': "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'" });
 const response = (value: unknown, status = 200) => Response.json(value, { status, headers: headers() });
@@ -74,6 +75,13 @@ export async function handleManagement(request: Request, env: ManagementEnv): Pr
       return response({ path, content: await github.text(entry), commit: snapshot.commit });
     }
     if (url.pathname === '/api/status' && request.method === 'GET') return response(await toolingStatus(github));
+    if (url.pathname === '/api/proposal' && request.method === 'GET') return response(await proposalReview(github, proposalNumber(url.searchParams.get('number')), actor.id));
+    if (url.pathname === '/api/approve' && request.method === 'POST') {
+      const input = JSON.parse(await limitedText(request, 8192));
+      if (input.reviewed !== true) throw new KnowledgeError('review_required', 'Review the changes and confirm before approving.', 400);
+      const head = requiredString(input.head, /^[a-f0-9]{40}$/, 'Reopen the submission before approving.');
+      return response(await approveProposal(github, proposalNumber(input.number), head, actor.id), 201);
+    }
     if (url.pathname === '/api/proposals' && request.method === 'GET') {
       const pulls = await github.repo<any[]>('/pulls?state=open&base=main&per_page=100');
       return response({ proposals: pulls.filter(item => item.head?.ref?.startsWith('committee/')).map(item => ({ title: item.title, url: item.html_url, number: item.number, author: item.user.login, updatedAt: item.updated_at })) });
