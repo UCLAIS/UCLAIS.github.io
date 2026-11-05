@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "pdf": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slides.pdf",
+  "slides": [
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-001.webp",
+      "width": 1600,
+      "height": 901,
+      "text": "MACHINE LEARNING TUTORIAL SERIES\nIntro to Machine Learning\nSession 2 of 7"
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-002.webp",
+      "width": 1600,
+      "height": 901,
+      "text": "Recap of lecture 1:"
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-003.webp",
+      "width": 1600,
+      "height": 901,
+      "text": ""
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-004.webp",
+      "width": 1600,
+      "height": 901,
+      "text": ""
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-005.webp",
+      "width": 1600,
+      "height": 901,
+      "text": ""
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-006.webp",
+      "width": 1600,
+      "height": 901,
+      "text": ""
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-007.webp",
+      "width": 1600,
+      "height": 901,
+      "text": "Where does this fall short?"
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-008.webp",
+      "width": 1600,
+      "height": 901,
+      "text": ""
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-009.webp",
+      "width": 1600,
+      "height": 901,
+      "text": ""
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-010.webp",
+      "width": 1600,
+      "height": 901,
+      "text": ""
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-011.webp",
+      "width": 1600,
+      "height": 901,
+      "text": "MACHINE LEARNING TUTORIAL SERIES\nMultivariate Regression"
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-012.webp",
+      "width": 1600,
+      "height": 901,
+      "text": "Beyond One Dimension\nBy setting a constant dummy feature x(0) = 1, the intercept b is \nabsorbed into the weight vector as w(0). This simplifies the \nprediction equation. \nAbsorbing the Bias"
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-013.webp",
+      "width": 1600,
+      "height": 901,
+      "text": "Beyond One Dimension"
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-014.webp",
+      "width": 1600,
+      "height": 901,
+      "text": "Beyond One Dimension\n"
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-015.webp",
+      "width": 1600,
+      "height": 901,
+      "text": "Can a the model fit a curve?"
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-016.webp",
+      "width": 1600,
+      "height": 901,
+      "text": "Polynomial Features\nONE INPUT, MANY FEATURES\nAS A WEIGHT VECTOR\n"
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-017.webp",
+      "width": 1600,
+      "height": 901,
+      "text": "The Design Matrix\nSquared Error\nSame loss as before, now over four \nweights.\nNormal Equations\nEach power of x is just another \ncolumn of X.\n"
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-018.webp",
+      "width": 1600,
+      "height": 901,
+      "text": "Choosing the Degree\nDegree 1\nUnderfits: a straight line \ncannot bend.\nDegree 4\nTracks the curve well, and is \nthe most accurate model\nDegree 3\nOverfits: Tracks every point \nperfectly, with the lowest \nerror, but generalises terribly. \n"
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-019.webp",
+      "width": 1600,
+      "height": 901,
+      "text": "Why Scale Features?\nThe Problem\nFor x between 0 and 10, x³ is 100 times larger \nthan x. The error calculation is almost 100% \ndominated by 𝑥3. The algorithm completely \nignores 𝑥 and 𝑥2, effectively throwing away \nthose features."
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-020.webp",
+      "width": 1600,
+      "height": 901,
+      "text": "Feature Scaling\nStandardization\nMean 0, standard deviation 1. \nThe usual default.\nMin–Max\nSqueezes each column \ninto the range 0 to 1.\nRules of thumb:  scale x, x² and x³ separately, leave the column of 1s alone, and compute μ and σ on training \ndata only, then reuse them at prediction time."
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-021.webp",
+      "width": 1600,
+      "height": 901,
+      "text": "Scaled Gradient Descent\nUnscaled\nLearning rate must stay below 1.7×10−5. Loss \nis still 1.77 after 300 steps.\nStandardized\nA learning rate of 0.3 is stable. Loss is 0.83 \nafter 300 steps."
+    },
+    {
+      "src": "/materials/_generated/tutorials/machine-learning/intro-to-mr/slide-022.webp",
+      "width": 1600,
+      "height": 901,
+      "text": "Key Takeaways\n1\nAdd columns\nTreat x, x² and x³ as separate \nfeatures.\n2\nSolve as before\nUse the normal equations or \ngradient descent on the \ndesign matrix X.\n3\nScale first\nStandardize each power of x, \nbut not the bias column, so \ntraining is fast and stable."
+    }
+  ],
+  "files": []
+}
