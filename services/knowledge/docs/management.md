@@ -7,13 +7,13 @@ The management service is a separate authenticated Worker at `https://manage.ucl
 - Edit Markdown under `knowledge/faqs`, `guides`, `tutorials` and `nexus`.
 - Add or replace PDF slide decks up to 8 MiB. Export PowerPoint or Google Slides to PDF before uploading. Selectable PDF text is required; image-only decks fail the knowledge checks.
 - Show website publication, MCP health and release alignment, Luma feed freshness, slide build validation and bounded cover-image checks. Checks run on opening Overview or pressing Refresh. There is no unattended monitoring.
-- Show pending management pull requests and recent website/knowledge workflow runs. Review and merge on GitHub using the repository's normal rules.
+- Show open management pull requests and recent website/knowledge workflow runs. Another member can review the changed files and approve through this page; GitHub records the review under their own account. Merge on GitHub using the repository's normal rules.
 
 The pinned external archive remains maintained through its existing importer. Editing arbitrary website code, notebook uploads, learning-path administration, deleting material, merging pull requests and rerunning workflows are outside this first version.
 
 ## Access and credentials
 
-The registered **GitHub App** is **UCL AI Society Management**, owned by **UCLAIS** and installed on **only `UCLAIS/UCLAIS.github.io`**. Its homepage is `https://manage.uclai.co.uk` and callback is `https://manage.uclai.co.uk/auth/callback`. Retain these repository permissions:
+The registered **GitHub App** is **UCL AI Society Management**, owned by **UCLAIS** and installed on **only `UCLAIS/UCLAIS.github.io`**. Its homepage is `https://manage.uclai.co.uk` and callback is `https://manage.uclai.co.uk/auth/callback`. Access requires **active UCLAIS membership and repository write access**. Retain these permissions:
 
 | Permission | Access | Purpose |
 | --- | --- | --- |
@@ -21,16 +21,23 @@ The registered **GitHub App** is **UCL AI Society Management**, owned by **UCLAI
 | Pull requests | Read and write | Submit changes for review |
 | Actions | Read | Report existing build/deployment runs |
 | Metadata | Read | Verify the repository and user access |
+| Members (organisation) | Read | Verify active UCLAIS membership |
+
+The membership check uses `/user/memberships/orgs/UCLAIS` and verifies the organisation's stable numeric ID (`61075473`). It supports private memberships. Pending invitations, non-members (including outside collaborators with repository write access), a different organisation and unverifiable membership are denied. Membership is checked again on every private request, so an existing session cannot retain access after removal. The read-only Members permission must also be approved on the existing UCLAIS installation. Older user grants may need renewed sign-in. See [GitHub's membership endpoint documentation](https://docs.github.com/en/rest/orgs/members#get-an-organization-membership-for-the-authenticated-user).
 
 Leave webhooks and device flow disabled. Enable expiring user access tokens. Users authorise the app through OAuth with S256 PKCE. The service uses each user's token, so GitHub constrains actions to both the app's permissions and the user's permissions. No app private key or installation token is needed. See [GitHub's user authorisation documentation](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-user-access-token-for-a-github-app).
 
-Set `GITHUB_CLIENT_ID` and `MANAGEMENT_ORIGIN` in the management configuration. Set `GITHUB_CLIENT_SECRET` and `SESSION_SECRET` with Wrangler's secret input or the Cloudflare dashboard, never a committed file or public website variable. Generate `SESSION_SECRET` from at least 32 cryptographically random bytes, encoded as base64. The code requires at least 43 characters. Optional `ALLOWED_GITHUB_IDS` further restricts access to comma-separated stable numeric IDs; it does not replace the repository-write requirement.
+Set `GITHUB_CLIENT_ID` and `MANAGEMENT_ORIGIN` in the management configuration. Set `GITHUB_CLIENT_SECRET` and `SESSION_SECRET` with Wrangler's secret input or the Cloudflare dashboard, never a committed file or public website variable. Generate `SESSION_SECRET` from at least 32 cryptographically random bytes, encoded as base64. The code requires at least 43 characters. Optional `ALLOWED_GITHUB_IDS` further restricts access to comma-separated stable numeric IDs; it does not replace either membership or repository-write requirements. Organisation-wide access uses no individual allowlist.
 
-All management assets and APIs check the user's current repository write access. The session lasts at most one hour and is an encrypted, authenticated, host-only Secure/HttpOnly cookie. JavaScript receives only a CSRF nonce, never the GitHub token. Writes also require the exact management Origin. Sessions have no server-side store: signing out clears the browser cookie, and a copied cookie remains usable until its expiry or GitHub access revocation. Rotating `SESSION_SECRET` invalidates all sessions. Do not add a production authentication bypass for previews.
+All management assets and APIs check the user's current active UCLAIS membership and repository write access. The session lasts at most one hour and is an encrypted, authenticated, host-only Secure/HttpOnly cookie. JavaScript receives only a CSRF nonce, never the GitHub token. Writes also require the exact management Origin. Sessions have no server-side store: signing out clears the browser cookie, and a copied cookie remains usable until its expiry or GitHub access revocation. Rotating `SESSION_SECRET` invalidates all sessions. Do not add a production authentication bypass for previews.
 
 ## Publication and PDF processing
 
 Every save uses a fixed base commit. A changed `main` causes a conflict instead of silently overwriting newer work. Successful submissions create unique `committee/*` branches and pull requests. If GitHub saves a branch but does not confirm a pull request, the error names the branch for recovery; do not blindly resubmit.
+
+**Review and approve** opens the submission's file changes and links to its GitHub files, including PDFs. Text is displayed as plain text. Previews are bounded; omitted or truncated changes must be reviewed on GitHub before confirming. The API supports only open, non-draft `committee/*` branches within the website repository targeting `main`, checks a complete file list (at most 100 files), rejects the author's own approval and refuses a head commit changed since the reviewer opened it. Approval requires a valid session, CSRF/Origin checks and explicit confirmation, then sends `APPROVE` with the reviewed `commit_id` through the reviewer's own GitHub token. It neither merges the PR nor changes branch rules; GitHub decides whether the review satisfies its requirements. No new app permission is needed. A reviewer should still inspect build failures and all changed files, including any manually added code.
+
+New session paths are generated on the server from the collection, academic year, optional series/session number and title. For example, “Multivariate Regression” in Tutorials for 2026/27 becomes `knowledge/tutorials/2026-27/multivariate-regression.md`. The upload form needs no manually entered path. A collision with an existing source, sidecar or PDF is refused; choose the existing session in the replacement list or use a different title. Replacements retain their existing URL.
 
 New decks produce a canonical Markdown file, a `.meta.json` sidecar and a PDF under `knowledge-assets/slides/<canonical-path-without-extension>/source.pdf`. The sidecar's `slides` field must match that exact path. Replacing a deck preserves the canonical file, metadata and existing additional downloads. **Written notes remain independently maintained and must be reviewed for consistency with the replacement PDF.**
 
@@ -51,7 +58,7 @@ pnpm management:build
 pnpm management:gateway
 ```
 
-`management:build` bundles without deploying. `management:gateway` prepares a separate Pages advanced-mode gateway under `.generated/management-gateway/`. The knowledge CI workflow runs both without secrets. No workflow automatically deploys management.
+`management:build` bundles without deploying. `management:gateway` prepares a separate Pages advanced-mode gateway under `.generated/management-gateway/`. The knowledge CI workflow runs both without secrets. The isolated website publication check also copies existing `knowledge-assets/slides` alongside the canonical knowledge files, so uploaded PDFs remain available for validation and rendering. No workflow automatically deploys management.
 
 Keep the society's Cloudflare account on Workers Free. Deploy `wrangler.management.jsonc` only after configuring the GitHub App and secrets. The Worker has public `workers.dev` and preview URLs disabled, and its assets run through the Worker before delivery. A live exact-8-MiB upload succeeded on Free on 4 November 2026; this is an acceptance check, not a guarantee of throughput or spare CPU under load. Quota exhaustion may stop access. Do not enable paid resources to bypass a failed check.
 
@@ -85,8 +92,8 @@ Live browser acceptance passed as `@sometimesyash`:
 - Authorisation and repeat sign-in, account display, editable library and current workflow reads.
 - A Markdown proposal (#83), a 637-byte PDF proposal (#84), an exact 8,388,608-byte PDF proposal (#85) and a replacement proposal (#86). Downloaded Git blobs exactly matched both uploaded fixtures; paths and sidecars were correct. Replacement left the existing Markdown/notes and downloads unchanged. All four synthetic PRs were closed and their proposal branches deleted; none was merged or published.
 - Sign-out returned the login screen and the same browser's private session API denied access. Sign-in succeeded again after the unused initial client secret ending `5395e977` was revoked. GitHub confirms only the working replacement remains.
-- MCP and Luma report Healthy. Website and slide publication remain Unverified because the production website has not yet received the build-manifest support.
+- Initially, MCP and Luma reported Healthy while website and slide publication remained Unverified pending the publishing merge. After the user's explicitly approved one-time administrator merge of PR #82, website and knowledge deployments completed at `eed0a51`. Both public services serve release `456feaf0ffca9355d8f06b8502301b36474d0be1712196b3d4895d3ebc5e2203`; both published cover images loaded and all four dashboard checks reported Healthy. Public MCP SDK initialisation, the five read-only tools and a search call also passed.
 
 The actual Workers runtime fixture checks native OAuth/fetch, redirects and immediate denial of an existing session after its repository-write permission is revoked. The full service suite has 319 passing tests across 25 files. No real maintainer permission was removed and no second non-maintainer GitHub account was used: those are not claimed as live acceptance results. The local pinned runtime predates the production compatibility date; that limitation is documented in the fixture.
 
-Source and publishing changes are in [PR #82](https://github.com/UCLAIS/UCLAIS.github.io/pull/82). Both CI checks passed at `1fe8286`; the protected branch still requires review. Merge the publishing support before expecting PDF content proposals to publish successfully on the website and MCP. A successful proposal is not a production publication. Management does not merge its own content proposals or invoke an administrator bypass.
+Source and publishing changes were merged through [PR #82](https://github.com/UCLAIS/UCLAIS.github.io/pull/82), after both final CI checks passed at `cbb83fd`. Branch rules were not changed. A successful proposal is not a production publication: future content submissions still require normal review and both deployments. Management does not merge its own content proposals or invoke an administrator bypass.

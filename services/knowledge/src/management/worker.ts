@@ -1,8 +1,9 @@
 import { KnowledgeError } from '../types';
 import { limitedText, escapeHtml } from '../browser';
 import { assertWrite, challenge, LOGIN_COOKIE, ManagementEnv, origin, random, readCookie, seal, Session, SESSION_COOKIE, sessionCookie, unseal } from './auth';
-import { Github, knowledgePath, REPO_URL, safeText, slidePath } from './github';
+import { Github, knowledgePath, newSlideDetails, REPO_URL, safeText, slidePath } from './github';
 import { toolingStatus } from './status';
+import { approveProposal, proposalNumber, proposalReview } from './reviews';
 
 const headers = () => new Headers({ 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', 'X-Frame-Options': 'DENY', 'Content-Security-Policy': "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'" });
 const response = (value: unknown, status = 200) => Response.json(value, { status, headers: headers() });
@@ -10,7 +11,7 @@ function redirect(location: string, cookies: string[] = []) {
   const values = headers(); values.set('Location', location); for (const cookie of cookies) values.append('Set-Cookie', cookie);
   return new Response(null, { status: 302, headers: values });
 }
-function login(message = 'Sign in with a GitHub account that has write access to the society website repository.', status = 200) {
+function login(message = 'Sign in with a GitHub account that is an active UCLAIS member and has write access to the society website repository.', status = 200) {
   const values = headers(); values.set('Content-Type', 'text/html; charset=utf-8');
   return new Response(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Society Management · UCL AI Society</title><style>body{background:#fdfbf8;color:#261c2e;font:16px/1.6 system-ui;margin:0}main{max-width:540px;margin:14vh auto;padding:32px;border-top:5px solid #2c1748}small{letter-spacing:.14em;text-transform:uppercase;color:#655b6a}h1{font:52px/1.1 Georgia;margin:28px 0}p{color:#655b6a}a{display:inline-block;padding:12px 20px;background:#2c1748;color:#fff;text-decoration:none;margin:20px 0}a:focus-visible{outline:3px solid #9472b8;outline-offset:4px}footer{font-size:13px;border-top:1px solid #d9d0dc;padding-top:24px;margin-top:30px}</style><main><small>UCL AI Society / Committee</small><h1>Society<br>Management.</h1><p>${escapeHtml(message)}</p><a href="/login">Continue with GitHub</a><footer>Knowledge, teaching materials and service status.<br>Uploads submitted to our public GitHub repository are public before a merge.</footer></main></html>`, { status, headers: values });
 }
@@ -55,7 +56,7 @@ export async function handleManagement(request: Request, env: ManagementEnv): Pr
     const session = await unseal<Session>(env, 'session', readCookie(request, SESSION_COOKIE));
     if (!session) return url.pathname.startsWith('/api/') ? response({ message: 'Sign in to continue.' }, 401) : login();
     const github = new Github(session.token);
-    const actor = await github.actor(env.ALLOWED_GITHUB_IDS); // Recheck permissions on every request, including assets.
+    const actor = await github.actor(env.ALLOWED_GITHUB_IDS); // Recheck active organisation membership and write access, including assets.
     if (request.method === 'POST') assertWrite(request, env, session);
     else if (!['GET', 'HEAD'].includes(request.method)) return response({ message: 'Method not allowed.' }, 405);
     if (url.pathname === '/api/session' && request.method === 'GET') return response({ user: actor, csrf: session.csrf, repository: REPO_URL });
@@ -74,6 +75,13 @@ export async function handleManagement(request: Request, env: ManagementEnv): Pr
       return response({ path, content: await github.text(entry), commit: snapshot.commit });
     }
     if (url.pathname === '/api/status' && request.method === 'GET') return response(await toolingStatus(github));
+    if (url.pathname === '/api/proposal' && request.method === 'GET') return response(await proposalReview(github, proposalNumber(url.searchParams.get('number')), actor.id));
+    if (url.pathname === '/api/approve' && request.method === 'POST') {
+      const input = JSON.parse(await limitedText(request, 8192));
+      if (input.reviewed !== true) throw new KnowledgeError('review_required', 'Review the changes and confirm before approving.', 400);
+      const head = requiredString(input.head, /^[a-f0-9]{40}$/, 'Reopen the submission before approving.');
+      return response(await approveProposal(github, proposalNumber(input.number), head, actor.id), 201);
+    }
     if (url.pathname === '/api/proposals' && request.method === 'GET') {
       const pulls = await github.repo<any[]>('/pulls?state=open&base=main&per_page=100');
       return response({ proposals: pulls.filter(item => item.head?.ref?.startsWith('committee/')).map(item => ({ title: item.title, url: item.html_url, number: item.number, author: item.user.login, updatedAt: item.updated_at })) });
@@ -87,26 +95,25 @@ export async function handleManagement(request: Request, env: ManagementEnv): Pr
     }
     if (url.pathname === '/api/slides' && request.method === 'POST') {
       const input = JSON.parse(await limitedText(request, 12 * 1024 * 1024));
-      const path = knowledgePath(input.path); const pdfPath = slidePath(path);
+      const details = input.replace === true ? undefined : newSlideDetails(input);
+      const path = details?.path || knowledgePath(input.path); const pdfPath = slidePath(path);
       const base = requiredString(input.commit, /^[a-f0-9]{40}$/, 'Reload the library before submitting.');
       const data = requiredString(input.pdf, /^[A-Za-z0-9+/]+={0,2}$/, 'Upload a PDF exported from your slide deck.');
-      if (data.length > Math.ceil(8 * 1024 * 1024 / 3) * 4 || data.length % 4 || !atob(data.slice(0, 12)).startsWith('%PDF-')) throw new KnowledgeError('invalid_pdf', 'Use a PDF no larger than 8 MiB.', 400);
+      const decodedBytes = data.length / 4 * 3 - (data.endsWith('==') ? 2 : data.endsWith('=') ? 1 : 0);
+      if (decodedBytes > 8 * 1024 * 1024 || data.length % 4 || !atob(data.slice(0, 12)).startsWith('%PDF-')) throw new KnowledgeError('invalid_pdf', 'Use a PDF no larger than 8 MiB.', 400);
       const snapshot = await github.snapshot();
       if (snapshot.commit !== base) throw new KnowledgeError('stale_base', 'The repository changed. Reload before submitting.', 409);
       const sourceExists = snapshot.entries.some(entry => entry.path === path);
-      if (sourceExists !== (input.replace === true)) throw new KnowledgeError('existing_source', sourceExists ? 'This path already exists. Choose it in the replacement list or use a new path.' : 'The session no longer exists. Reload the library.', 409);
       const metadataPath = path.replace(/\.md$/, '.meta.json');
+      if (input.replace === true && !sourceExists) throw new KnowledgeError('existing_source', 'The session no longer exists. Reload the library.', 409);
+      if (input.replace !== true && snapshot.entries.some(entry => [path, metadataPath, pdfPath].includes(entry.path))) throw new KnowledgeError('existing_source', 'A session with this title already exists for this year and series. Select it in the replacement list or use a different title.', 409);
       const existingMeta = snapshot.entries.find(entry => entry.path === metadataPath);
       const metadata = existingMeta ? JSON.parse(await github.text(existingMeta)) : {};
       if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) throw new KnowledgeError('invalid_metadata', 'The existing metadata needs correction in GitHub.', 400);
       const changes: { path: string; content: string; encoding?: 'utf-8' | 'base64' }[] = [{ path: pdfPath, content: data, encoding: 'base64' }];
       if (!sourceExists) {
-        const title = safeText(input.title, 200).replace(/[\r\n]/g, ' ');
-        const year = typeof input.year === 'string' && /^\d{4}\/\d{2}$/.test(input.year) ? input.year : undefined;
-        const series = typeof input.series === 'string' && input.series.trim() ? safeText(input.series, 200) : undefined;
-        const order = input.order === undefined || input.order === '' ? undefined : Number(input.order);
-        if (order !== undefined && (!series || !Number.isInteger(order) || order < 1 || order > 10000)) throw new KnowledgeError('invalid_metadata', 'A session number needs a series and must be between 1 and 10,000.', 400);
-        Object.assign(metadata, { title, type: path.startsWith('knowledge/nexus/') ? 'nexus-session' : 'tutorial', archived: true, status: 'published', ...(year ? { year } : {}), ...(series ? { series } : {}), ...(order ? { order } : {}) });
+        const { title, year, series, order } = details!;
+        Object.assign(metadata, { title, type: path.startsWith('knowledge/nexus/') ? 'nexus-session' : 'tutorial', archived: true, status: 'published', year, ...(series ? { series } : {}), ...(order ? { order } : {}) });
         changes.push({ path, content: `# ${title}\n\n## Additional information\n\n${typeof input.notes === 'string' && input.notes.trim() ? safeText(input.notes, 20000) : 'Slides and source text are provided in the attached deck.'}\n` });
       }
       metadata.slides = pdfPath;
