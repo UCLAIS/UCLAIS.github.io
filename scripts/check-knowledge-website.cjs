@@ -3,7 +3,7 @@
 const assert = require('node:assert/strict')
 const { execFileSync } = require('node:child_process')
 const { randomUUID } = require('node:crypto')
-const { cpSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync, rmSync, symlinkSync } = require('node:fs')
+const { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync, rmSync, symlinkSync } = require('node:fs')
 const path = require('node:path')
 const os = require('node:os')
 
@@ -26,7 +26,7 @@ function pdf() {
 try {
   // Copy only website sources and the approved importer input, never .env,
   // private raw imports, generated releases, credentials or deployment state.
-  for (const relative of ['docusaurus.config.js', 'package.json', 'sidebars.js', 'src', 'static', 'blog', 'our-initiatives', 'knowledge', 'plugins', 'scripts/preview-config.cjs', 'scripts/prepare-slides.py', 'services/knowledge/package.json', 'services/knowledge/src', 'services/knowledge/scripts/build-knowledge.ts', 'services/knowledge/data/bootstrap-corpus.json']) {
+  for (const relative of ['docusaurus.config.js', 'package.json', 'sidebars.js', 'src', 'static', 'blog', 'our-initiatives', 'knowledge', ...(existsSync(path.join(checkout, 'knowledge-assets/slides')) ? ['knowledge-assets/slides'] : []), 'plugins', 'scripts/preview-config.cjs', 'scripts/prepare-slides.py', 'services/knowledge/package.json', 'services/knowledge/src', 'services/knowledge/scripts/build-knowledge.ts', 'services/knowledge/data/bootstrap-corpus.json']) {
     mkdirSync(path.dirname(path.join(root, relative)), { recursive: true })
     cpSync(path.join(checkout, relative), path.join(root, relative), { recursive: true, filter: source => !/^(?:\.env(?:\..*)?|\.dev\.vars(?:\..*)?|\.wrangler|\.generated|secrets|credentials)$/.test(path.basename(source)) && !/\.(?:pem|key|p12|pfx)$/.test(source) })
   }

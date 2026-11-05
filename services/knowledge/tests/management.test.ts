@@ -1,10 +1,18 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { assertWrite, challenge, LOGIN_COOKIE, ManagementEnv, seal, SESSION_COOKIE, unseal } from '../src/management/auth';
-import { Github, knowledgePath, slidePath } from '../src/management/github';
+import { Github, knowledgePath, newSlideDetails, slidePath } from '../src/management/github';
 import { handleManagement } from '../src/management/worker';
 
 const env = { MANAGEMENT_ORIGIN: 'https://manage.uclai.co.uk', GITHUB_CLIENT_ID: 'configured-id', GITHUB_CLIENT_SECRET: 'configured-secret', SESSION_SECRET: 'a'.repeat(64), ASSETS: { fetch: vi.fn(async () => new Response('PRIVATE UI')) }, RATE_LIMITER: { limit: vi.fn(async () => ({ success: true })) } } as unknown as ManagementEnv;
 const session = { token: 'test-token', csrf: 'csrf-test', expires: Date.now() + 60_000 };
+const activeMembership = { state: 'active', organization: { id: 61075473 } };
+function actorResponse(url: RequestInfo | URL, push = true) {
+  const path = new URL(String(url)).pathname;
+  if (path === '/user') return Response.json({ id: 123, login: 'member' });
+  if (path === '/user/memberships/orgs/UCLAIS') return Response.json(activeMembership);
+  if (path === '/repos/UCLAIS/UCLAIS.github.io') return Response.json({ permissions: { push } });
+  throw new Error('Unexpected actor request.');
+}
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe('management security boundaries', () => {
@@ -28,18 +36,49 @@ describe('management security boundaries', () => {
     expect(network).not.toHaveBeenCalled();
     vi.unstubAllGlobals();
   });
-  it('requires both live repository write permission and any configured stable-ID restriction', async () => {
-    const network = vi.fn(async (url: any) => Response.json(String(url).endsWith('/user') ? { id: 123, login: 'member' } : { permissions: { push: false } }));
+  it('requires active membership, live repository write permission and any configured stable-ID restriction', async () => {
+    const network = vi.fn(async (url: RequestInfo | URL) => actorResponse(url, false));
     const github = new Github('token', network as typeof fetch);
     await expect(github.actor()).rejects.toMatchObject({ code: 'forbidden' });
-    network.mockImplementation(async (url: any) => Response.json(String(url).endsWith('/user') ? { id: 123, login: 'member' } : { permissions: { push: true } }));
+    network.mockImplementation(async (url: RequestInfo | URL) => actorResponse(url));
     await expect(github.actor('456')).rejects.toMatchObject({ code: 'forbidden' });
     await expect(github.actor('123')).resolves.toMatchObject({ id: 123 });
+  });
+  it.each([
+    { state: 'pending', organization: { id: 61075473 } },
+    { state: 'active', organization: { id: 1 } },
+    { state: 'active' },
+    {},
+    null,
+  ])('denies malformed, pending or different-organisation membership even with write access: %j', async membership => {
+    const network = vi.fn(async (url: RequestInfo | URL) => new URL(String(url)).pathname === '/user/memberships/orgs/UCLAIS' ? Response.json(membership) : actorResponse(url));
+    await expect(new Github('token', network as typeof fetch).actor()).rejects.toMatchObject({ code: 'forbidden', status: 403 });
+  });
+  it.each([404, 403, 500])('fails closed when the membership endpoint returns %i', async status => {
+    const network = vi.fn(async (url: RequestInfo | URL) => new URL(String(url)).pathname === '/user/memberships/orgs/UCLAIS' ? new Response('PRIVATE_PROVIDER_BODY', { status }) : actorResponse(url));
+    await expect(new Github('token', network as typeof fetch).actor()).rejects.toMatchObject({ status: status === 404 ? 403 : 502 });
+  });
+  it.each(['pending', 'missing', 'wrong-org', 'unavailable'])('denies authenticated writes before any repository mutation when membership is %s', async state => {
+    // Miniflare's external proxy rejects synthetic POST Origin headers before
+    // entering the Worker. Exercise a valid Origin/CSRF POST at the handler here;
+    // native tests separately prove OAuth and existing private-session denial.
+    const network = vi.fn(async (url: RequestInfo | URL, _init?: RequestInit) => {
+      if (new URL(String(url)).pathname !== '/user/memberships/orgs/UCLAIS') return actorResponse(url);
+      if (state === 'unavailable') return new Response('PRIVATE_PROVIDER_BODY', {status:503});
+      if (state === 'missing') return new Response('Not a member', {status:404});
+      return Response.json({state:state === 'pending' ? 'pending' : 'active',organization:{id:state === 'wrong-org' ? 1 : 61075473}});
+    });
+    vi.stubGlobal('fetch', network);
+    const cookie = await seal(env, 'session', session);
+    const result = await handleManagement(new Request(env.MANAGEMENT_ORIGIN+'/api/knowledge',{method:'POST',headers:{Cookie:`${SESSION_COOKIE}=${cookie}`,Origin:env.MANAGEMENT_ORIGIN,'Content-Type':'application/json','X-CSRF-Token':session.csrf},body:'{}'}),env);
+    expect(result.status).toBe(state === 'unavailable' ? 502 : 403);
+    expect(await result.text()).not.toContain('PRIVATE_PROVIDER_BODY');
+    expect(network.mock.calls.every(([,init]) => init?.method === 'GET')).toBe(true);
   });
   it('calls receiver-sensitive network APIs without binding the Github client as this', async () => {
     const network = function(this: unknown, url: RequestInfo | URL) {
       if (this !== undefined) throw new TypeError('Illegal invocation');
-      return Promise.resolve(Response.json(String(url).endsWith('/user') ? { id:123, login:'member' } : { permissions:{ push:true } }));
+      return Promise.resolve(actorResponse(url));
     };
     await expect(new Github('test-token', network as typeof fetch).actor()).resolves.toMatchObject({ id:123, login:'member' });
   });
@@ -64,7 +103,7 @@ describe('management security boundaries', () => {
     vi.stubGlobal('fetch', function(this:unknown, url:RequestInfo | URL) {
       if (this !== undefined && this !== globalThis) throw new TypeError('Illegal invocation');
       if (String(url).endsWith('/login/oauth/access_token')) return Promise.resolve(Response.json({ access_token:'known-test-user-token', expires_in:28800 }));
-      return Promise.resolve(Response.json(String(url).endsWith('/user') ? { id:123, login:'member' } : { permissions:{ push:true } }));
+      return Promise.resolve(actorResponse(url));
     });
     const result = await handleManagement(new Request(env.MANAGEMENT_ORIGIN + '/auth/callback?code=test-code&state=expected', { headers:{ Cookie:`${LOGIN_COOKIE}=${value}` } }), env);
     expect(result.status).toBe(302);
@@ -85,6 +124,28 @@ describe('management security boundaries', () => {
     expect(() => assertWrite(request(env.MANAGEMENT_ORIGIN, ''), env, session)).toThrow();
     expect(() => assertWrite(request(env.MANAGEMENT_ORIGIN, session.csrf), env, session)).not.toThrow();
   });
+  it.each([
+    {headers:{Origin:'https://manage.uclai.co.uk.evil.example'},status:403},
+    {headers:{'X-CSRF-Token':''},status:403},
+    {headers:{Authorization:'Bearer forged-test-token'},status:403},
+    {headers:{'Content-Type':'text/plain'},status:415},
+  ])('rejects an authenticated upload with invalid write headers before any repository work: %j', async sample => {
+    vi.spyOn(Github.prototype,'actor').mockResolvedValue({id:123,login:'member',admin:false});
+    const snapshot = vi.spyOn(Github.prototype,'snapshot');
+    const proposal = vi.spyOn(Github.prototype,'proposal');
+    const cookie = await seal(env,'session',session);
+    const headers = new Headers({Cookie:`${SESSION_COOKIE}=${cookie}`,Origin:env.MANAGEMENT_ORIGIN,'X-CSRF-Token':session.csrf,'Content-Type':'application/json'});
+    Object.entries(sample.headers).forEach(([key,value])=>headers.set(key,value!));
+    const result = await handleManagement(new Request(env.MANAGEMENT_ORIGIN+'/api/slides',{method:'POST',headers,body:'{}'}),env);
+    expect(result.status).toBe(sample.status);
+    expect(snapshot).not.toHaveBeenCalled(); expect(proposal).not.toHaveBeenCalled();
+  });
+  it('rejects duplicate encrypted session cookies without calling GitHub', async () => {
+    const network = vi.fn(); vi.stubGlobal('fetch',network);
+    const cookie = await seal(env,'session',session);
+    const result = await handleManagement(new Request(env.MANAGEMENT_ORIGIN+'/api/session',{headers:{Cookie:`${SESSION_COOKIE}=${cookie}; ${SESSION_COOKIE}=${cookie}`}}),env);
+    expect(result.status).toBe(401); expect(network).not.toHaveBeenCalled();
+  });
   it('does not let content editing address workflows, private files, traversal or arbitrary slides', () => {
     for (const input of ['.github/workflows/deploy.yml', 'knowledge/faqs/../secret.md', 'knowledge/tutorials/.hidden.md', 'knowledge/tutorials/_templates/a.md', 'knowledge/faqs/README.md', 'knowledge/faqs/evil%2f.md', 'knowledge/withdrawn.json']) expect(() => knowledgePath(input)).toThrow();
     expect(knowledgePath('knowledge/nexus/2026-27/session.md')).toBe('knowledge/nexus/2026-27/session.md');
@@ -98,7 +159,7 @@ describe('management security boundaries', () => {
   });
   it('refuses revoked permissions on an existing session before serving private assets', async () => {
     const value = await seal(env, 'session', session);
-    vi.stubGlobal('fetch', vi.fn(async (url: any) => Response.json(String(url).endsWith('/user') ? { id: 123, login: 'member' } : { permissions: { push: false } })));
+    vi.stubGlobal('fetch', vi.fn(async (url: RequestInfo | URL) => actorResponse(url, false)));
     const result = await handleManagement(new Request(env.MANAGEMENT_ORIGIN + '/app.js', { headers: { Cookie: `${SESSION_COOKIE}=${value}` } }), env);
     expect(result.status).toBe(403); expect(await result.text()).not.toContain('PRIVATE UI');
     vi.unstubAllGlobals();
@@ -124,13 +185,49 @@ describe('management security boundaries', () => {
     expect(changes.some(change => change.path === canonical)).toBe(false);
     expect(JSON.parse(changes[1].content)).toEqual({ attribution: 'Original author', year: '2026/27', license: 'CC-BY', slides: 'knowledge-assets/slides/tutorials/lesson/source.pdf' });
   });
-  it('does not silently replace an existing session through the new-deck form', async () => {
+  it('generates a safe, readable session path from the academic year, series and title', () => {
+    expect(newSlideDetails({collection:'tutorials',year:'2026/27',series:'Machine Learning',order:'2',title:'Múltivariate Regression: x₁ & x₂',path:'.github/workflows/unsafe.yml'})).toMatchObject({path:'knowledge/tutorials/2026-27/machine-learning/session-2-multivariate-regression-x1-x2.md',year:'2026/27',order:2});
+    expect(newSlideDetails({collection:'nexus',year:'2026/27',title:'What’s AI?'}).path).toBe('knowledge/nexus/2026-27/whats-ai.md');
+  });
+  it.each([
+    {collection:'../guides',year:'2026/27',title:'Lesson'},
+    {collection:'tutorials',year:'../2026',title:'Lesson'},
+    {collection:'tutorials',year:'2026/27',title:'../'},
+    {collection:'tutorials',year:'2026/27',title:'Lesson',order:'2'},
+    {collection:'tutorials',year:'2026/27',title:'Lesson',series:'ML',order:'1.5'},
+  ])('rejects invalid autogenerated-path metadata before any write: %j', input => {
+    expect(() => newSlideDetails(input)).toThrow();
+  });
+  it('submits a new deck using a server-generated path even if an arbitrary path is supplied', async () => {
+    vi.spyOn(Github.prototype,'actor').mockResolvedValue({id:123,login:'member',admin:false});
+    const base = 'a'.repeat(40);
+    vi.spyOn(Github.prototype,'snapshot').mockResolvedValue({commit:base,treeSha:base,entries:[]});
+    const proposal = vi.spyOn(Github.prototype,'proposal').mockResolvedValue({number:99,url:'https://github.com/UCLAIS/UCLAIS.github.io/pull/99',commit:base});
+    const value = await seal(env,'session',session);
+    const result = await handleManagement(new Request(env.MANAGEMENT_ORIGIN+'/api/slides',{method:'POST',headers:{Cookie:`${SESSION_COOKIE}=${value}`,Origin:env.MANAGEMENT_ORIGIN,'X-CSRF-Token':session.csrf,'Content-Type':'application/json'},body:JSON.stringify({collection:'tutorials',year:'2026/27',title:'Multivariate Regression',path:'.github/workflows/unsafe.yml',commit:base,pdf:btoa('%PDF-1.4\ntest fixture')})}),env);
+    expect(result.status).toBe(201);
+    const changes = proposal.mock.calls[0][1];
+    expect(changes.map(change => change.path)).toEqual(['knowledge-assets/slides/tutorials/2026-27/multivariate-regression/source.pdf','knowledge/tutorials/2026-27/multivariate-regression.md','knowledge/tutorials/2026-27/multivariate-regression.meta.json']);
+    expect(JSON.parse(changes[2].content)).toMatchObject({title:'Multivariate Regression',year:'2026/27',slides:changes[0].path});
+  });
+  it.each([8 * 1024 * 1024, 8 * 1024 * 1024 + 1])('enforces the exact decoded PDF byte limit for %i bytes', async bytes => {
+    vi.spyOn(Github.prototype,'actor').mockResolvedValue({id:123,login:'member',admin:false});
+    const base = 'a'.repeat(40);
+    const snapshot = vi.spyOn(Github.prototype,'snapshot').mockResolvedValue({commit:base,treeSha:base,entries:[]});
+    const proposal = vi.spyOn(Github.prototype,'proposal').mockResolvedValue({number:99,url:'https://github.com/UCLAIS/UCLAIS.github.io/pull/99',commit:base});
+    const pdf = Buffer.alloc(bytes,32); pdf.write('%PDF-1.4\n');
+    const cookie = await seal(env,'session',session);
+    const result = await handleManagement(new Request(env.MANAGEMENT_ORIGIN+'/api/slides',{method:'POST',headers:{Cookie:`${SESSION_COOKIE}=${cookie}`,Origin:env.MANAGEMENT_ORIGIN,'X-CSRF-Token':session.csrf,'Content-Type':'application/json'},body:JSON.stringify({collection:'tutorials',year:'2026/27',title:'Limit check',commit:base,pdf:pdf.toString('base64')})}),env);
+    expect(result.status).toBe(bytes === 8 * 1024 * 1024 ? 201 : 400);
+    if (bytes > 8 * 1024 * 1024) { expect(snapshot).not.toHaveBeenCalled(); expect(proposal).not.toHaveBeenCalled(); }
+  });
+  it.each(['knowledge/tutorials/2026-27/lesson.md','knowledge/tutorials/2026-27/lesson.meta.json','knowledge-assets/slides/tutorials/2026-27/lesson/source.pdf'])('refuses an autogenerated path collision with %s', async existingPath => {
     vi.spyOn(Github.prototype, 'actor').mockResolvedValue({ id: 123, login: 'member', admin: false });
     const base = 'a'.repeat(40);
-    vi.spyOn(Github.prototype, 'snapshot').mockResolvedValue({ commit: base, treeSha: base, entries: [{ path: 'knowledge/tutorials/lesson.md', sha: base, type: 'blob', mode: '100644' }] });
+    vi.spyOn(Github.prototype, 'snapshot').mockResolvedValue({ commit: base, treeSha: base, entries: [{ path: existingPath, sha: base, type: 'blob', mode: '100644' }] });
     const proposal = vi.spyOn(Github.prototype, 'proposal');
     const value = await seal(env, 'session', session);
-    const result = await handleManagement(new Request(env.MANAGEMENT_ORIGIN + '/api/slides', { method: 'POST', headers: { Cookie: `${SESSION_COOKIE}=${value}`, Origin: env.MANAGEMENT_ORIGIN, 'X-CSRF-Token': session.csrf, 'Content-Type': 'application/json' }, body: JSON.stringify({ path: 'knowledge/tutorials/lesson.md', commit: base, pdf: btoa('%PDF-1.4\ntest fixture') }) }), env);
+    const result = await handleManagement(new Request(env.MANAGEMENT_ORIGIN + '/api/slides', { method: 'POST', headers: { Cookie: `${SESSION_COOKIE}=${value}`, Origin: env.MANAGEMENT_ORIGIN, 'X-CSRF-Token': session.csrf, 'Content-Type': 'application/json' }, body: JSON.stringify({ collection:'tutorials',year:'2026/27',title:'Lesson',commit: base, pdf: btoa('%PDF-1.4\ntest fixture') }) }), env);
     expect(result.status).toBe(409); expect(proposal).not.toHaveBeenCalled();
   });
 });
