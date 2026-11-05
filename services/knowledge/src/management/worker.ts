@@ -1,7 +1,7 @@
 import { KnowledgeError } from '../types';
 import { limitedText, escapeHtml } from '../browser';
 import { assertWrite, challenge, LOGIN_COOKIE, ManagementEnv, origin, random, readCookie, seal, Session, SESSION_COOKIE, sessionCookie, unseal } from './auth';
-import { Github, knowledgePath, REPO_URL, safeText, slidePath } from './github';
+import { Github, knowledgePath, newSlideDetails, REPO_URL, safeText, slidePath } from './github';
 import { toolingStatus } from './status';
 
 const headers = () => new Headers({ 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', 'X-Frame-Options': 'DENY', 'Content-Security-Policy': "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'" });
@@ -87,26 +87,25 @@ export async function handleManagement(request: Request, env: ManagementEnv): Pr
     }
     if (url.pathname === '/api/slides' && request.method === 'POST') {
       const input = JSON.parse(await limitedText(request, 12 * 1024 * 1024));
-      const path = knowledgePath(input.path); const pdfPath = slidePath(path);
+      const details = input.replace === true ? undefined : newSlideDetails(input);
+      const path = details?.path || knowledgePath(input.path); const pdfPath = slidePath(path);
       const base = requiredString(input.commit, /^[a-f0-9]{40}$/, 'Reload the library before submitting.');
       const data = requiredString(input.pdf, /^[A-Za-z0-9+/]+={0,2}$/, 'Upload a PDF exported from your slide deck.');
-      if (data.length > Math.ceil(8 * 1024 * 1024 / 3) * 4 || data.length % 4 || !atob(data.slice(0, 12)).startsWith('%PDF-')) throw new KnowledgeError('invalid_pdf', 'Use a PDF no larger than 8 MiB.', 400);
+      const decodedBytes = data.length / 4 * 3 - (data.endsWith('==') ? 2 : data.endsWith('=') ? 1 : 0);
+      if (decodedBytes > 8 * 1024 * 1024 || data.length % 4 || !atob(data.slice(0, 12)).startsWith('%PDF-')) throw new KnowledgeError('invalid_pdf', 'Use a PDF no larger than 8 MiB.', 400);
       const snapshot = await github.snapshot();
       if (snapshot.commit !== base) throw new KnowledgeError('stale_base', 'The repository changed. Reload before submitting.', 409);
       const sourceExists = snapshot.entries.some(entry => entry.path === path);
-      if (sourceExists !== (input.replace === true)) throw new KnowledgeError('existing_source', sourceExists ? 'This path already exists. Choose it in the replacement list or use a new path.' : 'The session no longer exists. Reload the library.', 409);
       const metadataPath = path.replace(/\.md$/, '.meta.json');
+      if (input.replace === true && !sourceExists) throw new KnowledgeError('existing_source', 'The session no longer exists. Reload the library.', 409);
+      if (input.replace !== true && snapshot.entries.some(entry => [path, metadataPath, pdfPath].includes(entry.path))) throw new KnowledgeError('existing_source', 'A session with this title already exists for this year and series. Select it in the replacement list or use a different title.', 409);
       const existingMeta = snapshot.entries.find(entry => entry.path === metadataPath);
       const metadata = existingMeta ? JSON.parse(await github.text(existingMeta)) : {};
       if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) throw new KnowledgeError('invalid_metadata', 'The existing metadata needs correction in GitHub.', 400);
       const changes: { path: string; content: string; encoding?: 'utf-8' | 'base64' }[] = [{ path: pdfPath, content: data, encoding: 'base64' }];
       if (!sourceExists) {
-        const title = safeText(input.title, 200).replace(/[\r\n]/g, ' ');
-        const year = typeof input.year === 'string' && /^\d{4}\/\d{2}$/.test(input.year) ? input.year : undefined;
-        const series = typeof input.series === 'string' && input.series.trim() ? safeText(input.series, 200) : undefined;
-        const order = input.order === undefined || input.order === '' ? undefined : Number(input.order);
-        if (order !== undefined && (!series || !Number.isInteger(order) || order < 1 || order > 10000)) throw new KnowledgeError('invalid_metadata', 'A session number needs a series and must be between 1 and 10,000.', 400);
-        Object.assign(metadata, { title, type: path.startsWith('knowledge/nexus/') ? 'nexus-session' : 'tutorial', archived: true, status: 'published', ...(year ? { year } : {}), ...(series ? { series } : {}), ...(order ? { order } : {}) });
+        const { title, year, series, order } = details!;
+        Object.assign(metadata, { title, type: path.startsWith('knowledge/nexus/') ? 'nexus-session' : 'tutorial', archived: true, status: 'published', year, ...(series ? { series } : {}), ...(order ? { order } : {}) });
         changes.push({ path, content: `# ${title}\n\n## Additional information\n\n${typeof input.notes === 'string' && input.notes.trim() ? safeText(input.notes, 20000) : 'Slides and source text are provided in the attached deck.'}\n` });
       }
       metadata.slides = pdfPath;

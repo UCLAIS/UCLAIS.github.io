@@ -35,6 +35,8 @@ All management assets and APIs check the user's current active UCLAIS membership
 
 Every save uses a fixed base commit. A changed `main` causes a conflict instead of silently overwriting newer work. Successful submissions create unique `committee/*` branches and pull requests. If GitHub saves a branch but does not confirm a pull request, the error names the branch for recovery; do not blindly resubmit.
 
+New session paths are generated on the server from the collection, academic year, optional series/session number and title. For example, “Multivariate Regression” in Tutorials for 2026/27 becomes `knowledge/tutorials/2026-27/multivariate-regression.md`. The upload form needs no manually entered path. A collision with an existing source, sidecar or PDF is refused; choose the existing session in the replacement list or use a different title. Replacements retain their existing URL.
+
 New decks produce a canonical Markdown file, a `.meta.json` sidecar and a PDF under `knowledge-assets/slides/<canonical-path-without-extension>/source.pdf`. The sidecar's `slides` field must match that exact path. Replacing a deck preserves the canonical file, metadata and existing additional downloads. **Written notes remain independently maintained and must be reviewed for consistency with the replacement PDF.**
 
 The knowledge importer includes the PDF's extracted text with explicit slide/page locators. The website build uses the existing bounded PDF parser, sanitising slide preparation and Poppler renderer to create a download and raster images under ignored `static/materials/_generated/`. The downloadable copy rebuilds ordinary HTTPS links, drops internal destinations and page actions, and refuses chained actions and interactive annotations. Generated decks go into the site build, not a second content database. Original uploads are outside the website's static directory. Existing decks without a `slides` sidecar retain their existing viewers. Draft or withdrawn documents do not produce generated viewers.
@@ -54,7 +56,7 @@ pnpm management:build
 pnpm management:gateway
 ```
 
-`management:build` bundles without deploying. `management:gateway` prepares a separate Pages advanced-mode gateway under `.generated/management-gateway/`. The knowledge CI workflow runs both without secrets. No workflow automatically deploys management.
+`management:build` bundles without deploying. `management:gateway` prepares a separate Pages advanced-mode gateway under `.generated/management-gateway/`. The knowledge CI workflow runs both without secrets. The isolated website publication check also copies existing `knowledge-assets/slides` alongside the canonical knowledge files, so uploaded PDFs remain available for validation and rendering. No workflow automatically deploys management.
 
 Keep the society's Cloudflare account on Workers Free. Deploy `wrangler.management.jsonc` only after configuring the GitHub App and secrets. The Worker has public `workers.dev` and preview URLs disabled, and its assets run through the Worker before delivery. A live exact-8-MiB upload succeeded on Free on 4 November 2026; this is an acceptance check, not a guarantee of throughput or spare CPU under load. Quota exhaustion may stop access. Do not enable paid resources to bypass a failed check.
 

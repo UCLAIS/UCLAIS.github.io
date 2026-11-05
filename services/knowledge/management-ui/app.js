@@ -55,9 +55,8 @@ $('slides-form').addEventListener('submit', event => { event.preventDefault(); s
   const file = $('slide-file').files[0];
   if (!file || !/\.pdf$/i.test(file.name) || file.size > 8 * 1024 * 1024) throw new Error('Choose a PDF no larger than 8 MiB.');
   const existing = $('slide-target').value;
-  if (!existing && (!$('slide-title').value.trim() || !$('slide-path').value.trim())) throw new Error('Add a session title and path.');
-  const path = existing || `knowledge/${$('slide-collection').value}/${$('slide-path').value.trim().replace(/\.md$/, '')}.md`;
-  const result = await api('/api/slides', { path, replace: !!existing, title: $('slide-title').value, year: $('slide-year').value, series: $('slide-series').value, order: $('slide-order').value, notes: $('slide-notes').value, commit: library.commit, pdf: await readPdf(file) });
+  if (!existing && !$('slide-title').value.trim()) throw new Error('Add a session title.');
+  const result = await api('/api/slides', { ...(existing ? { path: existing } : { collection: $('slide-collection').value }), replace: !!existing, title: $('slide-title').value, year: $('slide-year').value, series: $('slide-series').value, order: $('slide-order').value, notes: $('slide-notes').value, commit: library.commit, pdf: await readPdf(file) });
   $('slides-public').checked = false; $('slide-file').value = ''; $('file-detail').textContent = 'Export your deck to PDF. Maximum 8 MiB.'; return result;
 }); });
 async function loadProposals() {

@@ -76,6 +76,24 @@ export function safeText(value: unknown, maximum = 512 * 1024): string {
   if (containsSensitiveText(value)) throw new KnowledgeError('sensitive_content', 'Remove credential-like content before submitting.', 400);
   return value;
 }
+export function newSlideDetails(input: { collection?: unknown; title?: unknown; year?: unknown; series?: unknown; order?: unknown; path?: unknown }) {
+  // Legacy open forms send a path instead of a collection. Its folder can select
+  // the collection, but new filenames are always generated here on the server.
+  const collection = input.collection ?? (typeof input.path === 'string' && input.path.startsWith('knowledge/nexus/') ? 'nexus' : 'tutorials');
+  if (collection !== 'tutorials' && collection !== 'nexus') throw new KnowledgeError('invalid_path', 'Choose Tutorials or Nexus Labs.', 400);
+  const title = safeText(input.title, 200).replace(/[\r\n]/g, ' ').trim();
+  if (typeof input.year !== 'string' || !/^\d{4}\/\d{2}$/.test(input.year)) throw new KnowledgeError('invalid_metadata', 'Choose an academic year such as 2026/27.', 400);
+  const year = input.year;
+  const series = typeof input.series === 'string' && input.series.trim() ? safeText(input.series, 200).trim() : undefined;
+  const order = input.order === undefined || input.order === '' ? undefined : Number(input.order);
+  if (order !== undefined && (!series || !Number.isInteger(order) || order < 1 || order > 10000)) throw new KnowledgeError('invalid_metadata', 'A session number needs a series and must be between 1 and 10,000.', 400);
+  const slug = (text: string, length: number) => text.normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').slice(0, length).replace(/^-+|-+$/g, '');
+  const titleSlug = slug(title, 100); const seriesSlug = series ? slug(series, 70) : undefined;
+  if (!titleSlug || (series && !seriesSlug)) throw new KnowledgeError('invalid_metadata', 'Include a letter or number in the title and series so a URL can be generated.', 400);
+  const name = `${order ? `session-${order}-` : ''}${titleSlug}`;
+  const path = knowledgePath(`knowledge/${collection}/${year.replace('/', '-')}/${seriesSlug ? seriesSlug + '/' : ''}${name}.md`);
+  return { path, title, year, series, order };
+}
 export function slidePath(sourcePath: string): string {
   knowledgePath(sourcePath);
   if (!/^knowledge\/(tutorials|nexus)\//.test(sourcePath)) throw new KnowledgeError('invalid_path', 'Slides belong to a tutorial or Nexus session.', 400);
